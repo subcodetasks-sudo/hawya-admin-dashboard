@@ -3,7 +3,12 @@
     "title": "مرحباً بالعالم!"
   },
   "Sidebar": {
-    "dashboard": "الصفحة الرئيسية",
+    "tagline": "لوحة التحكم",
+    "groups": {
+      "platform": "المنصة",
+      "administration": "الإدارة"
+    },
+    "dashboard": "لوحة التحكم",
     "plans": "الخطط",
     "subscriptions": "الاشتراكات",
     "users": "المستخدمين",
@@ -11,5 +16,68 @@
     "financial": "المالية",
     "testimonials": "اراء العملاء",
     "settings": "الاعدادات"
+  },
+  "Header": {
+    "breadcrumbRoot": "المنصة",
+    "searchPlaceholder": "البحث في كل شيء...",
+    "notifications": "الإشعارات",
+    "accountName": "ClaudeAdmin",
+    "accountInitials": "CA",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  },
+  "Dashboard": {
+    "title": "لوحة التحكم",
+    "subtitle": "نظرة عامة على أداء منصتك",
+    "compare": {
+      "vsYesterday": "مقارنة بالأمس",
+      "vsLastMonth": "مقارنة بالشهر الماضي",
+      "vsLastWeek": "مقارنة بالأسبوع الماضي"
+    },
+    "stats": {
+      "apiRequestsToday": "طلبات API اليوم",
+      "activeUsers": "المستخدمين النشطين",
+      "activeSubscriptions": "الاشتراكات النشطة",
+      "monthlyRevenue": "الإيرادات الشهرية",
+      "avgResponseTime": "متوسط وقت الاستجابة",
+      "activePlans": "الخطط النشطة",
+      "growthRate": "معدل النمو",
+      "netRevenue": "الإيرادات الصافية"
+    },
+    "charts": {
+      "subscribersByPlan": {
+        "title": "المشتركون حسب الخطة",
+        "subtitle": "التوزيع الحالي"
+      },
+      "revenueTrend": {
+        "title": "نمو الإيرادات",
+        "subtitle": "اتجاه الإيرادات الشهري لعام {year}"
+      },
+      "apiUsageTrend": {
+        "title": "اتجاه استخدام API",
+        "subtitle": "الطلبات اليومية خلال الأسبوع الماضي"
+      }
+    },
+    "plans": {
+      "starter": "Starter",
+      "pro": "Pro",
+      "business": "Business",
+      "enterprise": "Enterprise"
+    },
+    "payments": {
+      "title": "المدفوعات الأخيرة",
+      "subtitle": "أحدث المعاملات",
+      "viewAll": "عرض الكل",
+      "customer": "العميل",
+      "plan": "الخطة",
+      "amount": "المبلغ",
+      "date": "التاريخ",
+      "status": {
+        "paid": "مدفوع",
+        "pending": "قيد الانتظار",
+        "failed": "فاشل",
+        "refunded": "مسترد"
+      }
+    }
   }
 }

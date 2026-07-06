@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cairo } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -8,15 +8,12 @@ import Providers from "@/app/providers";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const cairo = Cairo({
+  variable: "--font-cairo",
   subsets: ["latin"],
+  // variants: ["300", "400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -56,7 +53,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={direction}
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={` ${cairo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Providers>

@@ -1,12 +1,6 @@
-import type React from "react";
-
 import AppSidebar from "@/components/layout/sidear";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import DashboardHeader from "@/components/layout/header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -17,11 +11,10 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger />
-          <Separator orientation="vertical" className="h-4" />
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+        <DashboardHeader />
+        <div className="flex flex-1 flex-col gap-4 bg-muted/30 p-4 md:p-6">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

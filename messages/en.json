@@ -3,6 +3,11 @@
     "title": "Hello world!"
   },
   "Sidebar": {
+    "tagline": "Control Panel",
+    "groups": {
+      "platform": "Platform",
+      "administration": "Administration"
+    },
     "dashboard": "Dashboard",
     "plans": "Plans",
     "subscriptions": "Subscriptions",
@@ -11,5 +16,68 @@
     "financial": "Financial",
     "testimonials": "Testimonials",
     "settings": "Settings"
+  },
+  "Header": {
+    "breadcrumbRoot": "Platform",
+    "searchPlaceholder": "Search anything...",
+    "notifications": "Notifications",
+    "accountName": "ClaudeAdmin",
+    "accountInitials": "CA",
+    "settings": "Settings",
+    "logout": "Log out"
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "subtitle": "An overview of your platform's performance",
+    "compare": {
+      "vsYesterday": "vs. yesterday",
+      "vsLastMonth": "vs. last month",
+      "vsLastWeek": "vs. last week"
+    },
+    "stats": {
+      "apiRequestsToday": "API Requests Today",
+      "activeUsers": "Active Subscribers",
+      "activeSubscriptions": "Active Subscriptions",
+      "monthlyRevenue": "Monthly Revenue",
+      "avgResponseTime": "Avg. Response Time",
+      "activePlans": "Active Plans",
+      "growthRate": "Growth Rate",
+      "netRevenue": "Net Revenue"
+    },
+    "charts": {
+      "subscribersByPlan": {
+        "title": "Subscribers by Plan",
+        "subtitle": "Current distribution"
+      },
+      "revenueTrend": {
+        "title": "Revenue Growth",
+        "subtitle": "Monthly revenue trend for {year}"
+      },
+      "apiUsageTrend": {
+        "title": "API Usage Trend",
+        "subtitle": "Daily requests over the past week"
+      }
+    },
+    "plans": {
+      "starter": "Starter",
+      "pro": "Pro",
+      "business": "Business",
+      "enterprise": "Enterprise"
+    },
+    "payments": {
+      "title": "Recent Payments",
+      "subtitle": "Latest transactions",
+      "viewAll": "View all",
+      "customer": "Customer",
+      "plan": "Plan",
+      "amount": "Amount",
+      "date": "Date",
+      "status": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      }
+    }
   }
 }

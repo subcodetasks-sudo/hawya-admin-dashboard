@@ -1,23 +1,16 @@
 "use client";
 
-import {
-  Bot,
-  ClipboardList,
-  CreditCard,
-  LayoutDashboard,
-  MessageSquareQuote,
-  Settings,
-  Users,
-  Wallet,
-} from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { isNavItemActive, navGroups } from "@/components/layout/nav-items";
 import { useDirection } from "@/components/ui/direction";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -25,17 +18,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Link, usePathname } from "@/i18n/navigation";
-
-const navItems = [
-  { key: "dashboard", href: "/", icon: LayoutDashboard },
-  { key: "plans", href: "/plans", icon: ClipboardList },
-  { key: "subscriptions", href: "/subscriptions", icon: CreditCard },
-  { key: "users", href: "/users", icon: Users },
-  { key: "claudeUsage", href: "/claude-usage", icon: Bot },
-  { key: "financial", href: "/financial", icon: Wallet },
-  { key: "testimonials", href: "/testimonials", icon: MessageSquareQuote },
-  { key: "settings", href: "/settings", icon: Settings },
-] as const;
 
 export default function AppSidebar() {
   const t = useTranslations("Sidebar");
@@ -50,44 +32,50 @@ export default function AppSidebar() {
     >
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-1.5">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-sidebar-primary text-sm font-semibold text-sidebar-primary-foreground">
-            H
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <Sparkles className="size-4" />
           </div>
-          <span className="truncate text-sm font-semibold group-data-[collapsible=icon]:hidden">
-            Howyeah
-          </span>
+          <div className="flex min-w-0 flex-col leading-tight group-data-[collapsible=icon]:hidden">
+            <span className="truncate text-sm font-semibold text-sidebar-foreground">
+              Howyeah
+            </span>
+            <span className="truncate text-xs text-sidebar-foreground/60">
+              {t("tagline")}
+            </span>
+          </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => {
-                const isActive =
-                  item.href === "/"
-                    ? pathname === "/"
-                    : pathname === item.href ||
-                      pathname.startsWith(`${item.href}/`);
-                const Icon = item.icon;
+        {navGroups.map((group) => (
+          <SidebarGroup key={group.key}>
+            <SidebarGroupLabel>{t(`groups.${group.key}`)}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="flex flex-col gap-2">
+                {group.items.map((item) => {
+                  const isActive = isNavItemActive(pathname, item.href);
+                  const Icon = item.icon;
 
-                return (
-                  <SidebarMenuItem key={item.key}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      tooltip={t(item.key)}
-                    >
-                      <Link href={item.href}>
-                        <Icon />
-                        <span>{t(item.key)}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                  return (
+                    <SidebarMenuItem key={item.key} >
+                      <SidebarMenuButton
+                        asChild
+                        // isActive={isActive}
+                        tooltip={t(item.key)}
+                      >
+                        <Link href={item.href}
+                          className={`flex items-center gap-2 rounded-2xl p-6 text-sm font-medium text-gray-500 ${isActive ? "bg-sidebar-primary shadow-sm text-white hover:bg-sidebar-primary/90 hover:text-white font-semibold" : "hover:bg-sidebar-accent hover:text-sidebar"}`}
+                        >
+                          <Icon className="text-2xl"/>
+                          <span>{t(item.key)}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
