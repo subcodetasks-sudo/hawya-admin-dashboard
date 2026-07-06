@@ -9,9 +9,9 @@ import { routing } from "@/i18n/routing";
 import "../globals.css";
 
 const cairo = Cairo({
-  variable: "--font-cairo",
-  subsets: ["latin"],
-  // variants: ["300", "400", "500", "600", "700"],
+  subsets: ['latin', 'arabic'],
+  weight: ['300', '400', '500', '700'],
+  display: 'swap',
 });
 
 
@@ -53,7 +53,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={direction}
-      className={` ${cairo.variable} h-full antialiased`}
+      className={` ${cairo.className}  h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Providers>
