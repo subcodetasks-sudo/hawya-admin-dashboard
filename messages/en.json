@@ -1,0 +1,15 @@
+{
+  "HomePage": {
+    "title": "Hello world!"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "plans": "Plans",
+    "subscriptions": "Subscriptions",
+    "users": "Users",
+    "claudeUsage": "Claude API Usage",
+    "financial": "Financial",
+    "testimonials": "Testimonials",
+    "settings": "Settings"
+  }
+}

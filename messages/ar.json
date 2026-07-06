@@ -1,0 +1,15 @@
+{
+  "HomePage": {
+    "title": "مرحباً بالعالم!"
+  },
+  "Sidebar": {
+    "dashboard": "الصفحة الرئيسية",
+    "plans": "الخطط",
+    "subscriptions": "الاشتراكات",
+    "users": "المستخدمين",
+    "claudeUsage": "استخدام Claude API",
+    "financial": "المالية",
+    "testimonials": "اراء العملاء",
+    "settings": "الاعدادات"
+  }
+}
