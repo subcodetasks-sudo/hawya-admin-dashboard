@@ -79,5 +79,95 @@
         "refunded": "Refunded"
       }
     }
+  },
+  "Plans": {
+    "title": "Plans",
+    "subtitle": "Manage subscription plans and pricing",
+    "createPlan": "Create Plan",
+    "toolbar": {
+      "searchPlaceholder": "Search plans...",
+      "filter": "Filter",
+      "export": "Export"
+    },
+    "table": {
+      "plan": "Plan",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "subscribers": "Subscribers",
+      "status": "Status",
+      "createdAt": "Created",
+      "actions": "Actions",
+      "perMonthSuffix": "/mo",
+      "perYearSuffix": "/yr",
+      "empty": "No plans match your search.",
+      "loadError": "Unable to load plans."
+    },
+    "status": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "rowActions": {
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "delete": "Delete"
+    },
+    "deleteDialog": {
+      "title": "Delete plan?",
+      "description": "This will permanently remove \"{name}\" and cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "form": {
+      "createTitle": "Create New Plan",
+      "editTitle": "Edit Plan",
+      "createDescription": "Fill in the details to add a new subscription plan.",
+      "editDescription": "Update the details of this subscription plan.",
+      "sections": {
+        "generalInfo": "General Information",
+        "pricing": "Pricing",
+        "usageLimits": "Usage Limits",
+        "features": "Features",
+        "status": "Status"
+      },
+      "fields": {
+        "name": {
+          "label": "Plan Name",
+          "placeholder": "e.g. Professional"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "A short description of this plan"
+        },
+        "monthlyPrice": "Monthly Price",
+        "annualPrice": "Annual Price",
+        "currency": "Currency",
+        "tokensPerMonth": "Token Limit / month",
+        "apiRequestsPerMonth": "API Requests / month",
+        "projects": "Projects",
+        "storageGb": "Storage (GB)",
+        "teamMembers": "Team Members",
+        "connectedSites": "Connected Websites"
+      },
+      "unlimitedPlaceholder": "Unlimited",
+      "addFeature": "Add feature",
+      "customFeaturePlaceholder": "Feature name",
+      "removeFeature": "Remove feature",
+      "features": {
+        "prioritySupport": "Priority Support",
+        "advancedAnalytics": "Advanced Analytics",
+        "teamMembers": "Team Members",
+        "customIntegrations": "Custom Integrations",
+        "claudeCrawling": "Claude Crawling",
+        "auditLogs": "Audit Logs"
+      },
+      "statusOptions": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "submitCreate": "Create Plan",
+      "submitEdit": "Save Changes",
+      "cancel": "Cancel"
+    }
   }
 }

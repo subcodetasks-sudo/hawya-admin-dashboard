@@ -79,5 +79,95 @@
         "refunded": "مسترد"
       }
     }
+  },
+  "Plans": {
+    "title": "الخطط",
+    "subtitle": "إدارة خطط الاشتراك والأسعار",
+    "createPlan": "إنشاء خطة",
+    "toolbar": {
+      "searchPlaceholder": "البحث في الخطط...",
+      "filter": "تصفية",
+      "export": "تصدير"
+    },
+    "table": {
+      "plan": "الخطة",
+      "monthly": "شهري",
+      "annual": "سنوي",
+      "subscribers": "المشتركون",
+      "status": "الحالة",
+      "createdAt": "تاريخ الإنشاء",
+      "actions": "الإجراءات",
+      "perMonthSuffix": "/mo",
+      "perYearSuffix": "/yr",
+      "empty": "لا توجد خطط مطابقة لبحثك.",
+      "loadError": "تعذر تحميل الخطط."
+    },
+    "status": {
+      "all": "الكل",
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "rowActions": {
+      "edit": "تعديل",
+      "duplicate": "نسخ",
+      "delete": "حذف"
+    },
+    "deleteDialog": {
+      "title": "حذف الخطة؟",
+      "description": "سيتم حذف \"{name}\" نهائيًا ولا يمكن التراجع عن هذا الإجراء.",
+      "confirm": "حذف",
+      "cancel": "إلغاء"
+    },
+    "form": {
+      "createTitle": "إنشاء خطة جديدة",
+      "editTitle": "تعديل الخطة",
+      "createDescription": "أدخل التفاصيل لإضافة خطة اشتراك جديدة.",
+      "editDescription": "قم بتحديث تفاصيل خطة الاشتراك هذه.",
+      "sections": {
+        "generalInfo": "المعلومات العامة",
+        "pricing": "التسعير",
+        "usageLimits": "حدود الاستخدام",
+        "features": "الميزات",
+        "status": "الحالة"
+      },
+      "fields": {
+        "name": {
+          "label": "اسم الخطة",
+          "placeholder": "مثال: Professional"
+        },
+        "description": {
+          "label": "الوصف",
+          "placeholder": "وصف مختصر لهذه الخطة"
+        },
+        "monthlyPrice": "السعر الشهري",
+        "annualPrice": "السعر السنوي",
+        "currency": "العملة",
+        "tokensPerMonth": "حد Token / شهر",
+        "apiRequestsPerMonth": "طلبات API / شهر",
+        "projects": "المشاريع",
+        "storageGb": "التخزين (GB)",
+        "teamMembers": "أعضاء الفريق",
+        "connectedSites": "المواقع الإلكترونية"
+      },
+      "unlimitedPlaceholder": "غير محدود",
+      "addFeature": "إضافة ميزة",
+      "customFeaturePlaceholder": "اسم الميزة",
+      "removeFeature": "إزالة الميزة",
+      "features": {
+        "prioritySupport": "الدعم الأولوي",
+        "advancedAnalytics": "التحليلات المتقدمة",
+        "teamMembers": "أعضاء الفريق",
+        "customIntegrations": "التكاملات المخصصة",
+        "claudeCrawling": "Claude Crawling",
+        "auditLogs": "Audit Logs"
+      },
+      "statusOptions": {
+        "active": "نشط",
+        "inactive": "غير نشط"
+      },
+      "submitCreate": "إنشاء الخطة",
+      "submitEdit": "حفظ التغييرات",
+      "cancel": "إلغاء"
+    }
   }
 }
