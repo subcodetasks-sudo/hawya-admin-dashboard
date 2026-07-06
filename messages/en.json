@@ -169,5 +169,45 @@
       "submitEdit": "Save Changes",
       "cancel": "Cancel"
     }
+  },
+  "Subscriptions": {
+    "title": "Subscriptions",
+    "subtitle": "Manage customer subscriptions and billing cycles",
+    "tabs": {
+      "active": "Active",
+      "pending": "Pending",
+      "expired": "Expired",
+      "cancelled": "Cancelled"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Search by name or email...",
+      "export": "Export"
+    },
+    "table": {
+      "customer": "Customer",
+      "plan": "Plan",
+      "billing": "Billing",
+      "status": "Status",
+      "startDate": "Start Date",
+      "renewal": "Renewal",
+      "usage": "Usage",
+      "empty": "No subscriptions found.",
+      "loadError": "Unable to load subscriptions."
+    },
+    "billing": {
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "expired": "Expired",
+      "cancelled": "Cancelled"
+    },
+    "noRenewal": "—",
+    "rowActions": {
+      "viewDetails": "View details",
+      "cancelSubscription": "Cancel subscription"
+    }
   }
 }

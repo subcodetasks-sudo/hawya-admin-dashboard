@@ -169,5 +169,45 @@
       "submitEdit": "حفظ التغييرات",
       "cancel": "إلغاء"
     }
+  },
+  "Subscriptions": {
+    "title": "الاشتراكات",
+    "subtitle": "إدارة اشتراكات العملاء ودورات الفوترة",
+    "tabs": {
+      "active": "نشط",
+      "pending": "قيد الانتظار",
+      "expired": "منتهي",
+      "cancelled": "ملغى"
+    },
+    "toolbar": {
+      "searchPlaceholder": "البحث بالاسم أو البريد...",
+      "export": "تصدير"
+    },
+    "table": {
+      "customer": "العميل",
+      "plan": "الخطة",
+      "billing": "الفوترة",
+      "status": "الحالة",
+      "startDate": "تاريخ البدء",
+      "renewal": "التجديد",
+      "usage": "الاستخدام",
+      "empty": "لا توجد اشتراكات.",
+      "loadError": "تعذر تحميل الاشتراكات."
+    },
+    "billing": {
+      "monthly": "شهري",
+      "yearly": "سنوي"
+    },
+    "status": {
+      "active": "نشط",
+      "pending": "قيد الانتظار",
+      "expired": "منتهي",
+      "cancelled": "ملغى"
+    },
+    "noRenewal": "—",
+    "rowActions": {
+      "viewDetails": "عرض التفاصيل",
+      "cancelSubscription": "إلغاء الاشتراك"
+    }
   }
 }
