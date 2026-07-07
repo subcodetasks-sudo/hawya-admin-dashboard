@@ -291,5 +291,38 @@
       "viewDetails": "View details",
       "cancelSubscription": "Cancel subscription"
     }
+  },
+  "Testimonials": {
+    "title": "Customer Testimonials",
+    "subtitle": "Manage and review ratings submitted by users",
+    "summary": {
+      "ratingBreakdown": {
+        "title": "Rating Breakdown",
+        "subtitle": "Star distribution across all reviews"
+      },
+      "overall": {
+        "title": "Overall Rating",
+        "totalReviews": "{count} total ratings"
+      }
+    },
+    "toolbar": {
+      "searchPlaceholder": "Search reviews..."
+    },
+    "status": {
+      "all": "All",
+      "pending": "Pending Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "grid": {
+      "empty": "No testimonials found.",
+      "loadError": "Unable to load testimonials."
+    },
+    "rowActions": {
+      "delete": "Delete",
+      "reject": "Reject",
+      "approve": "Approve"
+    },
+    "ratingLabel": "Rating: {rating} of 5"
   }
 }

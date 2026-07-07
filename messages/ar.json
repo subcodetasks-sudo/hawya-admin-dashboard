@@ -291,5 +291,38 @@
       "viewDetails": "عرض التفاصيل",
       "cancelSubscription": "إلغاء الاشتراك"
     }
+  },
+  "Testimonials": {
+    "title": "آراء العملاء",
+    "subtitle": "إدارة ومراجعة التقييمات المقدمة من المستخدمين",
+    "summary": {
+      "ratingBreakdown": {
+        "title": "توزيع التقييمات",
+        "subtitle": "توزيع النجوم عبر جميع التقييمات"
+      },
+      "overall": {
+        "title": "التقييم العام",
+        "totalReviews": "{count} تقييم إجمالي"
+      }
+    },
+    "toolbar": {
+      "searchPlaceholder": "البحث في التقييمات..."
+    },
+    "status": {
+      "all": "الكل",
+      "pending": "قيد النظر",
+      "approved": "موافق عليه",
+      "rejected": "مرفوض"
+    },
+    "grid": {
+      "empty": "لا توجد آراء مطابقة.",
+      "loadError": "تعذر تحميل آراء العملاء."
+    },
+    "rowActions": {
+      "delete": "حذف",
+      "reject": "رفض",
+      "approve": "قبول"
+    },
+    "ratingLabel": "التقييم: {rating} من 5"
   }
 }
