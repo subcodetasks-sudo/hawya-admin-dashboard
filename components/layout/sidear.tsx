@@ -63,7 +63,7 @@ export default function AppSidebar() {
                         tooltip={t(item.key)}
                       >
                         <Link href={item.href}
-                          className={`flex items-center gap-2 rounded-2xl p-6 text-sm font-medium text-gray-500 ${isActive ? "bg-sidebar-primary shadow-sm text-white hover:bg-sidebar-primary/90 hover:text-white font-semibold" : "hover:bg-sidebar-accent hover:text-sidebar"}`}
+                          className={`flex items-center gap-2 rounded-2xl p-6 text-sm font-medium text-gray-500 ${isActive ? "bg-sidebar-primary shadow-sm text-white hover:bg-sidebar-primary/90 hover:text-white font-semibold active:bg-sidebar-primary" : "hover:bg-sidebar-accent hover:text-sidebar"}`}
                         >
                           <Icon className="text-2xl"/>
                           <span>{t(item.key)}</span>

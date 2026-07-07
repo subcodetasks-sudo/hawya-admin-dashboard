@@ -34,9 +34,9 @@ export default function DashboardHeader() {
   const activeItem = findActiveNavItem(pathname);
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-3 border-b px-4  bg-white">
+    <header className="flex h-18 shrink-0 items-center gap-3 border-b px-4  bg-white">
       <SidebarTrigger />
-      <Separator orientation="vertical" className="h-8" />
+      <Separator orientation="vertical" className="h-18" />
 
       <Breadcrumb className="hidden sm:block">
         <BreadcrumbList>
@@ -69,7 +69,7 @@ export default function DashboardHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-2 ps-1.5 pe-2">
-              <Avatar size="sm">
+              <Avatar >
                 <AvatarFallback>{t("accountInitials")}</AvatarFallback>
               </Avatar>
               <span className="hidden text-sm font-medium sm:inline">
