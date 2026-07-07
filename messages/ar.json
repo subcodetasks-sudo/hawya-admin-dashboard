@@ -325,6 +325,53 @@
     },
     "ratingLabel": "التقييم: {rating} من 5"
   },
+  "ClaudeUsage": {
+    "title": "استخدام Claude API",
+    "subtitle": "راقب استهلاك API وتوزيع الموارد عبر جميع الخطط",
+    "compare": {
+      "vsYesterday": "مقارنة بالأمس",
+      "vsLastMonth": "مقارنة بالشهر الماضي",
+      "vsLastWeek": "مقارنة بالأسبوع الماضي"
+    },
+    "stats": {
+      "successRate": "معدل النجاح",
+      "tokensSent": "إرسال Tokens",
+      "requests": "الطلبات",
+      "remainingQuota": "الحصة المتبقية",
+      "avgResponseTime": "متوسط الاستجابة",
+      "requestCost": "تكلفة الطلبات"
+    },
+    "remainingQuota": {
+      "renewsIn": "يتجدد خلال {days} يوم"
+    },
+    "charts": {
+      "tokenConsumption": {
+        "title": "استهلاك Tokens",
+        "subtitle": "استخدام Tokens خلال الأسبوع الماضي"
+      },
+      "dailyRequests": {
+        "title": "الطلبات اليومية",
+        "subtitle": "عدد الطلبات لكل يوم خلال الأسبوع الماضي"
+      }
+    },
+    "table": {
+      "title": "أعلى مستخدمي API",
+      "subtitle": "الأعلى استخدامًا للموارد والحصص",
+      "user": "المستخدم",
+      "plan": "الخطة",
+      "requests": "الطلبات",
+      "tokens": "Tokens",
+      "cost": "التكلفة",
+      "usage": "الاستخدام",
+      "status": "الحالة",
+      "empty": "لا توجد بيانات استخدام.",
+      "loadError": "تعذر تحميل بيانات الاستخدام."
+    },
+    "status": {
+      "active": "نشط",
+      "limitExceeded": "تجاوز الحد"
+    }
+  },
   "Users": {
     "title": "المستخدمون",
     "subtitle": "إدارة المستخدمين المسجلين وصلاحياتهم",

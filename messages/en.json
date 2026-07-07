@@ -325,6 +325,53 @@
     },
     "ratingLabel": "Rating: {rating} of 5"
   },
+  "ClaudeUsage": {
+    "title": "Claude API Usage",
+    "subtitle": "Monitor API consumption and resource distribution across all plans",
+    "compare": {
+      "vsYesterday": "vs. yesterday",
+      "vsLastMonth": "vs. last month",
+      "vsLastWeek": "vs. last week"
+    },
+    "stats": {
+      "successRate": "Success Rate",
+      "tokensSent": "Tokens Sent",
+      "requests": "Requests",
+      "remainingQuota": "Remaining Quota",
+      "avgResponseTime": "Avg. Response Time",
+      "requestCost": "Request Cost"
+    },
+    "remainingQuota": {
+      "renewsIn": "Renews in {days} days"
+    },
+    "charts": {
+      "tokenConsumption": {
+        "title": "Token Consumption",
+        "subtitle": "Token usage over the past week"
+      },
+      "dailyRequests": {
+        "title": "Daily Requests",
+        "subtitle": "Number of requests per day over the past week"
+      }
+    },
+    "table": {
+      "title": "Top API Users",
+      "subtitle": "Highest resource and quota usage",
+      "user": "User",
+      "plan": "Plan",
+      "requests": "Requests",
+      "tokens": "Tokens",
+      "cost": "Cost",
+      "usage": "Usage",
+      "status": "Status",
+      "empty": "No API usage data found.",
+      "loadError": "Unable to load usage data."
+    },
+    "status": {
+      "active": "Active",
+      "limitExceeded": "Limit Exceeded"
+    }
+  },
   "Users": {
     "title": "Users",
     "subtitle": "Manage registered users and their permissions",
