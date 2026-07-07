@@ -57,7 +57,7 @@ export default function DashboardHeader() {
       </Breadcrumb>
 
       <div className="relative ms-2 hidden max-w-sm flex-1 md:block">
-        <Search className="pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute inset-s-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input placeholder={t("searchPlaceholder")} className="ps-8" />
       </div>
 
