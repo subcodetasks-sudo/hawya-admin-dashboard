@@ -26,6 +26,88 @@
     "settings": "Settings",
     "logout": "Log out"
   },
+  "Settings": {
+    "title": "Settings",
+    "subtitle": "Configure your platform settings and preferences",
+    "save": "Save Changes",
+    "discard": "Discard",
+    "savedToast": "Changes saved successfully",
+    "comingSoon": "Configuration options coming soon",
+    "tabs": {
+      "general": "General",
+      "payment": "Payment",
+      "email": "Email",
+      "apiKeys": "API Keys",
+      "security": "Security",
+      "roles": "Admin Roles"
+    },
+    "general": {
+      "sectionTitle": "Platform Information",
+      "platformName": "Platform Name",
+      "supportEmail": "Support Email",
+      "platformUrl": "Platform URL",
+      "currency": "Default Currency",
+      "preferences": "Preferences",
+      "prefs": {
+        "enableRegistration": "Enable user registration",
+        "requireEmailVerification": "Require email verification",
+        "allowFreeTrial": "Allow free trial",
+        "maintenanceMode": "Maintenance mode",
+        "sendUsageSummaries": "Send usage summaries"
+      }
+    },
+    "security": {
+      "twoFactorAuth": {
+        "title": "Two-Factor Authentication",
+        "description": "Require 2FA for all admin accounts"
+      },
+      "ipWhitelist": {
+        "title": "IP Whitelist",
+        "description": "Restrict access to specific IP addresses"
+      },
+      "auditLogging": {
+        "title": "Audit Logging",
+        "description": "Log all administrator actions"
+      },
+      "rateLimiting": {
+        "title": "Rate Limiting",
+        "description": "Protect endpoints from abuse"
+      },
+      "ddosProtection": {
+        "title": "DDoS Protection",
+        "description": "Filter traffic through Cloudflare"
+      }
+    },
+    "apiKeys": {
+      "sectionTitle": "API Keys",
+      "createKey": "Create New Key",
+      "active": "Active",
+      "inactive": "Inactive",
+      "createdAt": "Created: {date}",
+      "environments": {
+        "production": "Production API Key",
+        "development": "Development API Key"
+      },
+      "actions": {
+        "copy": "Copy key",
+        "regenerate": "Regenerate key",
+        "delete": "Delete key"
+      },
+      "copiedToast": "Key copied to clipboard",
+      "regeneratedToast": "Key regenerated",
+      "deletedToast": "Key deleted",
+      "createdToast": "New key created"
+    },
+    "payment": {
+      "title": "Payment Settings"
+    },
+    "email": {
+      "title": "Email Settings"
+    },
+    "roles": {
+      "title": "Admin Roles"
+    }
+  },
   "Dashboard": {
     "title": "Dashboard",
     "subtitle": "An overview of your platform's performance",

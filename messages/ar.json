@@ -26,6 +26,88 @@
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج"
   },
+  "Settings": {
+    "title": "الإعدادات",
+    "subtitle": "تكوين إعدادات وتفضيلات المنصة",
+    "save": "حفظ التغييرات",
+    "discard": "تجاهل",
+    "savedToast": "تم حفظ التغييرات بنجاح",
+    "comingSoon": "خيارات التكوين قادمة قريبًا",
+    "tabs": {
+      "general": "عام",
+      "payment": "الدفع",
+      "email": "البريد الإلكتروني",
+      "apiKeys": "مفاتيح API",
+      "security": "الأمان",
+      "roles": "أدوار المسؤولين"
+    },
+    "general": {
+      "sectionTitle": "معلومات المنصة",
+      "platformName": "اسم المنصة",
+      "supportEmail": "البريد الإلكتروني للدعم",
+      "platformUrl": "رابط المنصة",
+      "currency": "العملة الافتراضية",
+      "preferences": "التفضيلات",
+      "prefs": {
+        "enableRegistration": "تفعيل تسجيل المستخدمين",
+        "requireEmailVerification": "طلب التحقق من البريد الإلكتروني",
+        "allowFreeTrial": "السماح بالتجربة المجانية",
+        "maintenanceMode": "وضع الصيانة",
+        "sendUsageSummaries": "إرسال ملخصات الاستخدام"
+      }
+    },
+    "security": {
+      "twoFactorAuth": {
+        "title": "المصادقة الثنائية",
+        "description": "طلب 2FA لجميع حسابات الإدارة"
+      },
+      "ipWhitelist": {
+        "title": "قائمة IP المسموح بها",
+        "description": "تقييد الوصول بعناوين IP محددة"
+      },
+      "auditLogging": {
+        "title": "تسجيل Audit",
+        "description": "تسجيل جميع إجراءات المسؤولين"
+      },
+      "rateLimiting": {
+        "title": "تحديد معدل الطلبات",
+        "description": "حماية نقاط النهاية من إساءة الاستخدام"
+      },
+      "ddosProtection": {
+        "title": "حماية DDoS",
+        "description": "تصفية حركة المرور عبر Cloudflare"
+      }
+    },
+    "apiKeys": {
+      "sectionTitle": "مفاتيح API",
+      "createKey": "إنشاء مفتاح جديد",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "createdAt": "تاريخ الإنشاء: {date}",
+      "environments": {
+        "production": "مفتاح API للإنتاج",
+        "development": "مفتاح API للتطوير"
+      },
+      "actions": {
+        "copy": "نسخ المفتاح",
+        "regenerate": "إعادة إنشاء المفتاح",
+        "delete": "حذف المفتاح"
+      },
+      "copiedToast": "تم نسخ المفتاح",
+      "regeneratedToast": "تم إعادة إنشاء المفتاح",
+      "deletedToast": "تم حذف المفتاح",
+      "createdToast": "تم إنشاء مفتاح جديد"
+    },
+    "payment": {
+      "title": "إعدادات الدفع"
+    },
+    "email": {
+      "title": "إعدادات البريد الإلكتروني"
+    },
+    "roles": {
+      "title": "أدوار المسؤولين"
+    }
+  },
   "Dashboard": {
     "title": "لوحة التحكم",
     "subtitle": "نظرة عامة على أداء منصتك",
