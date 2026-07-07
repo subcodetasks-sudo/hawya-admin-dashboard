@@ -36,7 +36,7 @@ export default function SubscriptionsTabs({ status, onStatusChange }: Props) {
     <Tabs
       value={status}
       onValueChange={(value) => onStatusChange(value as SubscriptionStatus)}
-      className="px-4"
+      className="px-4 overflow-scroll md:overflow-hidden"
     >
       <TabsList variant="line" className="h-auto gap-4 py-3">
         {STATUS_TABS.map((tab) => (
