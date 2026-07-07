@@ -324,5 +324,97 @@
       "approve": "Approve"
     },
     "ratingLabel": "Rating: {rating} of 5"
+  },
+  "Users": {
+    "title": "Users",
+    "subtitle": "Manage registered users and their permissions",
+    "inviteUser": "Invite User",
+    "toolbar": {
+      "searchPlaceholder": "Search users...",
+      "filter": "Filter",
+      "export": "Export",
+      "filterStatusLabel": "Status",
+      "filterPlanLabel": "Plan"
+    },
+    "table": {
+      "user": "User",
+      "plan": "Plan",
+      "status": "Status",
+      "apiUsage": "API Usage",
+      "signupDate": "Signup Date",
+      "lastLogin": "Last Login",
+      "empty": "No users found.",
+      "loadError": "Unable to load users."
+    },
+    "status": {
+      "all": "All",
+      "active": "Active",
+      "suspended": "Suspended",
+      "blocked": "Blocked"
+    },
+    "rowActions": {
+      "view": "View details",
+      "edit": "Edit user",
+      "suspend": "Suspend user",
+      "reactivate": "Reactivate user"
+    },
+    "detail": {
+      "title": "User Details",
+      "stats": {
+        "lastLogin": "Last Login",
+        "apiRequests": "API Requests",
+        "signupDate": "Signup Date",
+        "plan": "Plan"
+      },
+      "actionsTitle": "Actions",
+      "actions": {
+        "assignPlan": "Assign Plan",
+        "resetPassword": "Reset Password",
+        "reactivate": "Reactivate User",
+        "suspend": "Suspend User",
+        "block": "Permanently Block"
+      },
+      "assignPlanLabel": "Select a new plan",
+      "notesLabel": "Admin Notes",
+      "notesPlaceholder": "Add notes about this user...",
+      "saveNote": "Save Note",
+      "blockDialog": {
+        "title": "Permanently block this user?",
+        "description": "{name} will lose all access immediately. This cannot be undone.",
+        "confirm": "Block User",
+        "cancel": "Cancel"
+      }
+    },
+    "invite": {
+      "title": "Invite User",
+      "description": "Send an invitation with an initial plan assignment.",
+      "nameLabel": "Name",
+      "namePlaceholder": "e.g. Jordan Lee",
+      "emailLabel": "Email",
+      "emailPlaceholder": "name@company.com",
+      "planLabel": "Plan",
+      "cancel": "Cancel",
+      "submit": "Send Invite"
+    },
+    "edit": {
+      "title": "Edit User",
+      "description": "Update this user's account details.",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "planLabel": "Plan",
+      "statusLabel": "Status",
+      "cancel": "Cancel",
+      "submit": "Save Changes"
+    },
+    "toasts": {
+      "invited": "Invitation sent",
+      "updated": "User updated",
+      "suspended": "User suspended",
+      "reactivated": "User reactivated",
+      "blocked": "User blocked",
+      "passwordReset": "Password reset email sent",
+      "planAssigned": "Plan updated",
+      "noteSaved": "Note saved"
+    }
   }
 }

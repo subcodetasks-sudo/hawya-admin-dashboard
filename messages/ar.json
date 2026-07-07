@@ -324,5 +324,97 @@
       "approve": "قبول"
     },
     "ratingLabel": "التقييم: {rating} من 5"
+  },
+  "Users": {
+    "title": "المستخدمون",
+    "subtitle": "إدارة المستخدمين المسجلين وصلاحياتهم",
+    "inviteUser": "دعوة مستخدم",
+    "toolbar": {
+      "searchPlaceholder": "البحث عن المستخدمين...",
+      "filter": "تصفية",
+      "export": "تصدير",
+      "filterStatusLabel": "الحالة",
+      "filterPlanLabel": "الخطة"
+    },
+    "table": {
+      "user": "المستخدم",
+      "plan": "الخطة",
+      "status": "الحالة",
+      "apiUsage": "استخدام API",
+      "signupDate": "تاريخ التسجيل",
+      "lastLogin": "آخر دخول",
+      "empty": "لا يوجد مستخدمون.",
+      "loadError": "تعذر تحميل المستخدمين."
+    },
+    "status": {
+      "all": "الكل",
+      "active": "نشط",
+      "suspended": "موقوف",
+      "blocked": "محظور"
+    },
+    "rowActions": {
+      "view": "عرض التفاصيل",
+      "edit": "تعديل المستخدم",
+      "suspend": "تعليق المستخدم",
+      "reactivate": "إعادة تفعيل المستخدم"
+    },
+    "detail": {
+      "title": "تفاصيل المستخدم",
+      "stats": {
+        "lastLogin": "آخر دخول",
+        "apiRequests": "طلبات API",
+        "signupDate": "تاريخ التسجيل",
+        "plan": "الخطة"
+      },
+      "actionsTitle": "الإجراءات",
+      "actions": {
+        "assignPlan": "تعيين خطة",
+        "resetPassword": "إعادة تعيين كلمة المرور",
+        "reactivate": "إعادة تفعيل المستخدم",
+        "suspend": "تعليق المستخدم",
+        "block": "حظر دائم"
+      },
+      "assignPlanLabel": "اختر خطة جديدة",
+      "notesLabel": "ملاحظات المسؤول",
+      "notesPlaceholder": "أضف ملاحظات حول هذا المستخدم...",
+      "saveNote": "حفظ الملاحظة",
+      "blockDialog": {
+        "title": "حظر هذا المستخدم نهائيًا؟",
+        "description": "سيفقد {name} كل الوصول فورًا. لا يمكن التراجع عن هذا الإجراء.",
+        "confirm": "حظر المستخدم",
+        "cancel": "إلغاء"
+      }
+    },
+    "invite": {
+      "title": "دعوة مستخدم",
+      "description": "أرسل دعوة مع تحديد خطة أولية.",
+      "nameLabel": "الاسم",
+      "namePlaceholder": "مثال: جوردان لي",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "name@company.com",
+      "planLabel": "الخطة",
+      "cancel": "إلغاء",
+      "submit": "إرسال الدعوة"
+    },
+    "edit": {
+      "title": "تعديل المستخدم",
+      "description": "قم بتحديث بيانات حساب هذا المستخدم.",
+      "nameLabel": "الاسم",
+      "emailLabel": "البريد الإلكتروني",
+      "planLabel": "الخطة",
+      "statusLabel": "الحالة",
+      "cancel": "إلغاء",
+      "submit": "حفظ التغييرات"
+    },
+    "toasts": {
+      "invited": "تم إرسال الدعوة",
+      "updated": "تم تحديث المستخدم",
+      "suspended": "تم تعليق المستخدم",
+      "reactivated": "تم إعادة تفعيل المستخدم",
+      "blocked": "تم حظر المستخدم",
+      "passwordReset": "تم إرسال بريد إعادة تعيين كلمة المرور",
+      "planAssigned": "تم تحديث الخطة",
+      "noteSaved": "تم حفظ الملاحظة"
+    }
   }
 }
