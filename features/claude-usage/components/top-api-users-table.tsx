@@ -38,7 +38,7 @@ export default function TopApiUsersTable() {
         <CardTitle>{t("table.title")}</CardTitle>
         <CardDescription>{t("table.subtitle")}</CardDescription>
       </CardHeader>
-      <CardContent className="px-0">
+      <CardContent className="px-0 ring-1 ring-border/80 rounded-b-xl">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
