@@ -76,7 +76,7 @@
   --chart-4: #2d5c0c;
   --chart-5: #1a3606;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: white;
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: #A1D241;
   --sidebar-primary-foreground: #132b0a;
