@@ -26,6 +26,40 @@
     "settings": "Settings",
     "logout": "Log out"
   },
+  "Auth": {
+    "title": "Sign In",
+    "subtitle": "Welcome back, sign in to access your dashboard.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "admin@company.com",
+    "passwordLabel": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign In",
+    "submitting": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "generic": "Something went wrong. Please try again."
+    },
+    "hero": {
+      "brand": "ClaudeAdmin",
+      "heading1": "Manage your platform",
+      "heading2": "Start with a secure sign-in",
+      "description": "Full control over users, subscriptions, billing, and API usage from a single place.",
+      "stats": {
+        "subscriptions": "Subscriptions",
+        "apiRequests": "API Requests",
+        "security": "Security",
+        "users": "Users"
+      },
+      "footer": "© {year} All rights reserved."
+    }
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Configure your platform settings and preferences",

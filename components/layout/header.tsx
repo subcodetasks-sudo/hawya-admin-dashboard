@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Link, usePathname } from "@/i18n/navigation";
 
 export default function DashboardHeader() {
@@ -32,6 +33,11 @@ export default function DashboardHeader() {
   const tSidebar = useTranslations("Sidebar");
   const pathname = usePathname();
   const activeItem = findActiveNavItem(pathname);
+  const { admin, logout } = useAuth();
+  const accountLabel = admin?.email ?? t("accountName");
+  const accountInitials = admin?.email
+    ? admin.email.slice(0, 2).toUpperCase()
+    : t("accountInitials");
 
   return (
     <header className="flex h-18 shrink-0 items-center gap-3 border-b px-4  bg-white">
@@ -70,15 +76,15 @@ export default function DashboardHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-2 ps-1.5 pe-2">
               <Avatar >
-                <AvatarFallback>{t("accountInitials")}</AvatarFallback>
+                <AvatarFallback>{accountInitials}</AvatarFallback>
               </Avatar>
               <span className="hidden text-sm font-medium sm:inline">
-                {t("accountName")}
+                {accountLabel}
               </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuLabel>{t("accountName")}</DropdownMenuLabel>
+            <DropdownMenuLabel>{accountLabel}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/settings">
@@ -87,7 +93,7 @@ export default function DashboardHeader() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" disabled>
+            <DropdownMenuItem variant="destructive" onSelect={logout}>
               <LogOut />
               {t("logout")}
             </DropdownMenuItem>

@@ -26,6 +26,40 @@
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج"
   },
+  "Auth": {
+    "title": "تسجيل الدخول",
+    "subtitle": "مرحبًا بك مجددًا، سجّل دخولك للوصول إلى لوحة التحكم.",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "admin@company.com",
+    "passwordLabel": "كلمة المرور",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "submit": "تسجيل الدخول",
+    "submitting": "جارٍ تسجيل الدخول...",
+    "noAccount": "ليس لديك حساب؟",
+    "createAccount": "إنشاء حساب",
+    "errors": {
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+    },
+    "hero": {
+      "brand": "ClaudeAdmin",
+      "heading1": "إدارة منصتك",
+      "heading2": "تبدأ من دخول آمن",
+      "description": "تحكم كامل في المستخدمين، الاشتراكات، الفواتير، واستخدام API من مكان واحد.",
+      "stats": {
+        "subscriptions": "الاشتراكات",
+        "apiRequests": "طلبات API",
+        "security": "الأمان",
+        "users": "المستخدمون"
+      },
+      "footer": "© {year} جميع الحقوق محفوظة."
+    }
+  },
   "Settings": {
     "title": "الإعدادات",
     "subtitle": "تكوين إعدادات وتفضيلات المنصة",
