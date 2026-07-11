@@ -20,10 +20,8 @@ type Props = {
 export default function SettingsComingSoon({ icon: Icon, title }: Props) {
   const t = useTranslations("Settings");
 
-  function noop() {}
-
   return (
-    <SettingsPanelShell onSave={noop} onDiscard={noop}>
+    <SettingsPanelShell>
       <Empty className="min-h-[200px] flex-1 p-0">
         <EmptyHeader>
           <EmptyMedia variant="icon">

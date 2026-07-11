@@ -1,42 +1,39 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import ApiKeyItem from "@/features/settings/components/api-key-item";
+import ApiKeySecretDialog from "@/features/settings/components/api-key-secret-dialog";
+import CreateApiKeyDialog from "@/features/settings/components/create-api-key-dialog";
 import SettingsPanelShell from "@/features/settings/components/settings-panel-shell";
 import {
-  useCreateApiKey,
   useDeleteApiKey,
-  useRegenerateApiKey,
+  useRotateApiKey,
 } from "@/features/settings/hooks/use-settings-mutations";
-import { settingsQueryOptions } from "@/features/settings/services/settings";
-import type { ApiKey } from "@/features/settings/types";
+import { apiKeysQueryOptions } from "@/features/settings/services/settings";
+import type { ApiKey, ApiKeyCreateResult } from "@/features/settings/types";
 
 export default function ApiKeysPanel() {
   const t = useTranslations("Settings");
-  const { data } = useQuery(settingsQueryOptions);
-  const createKey = useCreateApiKey();
-  const regenerateKey = useRegenerateApiKey();
+  const { data, isLoading, isError } = useQuery(apiKeysQueryOptions);
+  const rotateKey = useRotateApiKey();
   const deleteKey = useDeleteApiKey();
 
-  const apiKeys = data?.apiKeys ?? [];
-  const isBusy =
-    createKey.isPending || regenerateKey.isPending || deleteKey.isPending;
+  const [secretResult, setSecretResult] = useState<ApiKeyCreateResult | null>(null);
 
-  function noop() {}
+  const apiKeys = data ?? [];
+  const isBusy = rotateKey.isPending || deleteKey.isPending;
 
-  function handleCopy(apiKey: ApiKey) {
-    navigator.clipboard?.writeText(apiKey.maskedKey).catch(() => undefined);
-    toast.success(t("apiKeys.copiedToast"));
-  }
-
-  function handleRegenerate(apiKey: ApiKey) {
-    regenerateKey.mutate(apiKey.id, {
-      onSuccess: () => toast.success(t("apiKeys.regeneratedToast")),
+  function handleRotate(apiKey: ApiKey) {
+    rotateKey.mutate(apiKey.id, {
+      onSuccess: (result) => {
+        toast.success(t("apiKeys.rotatedToast"));
+        setSecretResult(result);
+      },
     });
   }
 
@@ -46,39 +43,50 @@ export default function ApiKeysPanel() {
     });
   }
 
-  function handleCreate() {
-    createKey.mutate("development", {
-      onSuccess: () => toast.success(t("apiKeys.createdToast")),
-    });
-  }
-
   return (
-    <SettingsPanelShell onSave={noop} onDiscard={noop}>
+    <SettingsPanelShell>
       <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-semibold text-foreground">
-          {t("apiKeys.sectionTitle")}
-        </h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-sm font-semibold text-foreground">
+            {t("apiKeys.sectionTitle")}
+          </h2>
+          <CreateApiKeyDialog
+            disabled={isBusy}
+            onCreated={(result) => {
+              toast.success(t("apiKeys.createdToast"));
+              setSecretResult(result);
+            }}
+          />
+        </div>
 
         <div className="flex flex-col gap-3">
-          {apiKeys.map((apiKey) => (
-            <ApiKeyItem
-              key={apiKey.id}
-              apiKey={apiKey}
-              onCopy={handleCopy}
-              onRegenerate={handleRegenerate}
-              onDelete={handleDelete}
-              disabled={isBusy}
-            />
-          ))}
-        </div>
-
-        <div className="flex justify-center pt-1">
-          <Button onClick={handleCreate} disabled={isBusy}>
-            <Plus data-icon="inline-start" />
-            {t("apiKeys.createKey")}
-          </Button>
+          {isLoading ? (
+            Array.from({ length: 2 }).map((_, index) => (
+              <Skeleton key={index} className="h-16 w-full" />
+            ))
+          ) : isError ? (
+            <p className="py-6 text-center text-sm text-destructive">
+              {t("apiKeys.loadError")}
+            </p>
+          ) : apiKeys.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              {t("apiKeys.empty")}
+            </p>
+          ) : (
+            apiKeys.map((apiKey) => (
+              <ApiKeyItem
+                key={apiKey.id}
+                apiKey={apiKey}
+                onRotate={handleRotate}
+                onDelete={handleDelete}
+                disabled={isBusy}
+              />
+            ))
+          )}
         </div>
       </section>
+
+      <ApiKeySecretDialog result={secretResult} onClose={() => setSecretResult(null)} />
     </SettingsPanelShell>
   );
 }

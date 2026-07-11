@@ -4,6 +4,7 @@ export type SettingsTabId =
   | "email"
   | "apiKeys"
   | "security"
+  | "auditLog"
   | "roles";
 
 export type GeneralSettings = {
@@ -35,18 +36,40 @@ export type SecuritySettings = {
 
 export type SecuritySettingKey = keyof SecuritySettings;
 
-export type ApiKeyEnvironment = "production" | "development";
-
 export type ApiKey = {
   id: string;
-  environment: ApiKeyEnvironment;
-  maskedKey: string;
-  status: "active" | "inactive";
+  name: string;
+  masked: string;
+  isActive: boolean;
+  createdAt: string;
+  lastRotatedAt: string | null;
+};
+
+export type ApiKeyCreateResult = {
+  key: ApiKey;
+  plaintext: string;
+};
+
+export type AuditLogEntry = {
+  id: string;
+  adminId: string;
+  action: string;
+  targetType: string;
+  targetId: string;
+  detail: string | null;
   createdAt: string;
 };
 
-export type PlatformSettings = {
-  general: GeneralSettings;
-  security: SecuritySettings;
-  apiKeys: ApiKey[];
+export type AuditLogListParams = {
+  page: number;
+  perPage: number;
+  targetType?: string;
+  targetId?: string;
+};
+
+export type AuditLogListResult = {
+  logs: AuditLogEntry[];
+  total: number;
+  page: number;
+  perPage: number;
 };

@@ -2,6 +2,7 @@
 
 import {
   CreditCard,
+  History,
   KeyRound,
   Mail,
   Settings,
@@ -20,6 +21,7 @@ const TABS: { id: SettingsTabId; icon: LucideIcon }[] = [
   { id: "email", icon: Mail },
   { id: "apiKeys", icon: KeyRound },
   { id: "security", icon: Shield },
+  { id: "auditLog", icon: History },
   { id: "roles", icon: UserCog },
 ];
 

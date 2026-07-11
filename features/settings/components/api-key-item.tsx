@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Copy, RefreshCw, Trash2 } from "lucide-react";
+import { RefreshCw, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,47 +13,44 @@ import type { ApiKey } from "@/features/settings/types";
 
 type Props = {
   apiKey: ApiKey;
-  onCopy: (apiKey: ApiKey) => void;
-  onRegenerate: (apiKey: ApiKey) => void;
+  onRotate: (apiKey: ApiKey) => void;
   onDelete: (apiKey: ApiKey) => void;
   disabled?: boolean;
 };
 
-export default function ApiKeyItem({
-  apiKey,
-  onCopy,
-  onRegenerate,
-  onDelete,
-  disabled = false,
-}: Props) {
+export default function ApiKeyItem({ apiKey, onRotate, onDelete, disabled = false }: Props) {
   const t = useTranslations("Settings");
   const locale = useLocale();
   const dateLocale = getDateFnsLocale(locale);
-  const createdAt = toLocaleDigits(
-    format(new Date(apiKey.createdAt), "d MMMM yyyy", { locale: dateLocale }),
-    locale,
-  );
+
+  function formatDate(value: string) {
+    return toLocaleDigits(
+      format(new Date(value), "d MMMM yyyy", { locale: dateLocale }),
+      locale,
+    );
+  }
 
   return (
     <div className="flex items-center justify-between gap-4 rounded-lg bg-muted/40 p-4 ring-1 ring-border/60">
       <div className="flex min-w-0 flex-col gap-1">
         <div className="flex items-center gap-2">
-          <span className="truncate text-sm font-medium">
-            {t(`apiKeys.environments.${apiKey.environment}`)}
-          </span>
+          <span className="truncate text-sm font-medium">{apiKey.name}</span>
           <Badge
             className={cn(
               "border-transparent",
-              apiKey.status === "active"
+              apiKey.isActive
                 ? "bg-success/10 text-success"
                 : "bg-muted text-muted-foreground",
             )}
           >
-            {t(`apiKeys.${apiKey.status}`)}
+            {t(apiKey.isActive ? "apiKeys.active" : "apiKeys.inactive")}
           </Badge>
         </div>
         <span className="text-xs text-muted-foreground">
-          {t("apiKeys.createdAt", { date: createdAt })}
+          {t("apiKeys.createdAt", { date: formatDate(apiKey.createdAt) })}
+          {apiKey.lastRotatedAt
+            ? ` · ${t("apiKeys.rotatedAt", { date: formatDate(apiKey.lastRotatedAt) })}`
+            : ""}
         </span>
       </div>
 
@@ -61,7 +58,7 @@ export default function ApiKeyItem({
         dir="ltr"
         className="hidden shrink-0 font-mono text-sm tracking-wide text-muted-foreground sm:inline"
       >
-        {apiKey.maskedKey}
+        {apiKey.masked}
       </span>
 
       <div className="flex shrink-0 items-center gap-0.5">
@@ -69,19 +66,9 @@ export default function ApiKeyItem({
           variant="ghost"
           size="icon-sm"
           className="text-muted-foreground"
-          aria-label={t("apiKeys.actions.copy")}
+          aria-label={t("apiKeys.actions.rotate")}
           disabled={disabled}
-          onClick={() => onCopy(apiKey)}
-        >
-          <Copy />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="text-muted-foreground"
-          aria-label={t("apiKeys.actions.regenerate")}
-          disabled={disabled}
-          onClick={() => onRegenerate(apiKey)}
+          onClick={() => onRotate(apiKey)}
         >
           <RefreshCw />
         </Button>

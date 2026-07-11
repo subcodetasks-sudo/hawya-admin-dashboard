@@ -5,6 +5,7 @@ import { CreditCard, Mail, UserCog } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import ApiKeysPanel from "@/features/settings/components/api-keys-panel";
+import AuditLogPanel from "@/features/settings/components/audit-log-panel";
 import GeneralSettingsPanel from "@/features/settings/components/general-settings-panel";
 import SecuritySettingsPanel from "@/features/settings/components/security-settings-panel";
 import SettingsComingSoon from "@/features/settings/components/settings-coming-soon";
@@ -23,6 +24,8 @@ export default function SettingsOverview() {
         return <ApiKeysPanel />;
       case "security":
         return <SecuritySettingsPanel />;
+      case "auditLog":
+        return <AuditLogPanel />;
       case "payment":
         return <SettingsComingSoon icon={CreditCard} title={t("payment.title")} />;
       case "email":

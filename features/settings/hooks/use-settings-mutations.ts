@@ -6,7 +6,7 @@ import { settingsKeys } from "@/features/settings/query-keys";
 import {
   createApiKey,
   deleteApiKey,
-  regenerateApiKey,
+  rotateApiKey,
   updateGeneralSettings,
   updateSecuritySettings,
 } from "@/features/settings/services/settings";
@@ -16,7 +16,7 @@ export function useUpdateGeneralSettings() {
 
   return useMutation({
     mutationFn: updateGeneralSettings,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.detail() }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.general() }),
   });
 }
 
@@ -25,7 +25,7 @@ export function useUpdateSecuritySettings() {
 
   return useMutation({
     mutationFn: updateSecuritySettings,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.detail() }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.security() }),
   });
 }
 
@@ -34,16 +34,16 @@ export function useCreateApiKey() {
 
   return useMutation({
     mutationFn: createApiKey,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.detail() }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.apiKeys() }),
   });
 }
 
-export function useRegenerateApiKey() {
+export function useRotateApiKey() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: regenerateApiKey,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.detail() }),
+    mutationFn: rotateApiKey,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.apiKeys() }),
   });
 }
 
@@ -52,6 +52,6 @@ export function useDeleteApiKey() {
 
   return useMutation({
     mutationFn: deleteApiKey,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.detail() }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.apiKeys() }),
   });
 }

@@ -14,10 +14,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import SettingsPanelShell from "@/features/settings/components/settings-panel-shell";
 import SettingsToggleRow from "@/features/settings/components/settings-toggle-row";
 import { useUpdateGeneralSettings } from "@/features/settings/hooks/use-settings-mutations";
-import { settingsQueryOptions } from "@/features/settings/services/settings";
+import { generalSettingsQueryOptions } from "@/features/settings/services/settings";
 import type {
   GeneralPreferenceKey,
   GeneralSettings,
@@ -35,20 +36,35 @@ const PREFERENCE_KEYS: GeneralPreferenceKey[] = [
 
 export default function GeneralSettingsPanel() {
   const t = useTranslations("Settings");
-  const { data } = useQuery(settingsQueryOptions);
+  const { data, isLoading, isError } = useQuery(generalSettingsQueryOptions);
   const mutation = useUpdateGeneralSettings();
 
-  const server = data?.general ?? null;
-  const [synced, setSynced] = useState<GeneralSettings | null>(server);
-  const [draft, setDraft] = useState<GeneralSettings | null>(server);
+  const [synced, setSynced] = useState<GeneralSettings | null>(null);
+  const [draft, setDraft] = useState<GeneralSettings | null>(null);
 
-  if (server && server !== synced) {
-    setSynced(server);
-    setDraft(server);
+  if (data && data !== synced) {
+    setSynced(data);
+    setDraft(data);
   }
 
-  if (!draft) {
-    return null;
+  if (isLoading) {
+    return (
+      <SettingsPanelShell>
+        <div className="flex flex-col gap-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="h-10 w-full" />
+          ))}
+        </div>
+      </SettingsPanelShell>
+    );
+  }
+
+  if (isError || !draft) {
+    return (
+      <SettingsPanelShell>
+        <p className="py-6 text-center text-sm text-destructive">{t("general.loadError")}</p>
+      </SettingsPanelShell>
+    );
   }
 
   const isDirty = JSON.stringify(draft) !== JSON.stringify(synced);
