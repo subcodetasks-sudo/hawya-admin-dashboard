@@ -4,21 +4,21 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useRouter } from "@/i18n/navigation";
 
-import { loginAdmin, type LoginRequest } from "../services/auth-service";
+import { verifyOtp, type VerifyOtpRequest } from "../services/auth-service";
 import { setSession } from "../services/session";
 
-export interface LoginFormValues extends LoginRequest {
+export interface VerifyOtpValues extends VerifyOtpRequest {
   remember: boolean;
 }
 
-export function useLogin() {
+export function useVerifyOtp() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (values: LoginFormValues) =>
-      loginAdmin({ email: values.email, password: values.password }),
+    mutationFn: (values: VerifyOtpValues) =>
+      verifyOtp({ email: values.email, otp: values.otp }),
     onSuccess: (data, variables) => {
-      if (data.otp_required || !data.access_token || !data.admin_id || !data.role) {
+      if (!data.access_token || !data.admin_id || !data.role) {
         return;
       }
 

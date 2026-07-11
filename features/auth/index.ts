@@ -1,7 +1,15 @@
 export { default as LoginPage } from "./components/login-page";
 export { useAuth } from "./hooks/use-auth";
 export { useLogin } from "./hooks/use-login";
-export { LoginError, loginAdmin, type LoginData, type LoginRequest } from "./services/auth-service";
+export { useVerifyOtp } from "./hooks/use-verify-otp";
+export {
+  LoginError,
+  loginAdmin,
+  verifyOtp,
+  type LoginData,
+  type LoginRequest,
+  type VerifyOtpRequest,
+} from "./services/auth-service";
 export {
   clearSession,
   getStoredAdmin,

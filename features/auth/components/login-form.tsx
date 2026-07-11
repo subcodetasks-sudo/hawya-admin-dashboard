@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -31,7 +31,11 @@ function buildLoginSchema(t: AuthTranslator) {
 
 type LoginFormValues = z.infer<ReturnType<typeof buildLoginSchema>>;
 
-export default function LoginForm() {
+interface LoginFormProps {
+  onOtpRequired: (email: string, remember: boolean) => void;
+}
+
+export default function LoginForm({ onOtpRequired }: LoginFormProps) {
   const t = useTranslations("Auth");
   const [showPassword, setShowPassword] = useState(false);
   const login = useLogin();
@@ -41,6 +45,7 @@ export default function LoginForm() {
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(schema),
@@ -51,6 +56,12 @@ export default function LoginForm() {
     login.reset();
     login.mutate(values);
   }
+
+  useEffect(() => {
+    if (login.data?.otp_required) {
+      onOtpRequired(login.data.email, getValues("remember"));
+    }
+  }, [login.data, onOtpRequired, getValues]);
 
   const serverErrorMessage =
     login.error instanceof LoginError

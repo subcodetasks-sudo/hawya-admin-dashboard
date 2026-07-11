@@ -3,12 +3,18 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginData {
-  access_token: string;
-  token_type: string;
-  admin_id: string;
+export interface VerifyOtpRequest {
   email: string;
-  role: string;
+  otp: string;
+}
+
+export interface LoginData {
+  access_token: string | null;
+  token_type: string;
+  admin_id: string | null;
+  email: string;
+  role: string | null;
+  otp_required: boolean;
 }
 
 interface LoginSuccessResponse {
@@ -49,6 +55,28 @@ export async function loginAdmin(payload: LoginRequest): Promise<LoginData> {
     const errorJson: LoginErrorResponse = await response.json();
     throw new LoginError(
       errorJson.message || "Login failed",
+      errorJson.errors?.error,
+    );
+  }
+
+  const json: LoginSuccessResponse = await response.json();
+  return json.data;
+}
+
+export async function verifyOtp(payload: VerifyOtpRequest): Promise<LoginData> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/auth/verify-otp`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
+
+  if (!response.ok) {
+    const errorJson: LoginErrorResponse = await response.json();
+    throw new LoginError(
+      errorJson.message || "OTP verification failed",
       errorJson.errors?.error,
     );
   }
