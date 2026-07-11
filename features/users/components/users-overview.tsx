@@ -5,16 +5,35 @@ import { UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
-import InviteUserDialog from "@/features/users/components/invite-user-dialog";
+import CreateUserDialog from "@/features/users/components/create-user-dialog";
+import UsersPagination from "@/features/users/components/users-pagination";
 import UsersTable from "@/features/users/components/users-table";
 import UsersToolbar from "@/features/users/components/users-toolbar";
-import type { UserPlanFilter, UserStatusFilter } from "@/features/users/types";
+
+const PER_PAGE = 10;
 
 export default function UsersOverview() {
   const t = useTranslations("Users");
+  const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<UserStatusFilter>("all");
-  const [planFilter, setPlanFilter] = useState<UserPlanFilter>("all");
+  const [planFilter, setPlanFilter] = useState("all");
+
+  function handleSearchQueryChange(value: string) {
+    setSearchQuery(value);
+    setPage(1);
+  }
+
+  function handlePlanFilterChange(value: string) {
+    setPlanFilter(value);
+    setPage(1);
+  }
+
+  const params = {
+    page,
+    perPage: PER_PAGE,
+    search: searchQuery.trim() || undefined,
+    planId: planFilter === "all" ? undefined : planFilter,
+  };
 
   return (
     <div className="flex flex-col gap-4 md:gap-6">
@@ -23,11 +42,11 @@ export default function UsersOverview() {
           <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
         </div>
-        <InviteUserDialog
+        <CreateUserDialog
           trigger={
             <Button>
               <UserPlus data-icon="inline-start" />
-              {t("inviteUser")}
+              {t("createUser")}
             </Button>
           }
         />
@@ -36,17 +55,13 @@ export default function UsersOverview() {
       <div className="flex flex-col overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10">
         <UsersToolbar
           searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
+          onSearchQueryChange={handleSearchQueryChange}
           planFilter={planFilter}
-          onPlanFilterChange={setPlanFilter}
+          onPlanFilterChange={handlePlanFilterChange}
+          listParams={params}
         />
-        <UsersTable
-          searchQuery={searchQuery}
-          statusFilter={statusFilter}
-          planFilter={planFilter}
-        />
+        <UsersTable params={params} />
+        <UsersPagination params={params} onPageChange={setPage} />
       </div>
     </div>
   );

@@ -1,205 +1,234 @@
 import { queryOptions } from "@tanstack/react-query";
 
+import { apiGet, apiPatch, apiPost } from "@/lib/api-client";
 import { userKeys } from "@/features/users/query-keys";
 import type {
-  InviteUserInput,
-  User,
-  UserInput,
-  UserPlanKey,
-  UserStatus,
+  BanUserInput,
+  CreateUserInput,
+  PlanOption,
+  UserDetail,
+  UserNote,
+  UsersListParams,
+  UsersListResult,
+  UserSubscription,
+  UserSummary,
 } from "@/features/users/types";
 
-const MOCK_LATENCY_MS = 350;
+type UserSummaryResponse = {
+  id: string;
+  display_name: string;
+  email: string;
+  plan_name: string;
+  is_active: boolean;
+  is_verified: boolean;
+  api_requests: number;
+  created_at: string;
+  last_login_at: string | null;
+};
 
-function delay<T>(value: T): Promise<T> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(value), MOCK_LATENCY_MS);
+function mapUserSummary(data: UserSummaryResponse): UserSummary {
+  return {
+    id: data.id,
+    displayName: data.display_name,
+    email: data.email,
+    planName: data.plan_name,
+    isActive: data.is_active,
+    isVerified: data.is_verified,
+    apiRequests: data.api_requests,
+    createdAt: data.created_at,
+    lastLoginAt: data.last_login_at,
+  };
+}
+
+type UsersListResponse = {
+  users: UserSummaryResponse[];
+  total: number;
+  page: number;
+  per_page: number;
+};
+
+export async function fetchUsers(params: UsersListParams): Promise<UsersListResult> {
+  const query = new URLSearchParams({
+    page: String(params.page),
+    per_page: String(params.perPage),
+  });
+
+  if (params.search) {
+    query.set("search", params.search);
+  }
+
+  if (params.planId) {
+    query.set("plan_id", params.planId);
+  }
+
+  const data = await apiGet<UsersListResponse>(`/admin/users?${query.toString()}`);
+
+  return {
+    users: data.users.map(mapUserSummary),
+    total: data.total,
+    page: data.page,
+    perPage: data.per_page,
+  };
+}
+
+export function usersListQueryOptions(params: UsersListParams) {
+  return queryOptions({
+    queryKey: userKeys.list(params),
+    queryFn: () => fetchUsers(params),
   });
 }
 
-function minutesAgo(minutes: number) {
-  return new Date(Date.now() - minutes * 60_000).toISOString();
+type UserSubscriptionResponse = {
+  plan_name: string;
+  billing_cycle: string;
+  status: string;
+  started_at: string;
+  ends_at: string;
+  renews_at: string;
+};
+
+function mapSubscription(data: UserSubscriptionResponse): UserSubscription {
+  return {
+    planName: data.plan_name,
+    billingCycle: data.billing_cycle,
+    status: data.status,
+    startedAt: data.started_at,
+    endsAt: data.ends_at,
+    renewsAt: data.renews_at,
+  };
 }
 
-function initialsFrom(name: string) {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
+type UserNoteResponse = {
+  id: string;
+  note: string;
+  admin_id: string;
+  created_at: string;
+};
+
+function mapNote(data: UserNoteResponse): UserNote {
+  return {
+    id: data.id,
+    note: data.note,
+    adminId: data.admin_id,
+    createdAt: data.created_at,
+  };
 }
 
-let mockUsers: User[] = [
-  {
-    id: "user_sarah_chen",
-    name: "Sarah Chen",
-    email: "sarah.chen@techcorp.io",
-    initials: "SC",
-    planKey: "pro",
-    status: "active",
-    apiUsage: 87_432,
-    signupDate: new Date(2024, 0, 15).toISOString(),
-    lastLoginAt: minutesAgo(120),
-    adminNotes: "",
-  },
-  {
-    id: "user_marcus_williams",
-    name: "Marcus Williams",
-    email: "m.williams@startup.co",
-    initials: "MW",
-    planKey: "business",
-    status: "active",
-    apiUsage: 234_891,
-    signupDate: new Date(2024, 1, 3).toISOString(),
-    lastLoginAt: minutesAgo(5),
-    adminNotes: "",
-  },
-  {
-    id: "user_elena_rodriguez",
-    name: "Elena Rodriguez",
-    email: "elena@designstudio.es",
-    initials: "ER",
-    planKey: "starter",
-    status: "active",
-    apiUsage: 9_821,
-    signupDate: new Date(2024, 2, 22).toISOString(),
-    lastLoginAt: minutesAgo(60 * 24),
-    adminNotes: "",
-  },
-  {
-    id: "user_james_kim",
-    name: "James Kim",
-    email: "james.kim@aiventures.com",
-    initials: "JK",
-    planKey: "enterprise",
-    status: "active",
-    apiUsage: 891_243,
-    signupDate: new Date(2024, 0, 30).toISOString(),
-    lastLoginAt: minutesAgo(180),
-    adminNotes: "",
-  },
-  {
-    id: "user_priya_patel",
-    name: "Priya Patel",
-    email: "priya@dataflow.in",
-    initials: "PP",
-    planKey: "pro",
-    status: "suspended",
-    apiUsage: 45_672,
-    signupDate: new Date(2024, 3, 10).toISOString(),
-    lastLoginAt: minutesAgo(60 * 24 * 3),
-    adminNotes: "",
-  },
-  {
-    id: "user_thomas_muller",
-    name: "Thomas Muller",
-    email: "t.muller@enterprise.de",
-    initials: "TM",
-    planKey: "business",
-    status: "active",
-    apiUsage: 156_789,
-    signupDate: new Date(2024, 1, 18).toISOString(),
-    lastLoginAt: minutesAgo(60),
-    adminNotes: "",
-  },
-  {
-    id: "user_aisha_okonkwo",
-    name: "Aisha Okonkwo",
-    email: "aisha@creative.ng",
-    initials: "AO",
-    planKey: "starter",
-    status: "active",
-    apiUsage: 3_421,
-    signupDate: new Date(2024, 4, 5).toISOString(),
-    lastLoginAt: minutesAgo(60 * 24 * 2),
-    adminNotes: "",
-  },
-  {
-    id: "user_li_wei",
-    name: "Li Wei",
-    email: "li.wei@cloudtech.cn",
-    initials: "LW",
-    planKey: "pro",
-    status: "active",
-    apiUsage: 67_234,
-    signupDate: new Date(2024, 2, 8).toISOString(),
-    lastLoginAt: minutesAgo(240),
-    adminNotes: "",
-  },
-];
+type UserDetailResponse = UserSummaryResponse & {
+  language: string;
+  total_projects: number;
+  total_payments: number;
+  subscription_months: number;
+  usage: {
+    api_requests: number;
+    tokens: number;
+    success_count: number;
+    failed_count: number;
+    limit: number;
+    remaining: number;
+    usage_percent: number;
+  };
+  current_subscription: UserSubscriptionResponse | null;
+  past_subscriptions: UserSubscriptionResponse[];
+  notes: UserNoteResponse[];
+};
 
-function findUserOrThrow(id: string): User {
-  const user = mockUsers.find((candidate) => candidate.id === id);
+export async function fetchUserDetail(id: string): Promise<UserDetail> {
+  const data = await apiGet<UserDetailResponse>(`/admin/users/${id}`);
 
-  if (!user) {
-    throw new Error(`User not found: ${id}`);
-  }
-
-  return user;
+  return {
+    ...mapUserSummary(data),
+    language: data.language,
+    totalProjects: data.total_projects,
+    totalPayments: data.total_payments,
+    subscriptionMonths: data.subscription_months,
+    usage: {
+      apiRequests: data.usage.api_requests,
+      tokens: data.usage.tokens,
+      successCount: data.usage.success_count,
+      failedCount: data.usage.failed_count,
+      limit: data.usage.limit,
+      remaining: data.usage.remaining,
+      usagePercent: data.usage.usage_percent,
+    },
+    currentSubscription: data.current_subscription
+      ? mapSubscription(data.current_subscription)
+      : null,
+    pastSubscriptions: data.past_subscriptions.map(mapSubscription),
+    notes: data.notes.map(mapNote),
+  };
 }
 
-async function setUserStatus(id: string, status: UserStatus): Promise<User> {
-  mockUsers = mockUsers.map((user) => (user.id === id ? { ...user, status } : user));
-  return delay(findUserOrThrow(id));
+export function userDetailQueryOptions(id: string) {
+  return queryOptions({
+    queryKey: userKeys.detail(id),
+    queryFn: () => fetchUserDetail(id),
+    enabled: Boolean(id),
+  });
 }
 
-export async function fetchUsers(): Promise<User[]> {
-  return delay([...mockUsers]);
+type PlanOptionResponse = {
+  id: string;
+  name: string;
+  is_active: boolean;
+};
+
+type PlanOptionsResponse = { plans: PlanOptionResponse[]; total: number };
+
+export async function fetchPlanOptions(): Promise<PlanOption[]> {
+  const data = await apiGet<PlanOptionsResponse>("/admin/plans");
+
+  return data.plans.map((plan) => ({
+    id: plan.id,
+    name: plan.name,
+    isActive: plan.is_active,
+  }));
 }
 
-export const usersListQueryOptions = queryOptions({
-  queryKey: userKeys.lists(),
-  queryFn: fetchUsers,
+export const planOptionsQueryOptions = queryOptions({
+  queryKey: userKeys.plans(),
+  queryFn: fetchPlanOptions,
 });
 
-export async function inviteUser(input: InviteUserInput): Promise<User> {
-  const user: User = {
-    id: `user_${Date.now()}`,
-    name: input.name,
+export async function createUser(input: CreateUserInput): Promise<UserSummary> {
+  const data = await apiPost<UserSummaryResponse>("/admin/users", {
+    display_name: input.displayName,
     email: input.email,
-    initials: initialsFrom(input.name),
-    planKey: input.planKey,
-    status: "active",
-    apiUsage: 0,
-    signupDate: new Date().toISOString(),
-    lastLoginAt: new Date().toISOString(),
-    adminNotes: "",
-  };
-  mockUsers = [user, ...mockUsers];
-  return delay(user);
+    plan_id: input.planId,
+    password: input.password,
+    is_verified: input.isVerified,
+  });
+
+  return mapUserSummary(data);
 }
 
-export async function updateUser(id: string, input: UserInput): Promise<User> {
-  mockUsers = mockUsers.map((user) =>
-    user.id === id ? { ...user, ...input, initials: initialsFrom(input.name) } : user,
-  );
-  return delay(findUserOrThrow(id));
+export async function suspendUser(id: string): Promise<void> {
+  await apiPatch(`/admin/users/${id}/suspend`);
 }
 
-export async function suspendUser(id: string): Promise<User> {
-  return setUserStatus(id, "suspended");
+export async function activateUser(id: string): Promise<void> {
+  await apiPatch(`/admin/users/${id}/activate`);
 }
 
-export async function reactivateUser(id: string): Promise<User> {
-  return setUserStatus(id, "active");
+export async function banUser(id: string, input: BanUserInput): Promise<void> {
+  await apiPost(`/admin/users/${id}/ban`, {
+    ban_type: input.banType,
+    ...(input.until ? { until: input.until } : {}),
+  });
 }
 
-export async function blockUser(id: string): Promise<User> {
-  return setUserStatus(id, "blocked");
+export async function changeUserPlan(id: string, planId: string): Promise<void> {
+  await apiPatch(`/admin/users/${id}/plan`, { plan_id: planId });
 }
 
-export async function resetUserPassword(id: string): Promise<void> {
-  findUserOrThrow(id);
-  return delay(undefined);
+type ResetPasswordResponse = { user_id: string; temporary_password: string };
+
+export async function resetUserPassword(id: string): Promise<string> {
+  const data = await apiPost<ResetPasswordResponse>(`/admin/users/${id}/reset-password`, {});
+  return data.temporary_password;
 }
 
-export async function assignUserPlan(id: string, planKey: UserPlanKey): Promise<User> {
-  mockUsers = mockUsers.map((user) => (user.id === id ? { ...user, planKey } : user));
-  return delay(findUserOrThrow(id));
-}
-
-export async function saveUserAdminNote(id: string, adminNotes: string): Promise<User> {
-  mockUsers = mockUsers.map((user) => (user.id === id ? { ...user, adminNotes } : user));
-  return delay(findUserOrThrow(id));
+export async function addUserNote(id: string, note: string): Promise<UserNote> {
+  const data = await apiPost<UserNoteResponse>(`/admin/users/${id}/notes`, { note });
+  return mapNote(data);
 }

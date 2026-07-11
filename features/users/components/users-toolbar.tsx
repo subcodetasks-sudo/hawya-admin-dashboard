@@ -9,53 +9,49 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
-import { usersListQueryOptions } from "@/features/users/services/users";
-import type { UserPlanFilter, UserStatusFilter } from "@/features/users/types";
-
-const STATUS_FILTERS: UserStatusFilter[] = ["all", "active", "suspended", "blocked"];
-const PLAN_FILTERS: UserPlanFilter[] = ["all", "starter", "pro", "business", "enterprise"];
+import { planOptionsQueryOptions, usersListQueryOptions } from "@/features/users/services/users";
+import type { UsersListParams } from "@/features/users/types";
 
 type Props = {
   searchQuery: string;
   onSearchQueryChange: (value: string) => void;
-  statusFilter: UserStatusFilter;
-  onStatusFilterChange: (value: UserStatusFilter) => void;
-  planFilter: UserPlanFilter;
-  onPlanFilterChange: (value: UserPlanFilter) => void;
+  planFilter: string;
+  onPlanFilterChange: (value: string) => void;
+  listParams: UsersListParams;
 };
 
 export default function UsersToolbar({
   searchQuery,
   onSearchQueryChange,
-  statusFilter,
-  onStatusFilterChange,
   planFilter,
   onPlanFilterChange,
+  listParams,
 }: Props) {
   const t = useTranslations("Users");
-  const tDashboard = useTranslations("Dashboard");
-  const { data } = useQuery(usersListQueryOptions);
+  const { data: plans } = useQuery(planOptionsQueryOptions);
+  const { data } = useQuery(usersListQueryOptions(listParams));
 
   function handleExport() {
-    const users = data ?? [];
+    const users = data?.users ?? [];
     const header = [
-      "name",
+      "display_name",
       "email",
-      "plan",
-      "status",
-      "apiUsage",
-      "signupDate",
-      "lastLoginAt",
+      "plan_name",
+      "is_active",
+      "is_verified",
+      "api_requests",
+      "created_at",
+      "last_login_at",
     ];
     const rows = users.map((user) => [
-      user.name,
+      user.displayName,
       user.email,
-      user.planKey,
-      user.status,
-      String(user.apiUsage),
-      user.signupDate,
-      user.lastLoginAt,
+      user.planName,
+      String(user.isActive),
+      String(user.isVerified),
+      String(user.apiRequests),
+      user.createdAt,
+      user.lastLoginAt ?? "",
     ]);
     const csv = [header, ...rows]
       .map((row) => row.map((value) => `"${value.replace(/"/g, '""')}"`).join(","))
@@ -64,6 +60,8 @@ export default function UsersToolbar({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
+    // Exports only the currently loaded page — the list endpoint is
+    // server-paginated and there is no "export all" endpoint yet.
     link.download = "users.csv";
     link.click();
     URL.revokeObjectURL(url);
@@ -91,35 +89,17 @@ export default function UsersToolbar({
           </PopoverTrigger>
           <PopoverContent align="end" className="w-56">
             <p className="px-1 pb-1 text-xs text-muted-foreground">
-              {t("toolbar.filterStatusLabel")}
-            </p>
-            <RadioGroup
-              value={statusFilter}
-              onValueChange={(value) => onStatusFilterChange(value as UserStatusFilter)}
-            >
-              {STATUS_FILTERS.map((value) => (
-                <div key={value} className="flex items-center gap-2 px-1 py-1">
-                  <RadioGroupItem value={value} id={`status-filter-${value}`} />
-                  <Label htmlFor={`status-filter-${value}`}>{t(`status.${value}`)}</Label>
-                </div>
-              ))}
-            </RadioGroup>
-
-            <Separator className="my-1" />
-
-            <p className="px-1 pb-1 text-xs text-muted-foreground">
               {t("toolbar.filterPlanLabel")}
             </p>
-            <RadioGroup
-              value={planFilter}
-              onValueChange={(value) => onPlanFilterChange(value as UserPlanFilter)}
-            >
-              {PLAN_FILTERS.map((value) => (
-                <div key={value} className="flex items-center gap-2 px-1 py-1">
-                  <RadioGroupItem value={value} id={`plan-filter-${value}`} />
-                  <Label htmlFor={`plan-filter-${value}`}>
-                    {value === "all" ? t("status.all") : tDashboard(`plans.${value}`)}
-                  </Label>
+            <RadioGroup value={planFilter} onValueChange={onPlanFilterChange}>
+              <div className="flex items-center gap-2 px-1 py-1">
+                <RadioGroupItem value="all" id="plan-filter-all" />
+                <Label htmlFor="plan-filter-all">{t("toolbar.planAll")}</Label>
+              </div>
+              {(plans ?? []).map((plan) => (
+                <div key={plan.id} className="flex items-center gap-2 px-1 py-1">
+                  <RadioGroupItem value={plan.id} id={`plan-filter-${plan.id}`} />
+                  <Label htmlFor={`plan-filter-${plan.id}`}>{plan.name}</Label>
                 </div>
               ))}
             </RadioGroup>

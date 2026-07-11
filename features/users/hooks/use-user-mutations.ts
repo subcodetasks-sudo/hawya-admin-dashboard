@@ -4,31 +4,21 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { userKeys } from "@/features/users/query-keys";
 import {
-  assignUserPlan,
-  blockUser,
-  inviteUser,
-  reactivateUser,
+  activateUser,
+  addUserNote,
+  banUser,
+  changeUserPlan,
+  createUser,
   resetUserPassword,
-  saveUserAdminNote,
   suspendUser,
-  updateUser,
 } from "@/features/users/services/users";
-import type { InviteUserInput, UserInput, UserPlanKey } from "@/features/users/types";
+import type { BanUserInput, CreateUserInput } from "@/features/users/types";
 
-export function useInviteUser() {
+export function useCreateUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (input: InviteUserInput) => inviteUser(input),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
-  });
-}
-
-export function useUpdateUser() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, input }: { id: string; input: UserInput }) => updateUser(id, input),
+    mutationFn: (input: CreateUserInput) => createUser(input),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
   });
 }
@@ -37,50 +27,62 @@ export function useSuspendUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: suspendUser,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
+    mutationFn: (id: string) => suspendUser(id),
+    onSuccess: (_data, id) => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
+    },
   });
 }
 
-export function useReactivateUser() {
+export function useActivateUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: reactivateUser,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
+    mutationFn: (id: string) => activateUser(id),
+    onSuccess: (_data, id) => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
+    },
   });
 }
 
-export function useBlockUser() {
+export function useBanUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: blockUser,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
+    mutationFn: ({ id, input }: { id: string; input: BanUserInput }) => banUser(id, input),
+    onSuccess: (_data, { id }) => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
+    },
+  });
+}
+
+export function useChangeUserPlan() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, planId }: { id: string; planId: string }) => changeUserPlan(id, planId),
+    onSuccess: (_data, { id }) => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
+    },
   });
 }
 
 export function useResetUserPassword() {
   return useMutation({
-    mutationFn: resetUserPassword,
+    mutationFn: (id: string) => resetUserPassword(id),
   });
 }
 
-export function useAssignUserPlan() {
+export function useAddUserNote() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, planKey }: { id: string; planKey: UserPlanKey }) =>
-      assignUserPlan(id, planKey),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
-  });
-}
-
-export function useSaveUserAdminNote() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, note }: { id: string; note: string }) => saveUserAdminNote(id, note),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
+    mutationFn: ({ id, note }: { id: string; note: string }) => addUserNote(id, note),
+    onSuccess: (_data, { id }) =>
+      queryClient.invalidateQueries({ queryKey: userKeys.detail(id) }),
   });
 }
