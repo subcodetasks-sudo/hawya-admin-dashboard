@@ -20,18 +20,18 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import { apiUsageTrendQueryOptions } from "@/features/dashboard/services/dashboard";
+import { usageTrendQueryOptions } from "@/features/dashboard/services/dashboard";
 import { getDateFnsLocale } from "@/lib/date-fns-locale";
 import { formatNumber } from "@/lib/format";
 
 const chartConfig = {
-  requests: { label: "Requests", color: "var(--chart-2)" },
+  value: { label: "Requests", color: "var(--chart-2)" },
 } satisfies ChartConfig;
 
 export default function ApiUsageChart() {
   const t = useTranslations("Dashboard");
   const locale = useLocale();
-  const { data, isLoading, isError } = useQuery(apiUsageTrendQueryOptions);
+  const { data, isLoading, isError } = useQuery(usageTrendQueryOptions);
 
   const points = useMemo(() => {
     if (!data) {
@@ -42,9 +42,11 @@ export default function ApiUsageChart() {
 
     return data.map((point) => ({
       ...point,
-      label: format(new Date(point.date), "EEE", { locale: dateLocale }),
+      tickLabel: format(new Date(point.label), "EEE", { locale: dateLocale }),
     }));
   }, [data, locale]);
+
+  const isEmpty = !isLoading && !isError && points.length === 0;
 
   return (
     <Card>
@@ -57,14 +59,16 @@ export default function ApiUsageChart() {
           <Skeleton className="aspect-video w-full" />
         ) : isError || !data ? (
           <p className="text-sm text-destructive">
-            {t("charts.apiUsageTrend.title")} — unable to load.
+            {t("charts.apiUsageTrend.title")} — {t("charts.loadError")}
           </p>
+        ) : isEmpty ? (
+          <p className="text-sm text-muted-foreground">{t("charts.noData")}</p>
         ) : (
           <ChartContainer config={chartConfig} className="aspect-video w-full">
             <BarChart data={points} margin={{ left: -12, right: 12 }}>
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="label"
+                dataKey="tickLabel"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
@@ -98,7 +102,7 @@ export default function ApiUsageChart() {
                 }
               />
               <Bar
-                dataKey="requests"
+                dataKey="value"
                 fill="var(--primary)"
                 radius={[4, 4, 0, 0]}
               />

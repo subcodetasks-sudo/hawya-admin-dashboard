@@ -1,72 +1,51 @@
 import { queryOptions } from "@tanstack/react-query";
 
+import { apiGet } from "@/lib/api-client";
 import { dashboardKeys } from "@/features/dashboard/query-keys";
 import type {
-  ApiUsageTrendPoint,
-  DashboardOverview,
+  DashboardStats,
   PaymentRecord,
-  PlanBreakdown,
-  RevenueTrendPoint,
+  PaymentStatus,
+  PlatformStats,
+  SubscribersByPlan,
+  TrendPoint,
 } from "@/features/dashboard/types";
 
-const MOCK_LATENCY_MS = 350;
+type DashboardStatsResponse = {
+  api_requests_today: number;
+  total_users: number;
+  active_subscriptions: number;
+  monthly_revenue: number;
+  yearly_revenue: number;
+  available_plans: number;
+  growth_rate_percent: number;
+  avg_response_time_ms: number;
+  visits: number;
+};
 
-function delay<T>(value: T): Promise<T> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(value), MOCK_LATENCY_MS);
-  });
+export async function fetchDashboardStats(): Promise<DashboardStats> {
+  const data = await apiGet<DashboardStatsResponse>("/admin/dashboard/stats");
+
+  return {
+    apiRequestsToday: data.api_requests_today,
+    totalUsers: data.total_users,
+    activeSubscriptions: data.active_subscriptions,
+    monthlyRevenue: data.monthly_revenue,
+    yearlyRevenue: data.yearly_revenue,
+    availablePlans: data.available_plans,
+    growthRatePercent: data.growth_rate_percent,
+    avgResponseTimeMs: data.avg_response_time_ms,
+    visits: data.visits,
+  };
 }
 
-export async function fetchDashboardOverview(): Promise<DashboardOverview> {
-  return delay({
-    apiRequestsToday: {
-      value: 1_240_000,
-      delta: { value: 6.1, direction: "up", period: "vsYesterday" },
-    },
-    activeUsers: {
-      value: 12_847,
-      delta: { value: 15.2, direction: "up", period: "vsLastMonth" },
-    },
-    activeSubscriptions: {
-      value: 6_264,
-      delta: { value: 18.9, direction: "up", period: "vsLastMonth" },
-    },
-    monthlyRevenue: {
-      value: 103_200,
-      currency: "USD",
-      delta: { value: 12.4, direction: "up", period: "vsLastMonth" },
-    },
-    avgResponseTimeMs: { value: 142, deltaMs: -18, direction: "down" },
-    activePlans: { value: 5 },
-    growthRate: {
-      value: 12.4,
-      delta: { value: 2.1, direction: "up", period: "vsLastMonth" },
-    },
-    netRevenue: {
-      value: 1_240_000,
-      currency: "USD",
-      delta: { value: 34.6, direction: "up", period: "vsLastMonth" },
-    },
-  });
-}
-
-export const dashboardOverviewQueryOptions = queryOptions({
-  queryKey: dashboardKeys.overview(),
-  queryFn: fetchDashboardOverview,
+export const dashboardStatsQueryOptions = queryOptions({
+  queryKey: dashboardKeys.stats(),
+  queryFn: fetchDashboardStats,
 });
 
-export async function fetchRevenueTrend(): Promise<RevenueTrendPoint[]> {
-  const now = new Date();
-  const shape = [62, 58, 65, 70, 74, 80, 88, 95, 101, 108, 115, 120];
-
-  const points: RevenueTrendPoint[] = shape.map((value, index) => {
-    const monthsAgo = shape.length - 1 - index;
-    const date = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
-
-    return { month: date.toISOString(), revenue: value * 1_000 };
-  });
-
-  return delay(points);
+export async function fetchRevenueTrend(): Promise<TrendPoint[]> {
+  return apiGet<TrendPoint[]>("/admin/dashboard/revenue-trend");
 }
 
 export const revenueTrendQueryOptions = queryOptions({
@@ -74,32 +53,32 @@ export const revenueTrendQueryOptions = queryOptions({
   queryFn: fetchRevenueTrend,
 });
 
-export async function fetchApiUsageTrend(): Promise<ApiUsageTrendPoint[]> {
-  const now = new Date();
-  const shape = [148, 165, 172, 190, 205, 120, 95];
-
-  const points: ApiUsageTrendPoint[] = shape.map((value, index) => {
-    const daysAgo = shape.length - 1 - index;
-    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysAgo);
-
-    return { date: date.toISOString(), requests: value * 1_000 };
-  });
-
-  return delay(points);
+export async function fetchUsageTrend(): Promise<TrendPoint[]> {
+  return apiGet<TrendPoint[]>("/admin/dashboard/usage-trend");
 }
 
-export const apiUsageTrendQueryOptions = queryOptions({
-  queryKey: dashboardKeys.apiUsageTrend(),
-  queryFn: fetchApiUsageTrend,
+export const usageTrendQueryOptions = queryOptions({
+  queryKey: dashboardKeys.usageTrend(),
+  queryFn: fetchUsageTrend,
 });
 
-export async function fetchSubscribersByPlan(): Promise<PlanBreakdown[]> {
-  return delay([
-    { plan: "starter", subscribers: 1_247 },
-    { plan: "pro", subscribers: 3_891 },
-    { plan: "business", subscribers: 892 },
-    { plan: "enterprise", subscribers: 234 },
-  ]);
+type SubscribersByPlanResponse = {
+  slices: { plan_name: string; count: number }[];
+  total: number;
+};
+
+export async function fetchSubscribersByPlan(): Promise<SubscribersByPlan> {
+  const data = await apiGet<SubscribersByPlanResponse>(
+    "/admin/dashboard/subscribers-by-plan",
+  );
+
+  return {
+    slices: data.slices.map((slice) => ({
+      planName: slice.plan_name,
+      count: slice.count,
+    })),
+    total: data.total,
+  };
 }
 
 export const subscribersByPlanQueryOptions = queryOptions({
@@ -107,63 +86,79 @@ export const subscribersByPlanQueryOptions = queryOptions({
   queryFn: fetchSubscribersByPlan,
 });
 
-export async function fetchRecentPayments(): Promise<PaymentRecord[]> {
-  const now = new Date();
-  const daysAgo = (n: number) =>
-    new Date(now.getFullYear(), now.getMonth(), now.getDate() - n).toISOString();
+type PlatformStatsResponse = {
+  total_users: number;
+  verified_users: number;
+  active_subscriptions: number;
+  crawls_today: number;
+  ai_calls_today: number;
+};
 
-  return delay([
-    {
-      id: "pay_1",
-      customerName: "James Kim",
-      customerInitials: "JK",
-      planKey: "enterprise",
-      date: daysAgo(6),
-      amount: 4_990,
-      currency: "USD",
-      status: "paid",
-    },
-    {
-      id: "pay_2",
-      customerName: "Sarah Nath",
-      customerInitials: "SN",
-      planKey: "pro",
-      date: daysAgo(21),
-      amount: 79,
-      currency: "USD",
-      status: "paid",
-    },
-    {
-      id: "pay_3",
-      customerName: "Marcus Williams",
-      customerInitials: "MW",
-      planKey: "business",
-      date: daysAgo(33),
-      amount: 1_990,
-      currency: "USD",
-      status: "paid",
-    },
-    {
-      id: "pay_4",
-      customerName: "Elena Rodriguez",
-      customerInitials: "ER",
-      planKey: "starter",
-      date: daysAgo(56),
-      amount: 29,
-      currency: "USD",
-      status: "failed",
-    },
-    {
-      id: "pay_5",
-      customerName: "Riya Patel",
-      customerInitials: "RP",
-      planKey: "pro",
-      date: daysAgo(88),
-      amount: 79,
-      currency: "USD",
-      status: "refunded",
-    },
-  ]);
+export async function fetchPlatformStats(): Promise<PlatformStats> {
+  const data = await apiGet<PlatformStatsResponse>("/admin/stats");
+
+  return {
+    totalUsers: data.total_users,
+    verifiedUsers: data.verified_users,
+    activeSubscriptions: data.active_subscriptions,
+    crawlsToday: data.crawls_today,
+    aiCallsToday: data.ai_calls_today,
+  };
+}
+
+export const platformStatsQueryOptions = queryOptions({
+  queryKey: dashboardKeys.platformStats(),
+  queryFn: fetchPlatformStats,
+});
+
+const RECENT_PAYMENTS_LIMIT = 5;
+
+function initialsFrom(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+}
+
+type PaymentResponse = {
+  id: string;
+  reference: string;
+  user_id: string;
+  user_name: string;
+  plan_name: string;
+  amount: number;
+  currency: string;
+  payment_method: string;
+  status: string;
+  date: string;
+};
+
+type PaymentsListResponse = {
+  payments: PaymentResponse[];
+  total: number;
+  page: number;
+  per_page: number;
+};
+
+export async function fetchRecentPayments(): Promise<PaymentRecord[]> {
+  const data = await apiGet<PaymentsListResponse>(
+    `/admin/financial/payments?page=1&per_page=${RECENT_PAYMENTS_LIMIT}`,
+  );
+
+  return data.payments
+    .map((payment) => ({
+      id: payment.id,
+      customerName: payment.user_name,
+      customerInitials: initialsFrom(payment.user_name),
+      planName: payment.plan_name,
+      date: payment.date,
+      amount: payment.amount,
+      currency: payment.currency,
+      status: payment.status as PaymentStatus,
+    }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export const recentPaymentsQueryOptions = queryOptions({

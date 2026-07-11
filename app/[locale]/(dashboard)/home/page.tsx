@@ -7,11 +7,12 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import DashboardOverview from "@/features/dashboard/components/dashboard-overview";
 import {
-  apiUsageTrendQueryOptions,
-  dashboardOverviewQueryOptions,
+  dashboardStatsQueryOptions,
+  platformStatsQueryOptions,
   recentPaymentsQueryOptions,
   revenueTrendQueryOptions,
   subscribersByPlanQueryOptions,
+  usageTrendQueryOptions,
 } from "@/features/dashboard/services/dashboard";
 
 type Props = {
@@ -26,9 +27,10 @@ export default async function DashboardHomePage({ params }: Props) {
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(dashboardOverviewQueryOptions),
+    queryClient.prefetchQuery(dashboardStatsQueryOptions),
+    queryClient.prefetchQuery(platformStatsQueryOptions),
     queryClient.prefetchQuery(revenueTrendQueryOptions),
-    queryClient.prefetchQuery(apiUsageTrendQueryOptions),
+    queryClient.prefetchQuery(usageTrendQueryOptions),
     queryClient.prefetchQuery(subscribersByPlanQueryOptions),
     queryClient.prefetchQuery(recentPaymentsQueryOptions),
   ]);

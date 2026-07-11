@@ -58,8 +58,10 @@ export default function RecentPaymentsTable() {
           </div>
         ) : isError || !data ? (
           <p className="text-sm text-destructive">
-            {t("payments.title")} — unable to load.
+            {t("payments.title")} — {t("payments.loadError")}
           </p>
+        ) : data.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t("payments.noData")}</p>
         ) : (
           <ul className="divide-y divide-border">
             {data.map((payment) => (
@@ -76,7 +78,7 @@ export default function RecentPaymentsTable() {
                       {payment.customerName}
                     </p>
                     <p className="truncate text-xs text-muted-foreground">
-                      {t(`plans.${payment.planKey}`)} ·{" "}
+                      {payment.planName} ·{" "}
                       {toLocaleDigits(
                         format(new Date(payment.date), "d MMMM yyyy", {
                           locale: dateLocale,

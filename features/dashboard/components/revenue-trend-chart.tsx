@@ -25,7 +25,7 @@ import { getDateFnsLocale } from "@/lib/date-fns-locale";
 import { formatCurrency, formatNumber } from "@/lib/format";
 
 const chartConfig = {
-  revenue: { label: "Revenue", color: "var(--chart-3)" },
+  value: { label: "Revenue", color: "var(--chart-3)" },
 } satisfies ChartConfig;
 
 export default function RevenueTrendChart() {
@@ -43,9 +43,11 @@ export default function RevenueTrendChart() {
 
     return data.map((point) => ({
       ...point,
-      label: format(new Date(point.month), "MMM", { locale: dateLocale }),
+      tickLabel: format(new Date(point.label), "MMM", { locale: dateLocale }),
     }));
   }, [data, locale]);
+
+  const isEmpty = !isLoading && !isError && points.length === 0;
 
   return (
     <Card>
@@ -64,8 +66,10 @@ export default function RevenueTrendChart() {
           <Skeleton className="aspect-video w-full" />
         ) : isError || !data ? (
           <p className="text-sm text-destructive">
-            {t("charts.revenueTrend.title")} — unable to load.
+            {t("charts.revenueTrend.title")} — {t("charts.loadError")}
           </p>
+        ) : isEmpty ? (
+          <p className="text-sm text-muted-foreground">{t("charts.noData")}</p>
         ) : (
           <ChartContainer config={chartConfig} className="aspect-video w-full">
             <AreaChart data={points} margin={{ left: -12, right: 12 }}>
@@ -77,7 +81,7 @@ export default function RevenueTrendChart() {
               </defs>
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="label"
+                dataKey="tickLabel"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
@@ -111,7 +115,7 @@ export default function RevenueTrendChart() {
                 }
               />
               <Area
-                dataKey="revenue"
+                dataKey="value"
                 type="monotone"
                 fill={`url(#${gradientId})`}
                 stroke="var(--primary)"

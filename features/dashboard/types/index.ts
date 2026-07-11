@@ -1,37 +1,36 @@
-export type TrendDirection = "up" | "down";
-
-export type StatDelta = {
+export type TrendPoint = {
+  label: string;
   value: number;
-  direction: TrendDirection;
-  period: "vsYesterday" | "vsLastMonth" | "vsLastWeek";
 };
 
-export type DashboardOverview = {
-  apiRequestsToday: { value: number; delta: StatDelta };
-  activeUsers: { value: number; delta: StatDelta };
-  activeSubscriptions: { value: number; delta: StatDelta };
-  monthlyRevenue: { value: number; currency: string; delta: StatDelta };
-  avgResponseTimeMs: { value: number; deltaMs: number; direction: TrendDirection };
-  activePlans: { value: number };
-  growthRate: { value: number; delta: StatDelta };
-  netRevenue: { value: number; currency: string; delta: StatDelta };
+export type DashboardStats = {
+  apiRequestsToday: number;
+  totalUsers: number;
+  activeSubscriptions: number;
+  monthlyRevenue: number;
+  yearlyRevenue: number;
+  availablePlans: number;
+  growthRatePercent: number;
+  avgResponseTimeMs: number;
+  visits: number;
 };
 
-export type RevenueTrendPoint = {
-  month: string;
-  revenue: number;
+export type PlanSlice = {
+  planName: string;
+  count: number;
 };
 
-export type ApiUsageTrendPoint = {
-  date: string;
-  requests: number;
+export type SubscribersByPlan = {
+  slices: PlanSlice[];
+  total: number;
 };
 
-export type PlanKey = "starter" | "pro" | "business" | "enterprise";
-
-export type PlanBreakdown = {
-  plan: PlanKey;
-  subscribers: number;
+export type PlatformStats = {
+  totalUsers: number;
+  verifiedUsers: number;
+  activeSubscriptions: number;
+  crawlsToday: number;
+  aiCallsToday: number;
 };
 
 export type PaymentStatus = "paid" | "pending" | "failed" | "refunded";
@@ -40,7 +39,7 @@ export type PaymentRecord = {
   id: string;
   customerName: string;
   customerInitials: string;
-  planKey: PlanKey;
+  planName: string;
   date: string;
   amount: number;
   currency: string;
