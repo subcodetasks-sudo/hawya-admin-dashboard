@@ -1,7 +1,8 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -11,7 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { TestimonialStatusFilter } from "@/features/testimonials/types";
+import { testimonialsListQueryOptions } from "@/features/testimonials/services/testimonials";
+import type { TestimonialListParams, TestimonialStatusFilter } from "@/features/testimonials/types";
+import { toLocaleDigits } from "@/lib/format";
 
 const STATUS_FILTERS: TestimonialStatusFilter[] = ["all", "pending", "approved", "rejected"];
 
@@ -20,6 +23,7 @@ type Props = {
   onSearchQueryChange: (value: string) => void;
   statusFilter: TestimonialStatusFilter;
   onStatusFilterChange: (value: TestimonialStatusFilter) => void;
+  params: TestimonialListParams;
 };
 
 export default function TestimonialsToolbar({
@@ -27,8 +31,11 @@ export default function TestimonialsToolbar({
   onSearchQueryChange,
   statusFilter,
   onStatusFilterChange,
+  params,
 }: Props) {
   const t = useTranslations("Testimonials");
+  const locale = useLocale();
+  const { data } = useQuery(testimonialsListQueryOptions(params));
 
   return (
     <div className="flex items-center gap-3">
@@ -51,7 +58,7 @@ export default function TestimonialsToolbar({
         <SelectContent>
           {STATUS_FILTERS.map((value) => (
             <SelectItem key={value} value={value}>
-              {t(`status.${value}`)}
+              {data ? `${t(`status.${value}`)} (${toLocaleDigits(String(data.counts[value]), locale)})` : t(`status.${value}`)}
             </SelectItem>
           ))}
         </SelectContent>

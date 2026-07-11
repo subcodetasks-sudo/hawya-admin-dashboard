@@ -1,90 +1,89 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import { testimonialKeys } from "@/features/testimonials/query-keys";
-import type { Testimonial } from "@/features/testimonials/types";
+import type {
+  Testimonial,
+  TestimonialCounts,
+  TestimonialListParams,
+  TestimonialsListResult,
+  TestimonialStats,
+  TestimonialStatus,
+} from "@/features/testimonials/types";
+import { apiDelete, apiGet, apiPatch } from "@/lib/api-client";
 
-const MOCK_LATENCY_MS = 350;
+type TestimonialResponse = {
+  id: string;
+  display_name: string;
+  is_anonymous: boolean;
+  rating: number;
+  text: string;
+  plan_name: string;
+  status: TestimonialStatus;
+  created_at: string;
+};
 
-function delay<T>(value: T): Promise<T> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(value), MOCK_LATENCY_MS);
+type TestimonialsListResponse = {
+  reviews: TestimonialResponse[];
+  stats: TestimonialStats;
+  counts: TestimonialCounts;
+};
+
+function mapTestimonial(data: TestimonialResponse): Testimonial {
+  return {
+    id: data.id,
+    displayName: data.display_name,
+    isAnonymous: data.is_anonymous,
+    rating: data.rating,
+    text: data.text,
+    planName: data.plan_name,
+    status: data.status,
+    createdAt: data.created_at,
+  };
+}
+
+const EMPTY_STATS: TestimonialStats = { average: 0, total: 0, histogram: {} };
+const EMPTY_COUNTS: TestimonialCounts = { pending: 0, approved: 0, rejected: 0, all: 0 };
+
+export async function fetchTestimonials(
+  params: TestimonialListParams = {},
+): Promise<TestimonialsListResult> {
+  const query = new URLSearchParams();
+  if (params.status && params.status !== "all") {
+    query.set("status", params.status);
+  }
+  if (params.search) {
+    query.set("search", params.search);
+  }
+  const qs = query.toString();
+
+  const data = await apiGet<TestimonialsListResponse>(`/admin/reviews${qs ? `?${qs}` : ""}`);
+
+  return {
+    reviews: (data.reviews ?? []).map(mapTestimonial),
+    stats: data.stats ?? EMPTY_STATS,
+    counts: data.counts ?? EMPTY_COUNTS,
+  };
+}
+
+export function testimonialsListQueryOptions(params: TestimonialListParams = {}) {
+  return queryOptions({
+    queryKey: testimonialKeys.list({ status: params.status ?? "all", search: params.search ?? "" }),
+    queryFn: () => fetchTestimonials(params),
   });
 }
 
-const mockTestimonials: Testimonial[] = [
-  {
-    id: "test_marcus_williams",
-    customerName: "ماركوس ويليامز",
-    customerInitials: "MW",
-    planKey: "business",
-    rating: 3,
-    comment:
-      "منتج ممتاز يقدم كل ما نحتاجه بالضبط، لكن بعض تفاصيل لوحة الاستخدام تحتاج مزيدًا من الوضوح.",
-    status: "pending",
-    createdAt: new Date(2024, 11, 25).toISOString(),
-  },
-  {
-    id: "test_sarah_chen",
-    customerName: "سارة تشن",
-    customerInitials: "SC",
-    planKey: "pro",
-    rating: 4,
-    comment:
-      "منصة رائعة، تكامل سلس مع Claude API والواجهة توفر كل ما نحتاجه لمراقبة الاستخدام بسهولة.",
-    status: "approved",
-    createdAt: new Date(2024, 11, 28).toISOString(),
-  },
-  {
-    id: "test_james_kim",
-    customerName: "جيمس كيم",
-    customerInitials: "JK",
-    planKey: "enterprise",
-    rating: 5,
-    comment:
-      "دعم Enterprise استثنائي، سرعة الاستجابة وموثوقية الفريق على مدار الساعة تجعل قيمة الاشتراك مضاعفة.",
-    status: "approved",
-    createdAt: new Date(2024, 11, 22).toISOString(),
-  },
-  {
-    id: "test_elena_rodriguez",
-    customerName: "إيلينا رودريغز",
-    customerInitials: "ER",
-    planKey: "starter",
-    rating: 3,
-    comment:
-      "جيدة لبدء استكشاف Claude، لكن سقف الاستخدام في خطة Starter ضيق جدًا بالنسبة لفريق صغير مثل فريقنا.",
-    status: "pending",
-    createdAt: new Date(2024, 11, 19).toISOString(),
-  },
-  {
-    id: "test_thomas_muller",
-    customerName: "توماس مولر",
-    customerInitials: "TM",
-    planKey: "business",
-    rating: 5,
-    comment:
-      "نحن راضون جدًا عن الخدمة، خطة Business تمنحنا قيمة ممتازة مقابل السعر بعد 12 شهرًا من الاستخدام المستمر.",
-    status: "approved",
-    createdAt: new Date(2024, 11, 17).toISOString(),
-  },
-  {
-    id: "test_anonymous_1",
-    customerName: "مجهول",
-    customerInitials: "؟",
-    planKey: "starter",
-    rating: 4,
-    comment:
-      "واجهنا بعض المشاكل بسبب استخدام حساب مشترك بين عدة أشخاص، ما أدى إلى تعليق الحساب مؤقتًا.",
-    status: "rejected",
-    createdAt: new Date(2024, 11, 14).toISOString(),
-  },
-];
-
-export async function fetchTestimonials(): Promise<Testimonial[]> {
-  return delay([...mockTestimonials]);
+export async function approveTestimonial(id: string): Promise<Testimonial> {
+  const data = await apiPatch<TestimonialResponse>(`/admin/reviews/${id}/approve`);
+  return mapTestimonial(data);
 }
 
-export const testimonialsListQueryOptions = queryOptions({
-  queryKey: testimonialKeys.lists(),
-  queryFn: fetchTestimonials,
-});
+export async function rejectTestimonial(id: string): Promise<{ id: string; status: TestimonialStatus }> {
+  return apiPatch<{ id: string; status: TestimonialStatus }>(`/admin/reviews/${id}/reject`);
+}
+
+export async function deleteTestimonial(id: string): Promise<{ id: string; deleted: boolean }> {
+  return apiDelete<{ id: string; deleted: boolean }>(`/admin/reviews/${id}`);
+}
+
+// POST /reviews (public review submission) is not called from this admin
+// surface, which only moderates reviews already submitted from the site.

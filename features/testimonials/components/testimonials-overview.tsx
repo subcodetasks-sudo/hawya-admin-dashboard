@@ -7,12 +7,18 @@ import TestimonialsGrid from "@/features/testimonials/components/testimonials-gr
 import TestimonialsRatingBreakdown from "@/features/testimonials/components/testimonials-rating-breakdown";
 import TestimonialsRatingSummary from "@/features/testimonials/components/testimonials-rating-summary";
 import TestimonialsToolbar from "@/features/testimonials/components/testimonials-toolbar";
-import type { TestimonialStatusFilter } from "@/features/testimonials/types";
+import { useDebouncedValue } from "@/features/testimonials/hooks/use-debounced-value";
+import type { TestimonialListParams, TestimonialStatusFilter } from "@/features/testimonials/types";
+
+const SEARCH_DEBOUNCE_MS = 350;
 
 export default function TestimonialsOverview() {
   const t = useTranslations("Testimonials");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState<TestimonialStatusFilter>("all");
+  const search = useDebouncedValue(searchInput, SEARCH_DEBOUNCE_MS);
+
+  const params: TestimonialListParams = { status: statusFilter, search };
 
   return (
     <div className="flex flex-col gap-4 md:gap-6">
@@ -22,18 +28,19 @@ export default function TestimonialsOverview() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3 md:gap-6">
-        <TestimonialsRatingBreakdown className="md:col-span-2" />
-        <TestimonialsRatingSummary />
+        <TestimonialsRatingBreakdown className="md:col-span-2" params={params} />
+        <TestimonialsRatingSummary params={params} />
       </div>
 
       <TestimonialsToolbar
-        searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
+        searchQuery={searchInput}
+        onSearchQueryChange={setSearchInput}
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
+        params={params}
       />
 
-      <TestimonialsGrid searchQuery={searchQuery} statusFilter={statusFilter} />
+      <TestimonialsGrid params={params} />
     </div>
   );
 }

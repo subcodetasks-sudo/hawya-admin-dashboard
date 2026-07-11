@@ -6,27 +6,15 @@ import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 import TestimonialCard from "@/features/testimonials/components/testimonial-card";
 import { testimonialsListQueryOptions } from "@/features/testimonials/services/testimonials";
-import type { TestimonialStatusFilter } from "@/features/testimonials/types";
+import type { TestimonialListParams } from "@/features/testimonials/types";
 
 type Props = {
-  searchQuery: string;
-  statusFilter: TestimonialStatusFilter;
+  params: TestimonialListParams;
 };
 
-export default function TestimonialsGrid({ searchQuery, statusFilter }: Props) {
+export default function TestimonialsGrid({ params }: Props) {
   const t = useTranslations("Testimonials");
-  const { data, isLoading, isError } = useQuery(testimonialsListQueryOptions);
-
-  const testimonials = (data ?? []).filter((testimonial) => {
-    const matchesStatus = statusFilter === "all" || testimonial.status === statusFilter;
-    const query = searchQuery.trim().toLowerCase();
-    const matchesSearch =
-      !query ||
-      testimonial.customerName.toLowerCase().includes(query) ||
-      testimonial.comment.toLowerCase().includes(query);
-
-    return matchesStatus && matchesSearch;
-  });
+  const { data, isLoading, isError } = useQuery(testimonialsListQueryOptions(params));
 
   if (isLoading) {
     return (
@@ -46,7 +34,9 @@ export default function TestimonialsGrid({ searchQuery, statusFilter }: Props) {
     );
   }
 
-  if (testimonials.length === 0) {
+  const reviews = data?.reviews ?? [];
+
+  if (reviews.length === 0) {
     return (
       <p className="rounded-xl bg-card py-8 text-center text-sm text-muted-foreground ring-1 ring-foreground/10">
         {t("grid.empty")}
@@ -56,7 +46,7 @@ export default function TestimonialsGrid({ searchQuery, statusFilter }: Props) {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {testimonials.map((testimonial) => (
+      {reviews.map((testimonial) => (
         <TestimonialCard key={testimonial.id} testimonial={testimonial} />
       ))}
     </div>

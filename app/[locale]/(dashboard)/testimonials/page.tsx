@@ -13,7 +13,7 @@ export default async function TestimonialsPage({ params }: Props) {
   setRequestLocale(locale);
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(testimonialsListQueryOptions);
+  await queryClient.prefetchQuery(testimonialsListQueryOptions());
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
