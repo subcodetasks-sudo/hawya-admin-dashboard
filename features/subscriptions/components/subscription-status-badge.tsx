@@ -11,6 +11,7 @@ const STATUS_STYLES: Record<SubscriptionStatus, string> = {
   pending: "border-transparent bg-blue-500/10 text-blue-600 dark:text-blue-400",
   expired: "border-transparent bg-muted text-muted-foreground",
   cancelled: "border-transparent bg-destructive/10 text-destructive",
+  suspended: "border-transparent bg-amber-500/10 text-amber-600 dark:text-amber-400",
 };
 
 type Props = {

@@ -5,32 +5,42 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { subscriptionsListQueryOptions } from "@/features/subscriptions/services/subscriptions";
-import type { SubscriptionStatus } from "@/features/subscriptions/types";
+import type { SubscriptionsListParams, SubscriptionStatus } from "@/features/subscriptions/types";
 import { toLocaleDigits } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
-const STATUS_TABS: SubscriptionStatus[] = ["active", "pending", "expired", "cancelled"];
+const STATUS_TABS: SubscriptionStatus[] = ["active", "pending", "expired", "suspended", "cancelled"];
 
 type Props = {
   status: SubscriptionStatus;
   onStatusChange: (status: SubscriptionStatus) => void;
+  params: SubscriptionsListParams;
 };
 
-export default function SubscriptionsTabs({ status, onStatusChange }: Props) {
+export default function SubscriptionsTabs({ status, onStatusChange, params }: Props) {
   const t = useTranslations("Subscriptions");
   const locale = useLocale();
-  const { data } = useQuery(subscriptionsListQueryOptions);
+  // Counts reflect the overall breakdown regardless of the active status tab,
+  // so this query intentionally omits `status` (a distinct cache entry from
+  // the table's query, kept in sync with the same search/plan filters).
+  const { data } = useQuery(
+    subscriptionsListQueryOptions({
+      page: 1,
+      perPage: 1,
+      search: params.search,
+      userId: params.userId,
+      planId: params.planId,
+    }),
+  );
 
   const counts: Record<SubscriptionStatus, number> = {
     active: 0,
     pending: 0,
     expired: 0,
     cancelled: 0,
+    suspended: 0,
+    ...data?.counts,
   };
-
-  for (const subscription of data ?? []) {
-    counts[subscription.status] += 1;
-  }
 
   return (
     <Tabs

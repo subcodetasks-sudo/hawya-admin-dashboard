@@ -13,7 +13,9 @@ export default async function SubscriptionsPage({ params }: Props) {
   setRequestLocale(locale);
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(subscriptionsListQueryOptions);
+  await queryClient.prefetchQuery(
+    subscriptionsListQueryOptions({ page: 1, perPage: 10, status: "active" }),
+  );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

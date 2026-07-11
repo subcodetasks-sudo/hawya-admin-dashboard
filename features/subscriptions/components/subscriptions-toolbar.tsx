@@ -1,42 +1,65 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Download, Search } from "lucide-react";
+import { Download, Filter, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { subscriptionsListQueryOptions } from "@/features/subscriptions/services/subscriptions";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  planOptionsQueryOptions,
+  subscriptionsListQueryOptions,
+} from "@/features/subscriptions/services/subscriptions";
+import type { SubscriptionsListParams } from "@/features/subscriptions/types";
 
 type Props = {
   searchQuery: string;
   onSearchQueryChange: (value: string) => void;
+  planFilter: string;
+  onPlanFilterChange: (value: string) => void;
+  listParams: SubscriptionsListParams;
 };
 
-export default function SubscriptionsToolbar({ searchQuery, onSearchQueryChange }: Props) {
+export default function SubscriptionsToolbar({
+  searchQuery,
+  onSearchQueryChange,
+  planFilter,
+  onPlanFilterChange,
+  listParams,
+}: Props) {
   const t = useTranslations("Subscriptions");
-  const { data } = useQuery(subscriptionsListQueryOptions);
+  const { data: plans } = useQuery(planOptionsQueryOptions);
+  const { data } = useQuery(subscriptionsListQueryOptions(listParams));
 
   function handleExport() {
-    const subscriptions = data ?? [];
+    const subscriptions = data?.subscriptions ?? [];
     const header = [
-      "customerName",
-      "customerEmail",
-      "plan",
-      "billingCycle",
+      "user_name",
+      "user_email",
+      "plan_name",
+      "billing_cycle",
       "status",
-      "startDate",
-      "renewalDate",
-      "usagePercent",
+      "price",
+      "currency",
+      "auto_renew",
+      "started_at",
+      "renews_at",
+      "usage_percent",
     ];
     const rows = subscriptions.map((subscription) => [
-      subscription.customerName,
-      subscription.customerEmail,
-      subscription.planKey,
+      subscription.userName,
+      subscription.userEmail,
+      subscription.planName,
       subscription.billingCycle,
       subscription.status,
-      subscription.startDate,
-      subscription.renewalDate ?? "",
+      String(subscription.price),
+      subscription.currency,
+      String(subscription.autoRenew),
+      subscription.startedAt,
+      subscription.renewsAt ?? "",
       String(subscription.usagePercent),
     ]);
     const csv = [header, ...rows]
@@ -46,6 +69,8 @@ export default function SubscriptionsToolbar({ searchQuery, onSearchQueryChange 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
+    // Exports only the currently loaded page — the list endpoint is
+    // server-paginated and there is no "export all" endpoint yet.
     link.download = "subscriptions.csv";
     link.click();
     URL.revokeObjectURL(url);
@@ -62,10 +87,39 @@ export default function SubscriptionsToolbar({ searchQuery, onSearchQueryChange 
           className="ps-8"
         />
       </div>
-      <Button variant="outline" onClick={handleExport}>
-        <Download data-icon="inline-start" />
-        {t("toolbar.export")}
-      </Button>
+
+      <div className="flex items-center gap-2">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline">
+              <Filter data-icon="inline-start" />
+              {t("toolbar.filter")}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-56">
+            <p className="px-1 pb-1 text-xs text-muted-foreground">
+              {t("toolbar.filterPlanLabel")}
+            </p>
+            <RadioGroup value={planFilter} onValueChange={onPlanFilterChange}>
+              <div className="flex items-center gap-2 px-1 py-1">
+                <RadioGroupItem value="all" id="subscription-plan-filter-all" />
+                <Label htmlFor="subscription-plan-filter-all">{t("toolbar.planAll")}</Label>
+              </div>
+              {(plans ?? []).map((plan) => (
+                <div key={plan.id} className="flex items-center gap-2 px-1 py-1">
+                  <RadioGroupItem value={plan.id} id={`subscription-plan-filter-${plan.id}`} />
+                  <Label htmlFor={`subscription-plan-filter-${plan.id}`}>{plan.name}</Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </PopoverContent>
+        </Popover>
+
+        <Button variant="outline" onClick={handleExport}>
+          <Download data-icon="inline-start" />
+          {t("toolbar.export")}
+        </Button>
+      </div>
     </div>
   );
 }
