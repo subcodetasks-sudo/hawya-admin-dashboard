@@ -8,3 +8,14 @@ export const claudeUsageKeys = {
   topUsers: (limit: number) => [...claudeUsageKeys.all, "top-users", limit] as const,
   aiSettings: () => [...claudeUsageKeys.all, "ai-settings"] as const,
 };
+
+export const anthropicUsageKeys = {
+  all: ["anthropic-usage"] as const,
+  summary: () => [...anthropicUsageKeys.all, "summary"] as const,
+  balance: () => [...anthropicUsageKeys.all, "balance"] as const,
+  workspaces: () => [...anthropicUsageKeys.all, "workspaces"] as const,
+  costReport: (startingAt: string, endingAt?: string) =>
+    [...anthropicUsageKeys.all, "cost-report", startingAt, endingAt ?? null] as const,
+  usageReport: (startingAt: string, endingAt?: string) =>
+    [...anthropicUsageKeys.all, "usage-report", startingAt, endingAt ?? null] as const,
+};

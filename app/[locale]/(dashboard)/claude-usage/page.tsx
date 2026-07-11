@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import ClaudeUsageOverview from "@/features/claude-usage/components/claude-usage-overview";
+import ClaudeUsageTabs from "@/features/claude-usage/components/claude-usage-tabs";
 import {
   aiSettingsQueryOptions,
   requestsTrendQueryOptions,
@@ -13,6 +13,11 @@ import {
   topApiUsersQueryOptions,
   usageSummaryQueryOptions,
 } from "@/features/claude-usage/services/claude-usage";
+import {
+  anthropicBalanceQueryOptions,
+  anthropicUsageSummaryQueryOptions,
+  anthropicWorkspacesQueryOptions,
+} from "@/features/claude-usage/services/anthropic-usage";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -31,6 +36,9 @@ export default async function ClaudeUsagePage({ params }: Props) {
     queryClient.prefetchQuery(requestsTrendQueryOptions),
     queryClient.prefetchQuery(topApiUsersQueryOptions),
     queryClient.prefetchQuery(aiSettingsQueryOptions),
+    queryClient.prefetchQuery(anthropicUsageSummaryQueryOptions),
+    queryClient.prefetchQuery(anthropicBalanceQueryOptions),
+    queryClient.prefetchQuery(anthropicWorkspacesQueryOptions),
   ]);
 
   return (
@@ -42,7 +50,7 @@ export default async function ClaudeUsagePage({ params }: Props) {
           </h1>
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
         </div>
-        <ClaudeUsageOverview />
+        <ClaudeUsageTabs />
       </div>
     </HydrationBoundary>
   );

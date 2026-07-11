@@ -1,3 +1,5 @@
 export { default as ClaudeUsageOverview } from "./components/claude-usage-overview";
-export { claudeUsageKeys } from "./query-keys";
+export { default as ClaudeUsageTabs } from "./components/claude-usage-tabs";
+export { default as AnthropicUsageTab } from "./components/anthropic-usage-tab";
+export { claudeUsageKeys, anthropicUsageKeys } from "./query-keys";
 export * from "./types";
