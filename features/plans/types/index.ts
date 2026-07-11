@@ -1,52 +1,44 @@
-export type PlanStatus = "active" | "inactive";
+export type PlanStatusFilter = "all" | "active" | "inactive";
 
-export type PlanStatusFilter = "all" | PlanStatus;
+export type DiscountType = "percent" | "fixed";
 
-export type PresetFeatureKey =
-  | "prioritySupport"
-  | "advancedAnalytics"
-  | "teamMembers"
-  | "customIntegrations"
-  | "claudeCrawling"
-  | "auditLogs";
+export type DiscountScope = "month" | "year";
 
-export type PlanFeature = {
-  id: string;
-  labelKey?: PresetFeatureKey;
-  customLabel?: string;
-  enabled: boolean;
+export type PlanFeatures = {
+  requestsLimit: number;
+  apiTokenLimit: number;
+  maxWebsites: number;
+  crawlingEnabled: boolean;
+  supportPriority: string;
 };
 
-export type PlanLimits = {
-  tokensPerMonth: number | null;
-  apiRequestsPerMonth: number | null;
-  projects: number | null;
-  storageGb: number | null;
-  teamMembers: number | null;
-  connectedSites: number | null;
+export type PlanDiscount = {
+  type: DiscountType;
+  value: number;
+  scope: DiscountScope;
 };
 
 export type Plan = {
   id: string;
   name: string;
   description: string;
-  monthlyPrice: number;
-  annualPrice: number;
-  currency: string;
+  priceMonthly: number;
+  priceYearly: number;
+  maxProjects: number;
+  features: PlanFeatures;
+  discount: PlanDiscount | null;
+  isActive: boolean;
   subscribers: number;
-  status: PlanStatus;
   createdAt: string;
-  limits: PlanLimits;
-  features: PlanFeature[];
 };
 
 export type PlanInput = {
   name: string;
   description: string;
-  monthlyPrice: number;
-  annualPrice: number;
-  currency: string;
-  status: PlanStatus;
-  limits: PlanLimits;
-  features: PlanFeature[];
+  priceMonthly: number;
+  autoYearly: boolean;
+  maxProjects: number;
+  features: PlanFeatures;
+  discount: PlanDiscount | null;
+  isActive: boolean;
 };

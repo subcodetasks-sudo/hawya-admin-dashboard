@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Pencil, Trash2 } from "lucide-react";
+import { Copy, Pencil, Power, PowerOff, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -17,7 +18,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import PlanFormDialog from "@/features/plans/components/plan-form-dialog";
-import { useDeletePlan, useDuplicatePlan } from "@/features/plans/hooks/use-plan-mutations";
+import {
+  useDeletePlan,
+  useDuplicatePlan,
+  useUpdatePlanStatus,
+} from "@/features/plans/hooks/use-plan-mutations";
 import type { Plan } from "@/features/plans/types";
 
 type Props = {
@@ -30,6 +35,35 @@ export default function PlanRowActions({ plan }: Props) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const deletePlanMutation = useDeletePlan();
   const duplicatePlanMutation = useDuplicatePlan();
+  const updateStatusMutation = useUpdatePlanStatus();
+
+  function handleToggleStatus() {
+    updateStatusMutation.mutate(
+      { id: plan.id, isActive: !plan.isActive },
+      {
+        onSuccess: () =>
+          toast.success(t(plan.isActive ? "toasts.deactivated" : "toasts.activated")),
+        onError: () => toast.error(t("toasts.error")),
+      },
+    );
+  }
+
+  function handleDuplicate() {
+    duplicatePlanMutation.mutate(plan.id, {
+      onSuccess: () => toast.success(t("toasts.duplicated")),
+      onError: () => toast.error(t("toasts.error")),
+    });
+  }
+
+  function handleDelete() {
+    deletePlanMutation.mutate(plan.id, {
+      onSuccess: () => {
+        toast.success(t("toasts.deleted"));
+        setDeleteOpen(false);
+      },
+      onError: () => toast.error(t("toasts.error")),
+    });
+  }
 
   return (
     <div className="flex items-center justify-end gap-1">
@@ -52,9 +86,26 @@ export default function PlanRowActions({ plan }: Props) {
           <Button
             variant="ghost"
             size="icon-sm"
+            aria-label={t(plan.isActive ? "rowActions.deactivate" : "rowActions.activate")}
+            disabled={updateStatusMutation.isPending}
+            onClick={handleToggleStatus}
+          >
+            {plan.isActive ? <PowerOff /> : <Power />}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          {t(plan.isActive ? "rowActions.deactivate" : "rowActions.activate")}
+        </TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon-sm"
             aria-label={t("rowActions.duplicate")}
             disabled={duplicatePlanMutation.isPending}
-            onClick={() => duplicatePlanMutation.mutate(plan.id)}
+            onClick={handleDuplicate}
           >
             <Copy />
           </Button>
@@ -90,7 +141,8 @@ export default function PlanRowActions({ plan }: Props) {
             <AlertDialogCancel>{t("deleteDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
-              onClick={() => deletePlanMutation.mutate(plan.id)}
+              disabled={deletePlanMutation.isPending}
+              onClick={handleDelete}
             >
               {t("deleteDialog.confirm")}
             </AlertDialogAction>

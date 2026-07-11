@@ -4,36 +4,36 @@ import { useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { PlanLimitsFormValues } from "@/features/plans/lib/plan-form-values";
+import type { PlanFormValues } from "@/features/plans/lib/plan-form-values";
 
-const LIMIT_FIELD_KEYS: (keyof PlanLimitsFormValues)[] = [
-  "tokensPerMonth",
-  "apiRequestsPerMonth",
-  "projects",
-  "storageGb",
-  "teamMembers",
-  "connectedSites",
-];
+const LIMIT_FIELD_KEYS = [
+  "maxProjects",
+  "requestsLimit",
+  "apiTokenLimit",
+  "maxWebsites",
+] as const;
 
 type Props = {
-  limits: PlanLimitsFormValues;
-  onChange: (limits: PlanLimitsFormValues) => void;
+  values: PlanFormValues;
+  onChange: (patch: Partial<PlanFormValues>) => void;
 };
 
-export default function PlanUsageLimitsFields({ limits, onChange }: Props) {
+export default function PlanUsageLimitsFields({ values, onChange }: Props) {
   const t = useTranslations("Plans");
 
   return (
     <div className="grid grid-cols-2 gap-3">
       {LIMIT_FIELD_KEYS.map((key) => (
         <div key={key} className="flex flex-col gap-1.5">
-          <Label htmlFor={`plan-limit-${key}`}>{t(`form.fields.${key}`)}</Label>
+          <Label htmlFor={`plan-${key}`}>{t(`form.fields.${key}`)}</Label>
           <Input
-            id={`plan-limit-${key}`}
+            id={`plan-${key}`}
             inputMode="numeric"
-            value={limits[key]}
-            onChange={(event) => onChange({ ...limits, [key]: event.target.value })}
-            placeholder={t("form.unlimitedPlaceholder")}
+            required
+            value={values[key]}
+            onChange={(event) =>
+              onChange({ [key]: event.target.value.replace(/[^0-9]/g, "") })
+            }
           />
         </div>
       ))}

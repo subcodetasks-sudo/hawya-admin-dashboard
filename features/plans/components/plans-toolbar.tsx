@@ -35,9 +35,8 @@ export default function PlansToolbar({
     const header = [
       "name",
       "description",
-      "monthlyPrice",
-      "annualPrice",
-      "currency",
+      "priceMonthly",
+      "priceYearly",
       "subscribers",
       "status",
       "createdAt",
@@ -45,11 +44,10 @@ export default function PlansToolbar({
     const rows = plans.map((plan) => [
       plan.name,
       plan.description,
-      String(plan.monthlyPrice),
-      String(plan.annualPrice),
-      plan.currency,
+      String(plan.priceMonthly),
+      String(plan.priceYearly),
       String(plan.subscribers),
-      plan.status,
+      plan.isActive ? "active" : "inactive",
       plan.createdAt,
     ]);
     const csv = [header, ...rows]

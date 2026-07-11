@@ -8,6 +8,7 @@ import {
   deletePlan,
   duplicatePlan,
   updatePlan,
+  updatePlanStatus,
 } from "@/features/plans/services/plans";
 import type { PlanInput } from "@/features/plans/types";
 
@@ -43,6 +44,16 @@ export function useDuplicatePlan() {
 
   return useMutation({
     mutationFn: duplicatePlan,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: planKeys.lists() }),
+  });
+}
+
+export function useUpdatePlanStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
+      updatePlanStatus(id, isActive),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: planKeys.lists() }),
   });
 }

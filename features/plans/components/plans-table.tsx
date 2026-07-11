@@ -29,9 +29,8 @@ type Props = {
 // locale, and are isolated with dir="ltr" — mixing Eastern Arabic numerals
 // with a literal "/mo" suffix inside an RTL page causes the bidi algorithm
 // to visually reorder the symbol, suffix, and digits unpredictably.
-function formatPlanPrice(amount: number, currency: string) {
-  const symbol = currency === "USD" ? "$" : `${currency} `;
-  return `${symbol}${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(amount)}`;
+function formatPlanPrice(amount: number) {
+  return `$${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(amount)}`;
 }
 
 export default function PlansTable({ searchQuery, statusFilter }: Props) {
@@ -41,7 +40,8 @@ export default function PlansTable({ searchQuery, statusFilter }: Props) {
   const { data, isLoading, isError } = useQuery(plansListQueryOptions);
 
   const plans = (data ?? []).filter((plan) => {
-    const matchesStatus = statusFilter === "all" || plan.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "all" || plan.isActive === (statusFilter === "active");
     const matchesSearch = plan.name.toLowerCase().includes(searchQuery.trim().toLowerCase());
     return matchesStatus && matchesSearch;
   });
@@ -95,13 +95,13 @@ export default function PlansTable({ searchQuery, statusFilter }: Props) {
                 </TableCell>
                 <TableCell className="px-4 py-3 tabular-nums">
                   <span dir="ltr">
-                    {formatPlanPrice(plan.monthlyPrice, plan.currency)}
+                    {formatPlanPrice(plan.priceMonthly)}
                     {t("table.perMonthSuffix")}
                   </span>
                 </TableCell>
                 <TableCell className="px-4 py-3 tabular-nums">
                   <span dir="ltr">
-                    {formatPlanPrice(plan.annualPrice, plan.currency)}
+                    {formatPlanPrice(plan.priceYearly)}
                     {t("table.perYearSuffix")}
                   </span>
                 </TableCell>
@@ -109,7 +109,7 @@ export default function PlansTable({ searchQuery, statusFilter }: Props) {
                   {formatNumber(plan.subscribers, locale)}
                 </TableCell>
                 <TableCell className="px-4 py-3">
-                  <PlanStatusBadge status={plan.status} />
+                  <PlanStatusBadge isActive={plan.isActive} />
                 </TableCell>
                 <TableCell className="px-4 py-3">
                   {toLocaleDigits(

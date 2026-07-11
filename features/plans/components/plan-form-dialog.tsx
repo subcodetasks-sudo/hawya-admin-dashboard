@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,21 +17,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import PlanFeatureToggleList from "@/features/plans/components/plan-feature-toggle-list";
+import PlanDiscountFields from "@/features/plans/components/plan-discount-fields";
+import PlanSupportFields from "@/features/plans/components/plan-support-fields";
 import PlanUsageLimitsFields from "@/features/plans/components/plan-usage-limits-fields";
 import { useCreatePlan, useUpdatePlan } from "@/features/plans/hooks/use-plan-mutations";
-import { buildFormValues, formValuesToLimits } from "@/features/plans/lib/plan-form-values";
-import type { Plan, PlanStatus } from "@/features/plans/types";
-
-const CURRENCIES = ["USD", "SAR", "EUR"] as const;
+import { buildFormValues, formValuesToInput } from "@/features/plans/lib/plan-form-values";
+import type { Plan } from "@/features/plans/types";
 
 type Props = {
   mode: "create" | "edit";
@@ -59,33 +52,25 @@ export default function PlanFormDialog({ mode, plan, trigger, open: openProp, on
     }
   }
 
+  function patchValues(patch: Partial<typeof values>) {
+    setValues((prev) => ({ ...prev, ...patch }));
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const input = {
-      name: values.name,
-      description: values.description,
-      monthlyPrice: Number(values.monthlyPrice) || 0,
-      annualPrice: Number(values.annualPrice) || 0,
-      currency: values.currency,
-      status: values.status,
-      limits: formValuesToLimits(values.limits),
-      features: values.features,
+    const input = formValuesToInput(values);
+    const onSuccess = () => {
+      toast.success(mode === "create" ? t("toasts.created") : t("toasts.updated"));
+      setOpen(false);
     };
-    const onSuccess = () => setOpen(false);
+    const onError = () => toast.error(t("toasts.error"));
 
     if (mode === "create") {
-      createPlan.mutate(input, { onSuccess });
+      createPlan.mutate(input, { onSuccess, onError });
     } else if (plan) {
-      updatePlan.mutate({ id: plan.id, input }, { onSuccess });
+      updatePlan.mutate({ id: plan.id, input }, { onSuccess, onError });
     }
-  }
-
-  function addCustomFeature() {
-    setValues((prev) => ({
-      ...prev,
-      features: [...prev.features, { id: `custom-${Date.now()}`, customLabel: "", enabled: true }],
-    }));
   }
 
   return (
@@ -110,9 +95,7 @@ export default function PlanFormDialog({ mode, plan, trigger, open: openProp, on
                 id="plan-name"
                 required
                 value={values.name}
-                onChange={(event) =>
-                  setValues((prev) => ({ ...prev, name: event.target.value }))
-                }
+                onChange={(event) => patchValues({ name: event.target.value })}
                 placeholder={t("form.fields.name.placeholder")}
               />
             </div>
@@ -121,9 +104,7 @@ export default function PlanFormDialog({ mode, plan, trigger, open: openProp, on
               <Textarea
                 id="plan-description"
                 value={values.description}
-                onChange={(event) =>
-                  setValues((prev) => ({ ...prev, description: event.target.value }))
-                }
+                onChange={(event) => patchValues({ description: event.target.value })}
                 placeholder={t("form.fields.description.placeholder")}
               />
             </div>
@@ -131,91 +112,58 @@ export default function PlanFormDialog({ mode, plan, trigger, open: openProp, on
 
           <section className="flex flex-col gap-3">
             <h3 className="text-sm font-semibold">{t("form.sections.pricing")}</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="plan-monthly-price">{t("form.fields.monthlyPrice")}</Label>
-                <Input
-                  id="plan-monthly-price"
-                  inputMode="decimal"
-                  value={values.monthlyPrice}
-                  onChange={(event) =>
-                    setValues((prev) => ({
-                      ...prev,
-                      monthlyPrice: event.target.value.replace(/[^0-9.]/g, ""),
-                    }))
-                  }
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="plan-annual-price">{t("form.fields.annualPrice")}</Label>
-                <Input
-                  id="plan-annual-price"
-                  inputMode="decimal"
-                  value={values.annualPrice}
-                  onChange={(event) =>
-                    setValues((prev) => ({
-                      ...prev,
-                      annualPrice: event.target.value.replace(/[^0-9.]/g, ""),
-                    }))
-                  }
-                />
-              </div>
-            </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="plan-currency">{t("form.fields.currency")}</Label>
-              <Select
-                value={values.currency}
-                onValueChange={(currency) => setValues((prev) => ({ ...prev, currency }))}
-              >
-                <SelectTrigger id="plan-currency" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {CURRENCIES.map((currency) => (
-                    <SelectItem key={currency} value={currency}>
-                      {currency}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="plan-monthly-price">{t("form.fields.monthlyPrice")}</Label>
+              <Input
+                id="plan-monthly-price"
+                inputMode="decimal"
+                required
+                value={values.priceMonthly}
+                onChange={(event) =>
+                  patchValues({ priceMonthly: event.target.value.replace(/[^0-9.]/g, "") })
+                }
+              />
             </div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col">
+                <Label htmlFor="plan-auto-yearly">{t("form.fields.autoYearly")}</Label>
+                <span className="text-xs text-muted-foreground">
+                  {t("form.fields.autoYearlyHint")}
+                </span>
+              </div>
+              <Switch
+                id="plan-auto-yearly"
+                checked={values.autoYearly}
+                onCheckedChange={(autoYearly) => patchValues({ autoYearly })}
+              />
+            </div>
+            {mode === "edit" && plan ? (
+              <p className="text-xs text-muted-foreground">
+                {t("form.fields.yearlyPrice")}: <span dir="ltr">${plan.priceYearly}</span>
+              </p>
+            ) : null}
           </section>
 
           <section className="flex flex-col gap-3">
-            <h3 className="text-sm font-semibold">{t("form.sections.usageLimits")}</h3>
-            <PlanUsageLimitsFields
-              limits={values.limits}
-              onChange={(limits) => setValues((prev) => ({ ...prev, limits }))}
-            />
+            <h3 className="text-sm font-semibold">{t("form.sections.limits")}</h3>
+            <PlanUsageLimitsFields values={values} onChange={patchValues} />
           </section>
 
           <section className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">{t("form.sections.features")}</h3>
-              <Button
-                type="button"
-                variant="link"
-                size="sm"
-                className="h-auto p-0"
-                onClick={addCustomFeature}
-              >
-                <Plus className="size-3.5" data-icon="inline-start" />
-                {t("form.addFeature")}
-              </Button>
-            </div>
-            <PlanFeatureToggleList
-              features={values.features}
-              onChange={(features) => setValues((prev) => ({ ...prev, features }))}
-            />
+            <h3 className="text-sm font-semibold">{t("form.sections.supportAndCrawling")}</h3>
+            <PlanSupportFields values={values} onChange={patchValues} />
+          </section>
+
+          <section className="flex flex-col gap-3">
+            <h3 className="text-sm font-semibold">{t("form.sections.discount")}</h3>
+            <PlanDiscountFields values={values} onChange={patchValues} />
           </section>
 
           <section className="flex flex-col gap-3">
             <h3 className="text-sm font-semibold">{t("form.sections.status")}</h3>
             <RadioGroup
-              value={values.status}
-              onValueChange={(status) =>
-                setValues((prev) => ({ ...prev, status: status as PlanStatus }))
-              }
+              value={values.isActive ? "active" : "inactive"}
+              onValueChange={(value) => patchValues({ isActive: value === "active" })}
               className="flex items-center gap-4"
             >
               <div className="flex items-center gap-2">
