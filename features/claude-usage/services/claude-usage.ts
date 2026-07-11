@@ -1,190 +1,143 @@
 import { queryOptions } from "@tanstack/react-query";
 
+import { apiGet, apiPut } from "@/lib/api-client";
 import { claudeUsageKeys } from "@/features/claude-usage/query-keys";
 import type {
-  ClaudeUsageOverview,
-  DailyRequestsPoint,
-  TokenConsumptionPoint,
+  AiSettings,
   TopApiUser,
+  TrendPoint,
+  UpdateAiSettingsInput,
+  UsageMetric,
+  UsageSummary,
 } from "@/features/claude-usage/types";
 
-const MOCK_LATENCY_MS = 350;
+type UsageSummaryResponse = {
+  total_requests: number;
+  total_tokens: number;
+  success_rate_percent: number;
+  failed_requests: number;
+  avg_response_time_ms: number;
+  remaining_quota_percent: number;
+};
 
-function delay<T>(value: T): Promise<T> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(value), MOCK_LATENCY_MS);
-  });
+export async function fetchUsageSummary(): Promise<UsageSummary> {
+  const data = await apiGet<UsageSummaryResponse>("/admin/usage/summary");
+
+  return {
+    totalRequests: data.total_requests,
+    totalTokens: data.total_tokens,
+    successRatePercent: data.success_rate_percent,
+    failedRequests: data.failed_requests,
+    avgResponseTimeMs: data.avg_response_time_ms,
+    remainingQuotaPercent: data.remaining_quota_percent,
+  };
 }
 
-export async function fetchClaudeUsageOverview(): Promise<ClaudeUsageOverview> {
-  return delay({
-    successRate: {
-      value: 98.7,
-      delta: { value: 0.3, direction: "up", period: "vsLastMonth" },
-    },
-    tokensSent: {
-      value: 73_600_000,
-      delta: { value: 12.5, direction: "up", period: "vsLastMonth" },
-    },
-    requests: {
-      value: 1_240_000,
-      delta: { value: 18.2, direction: "up", period: "vsLastMonth" },
-    },
-    remainingQuota: { value: 67.8, renewalInDays: 12 },
-    avgResponseTimeMs: { value: 142, deltaMs: -18, direction: "down" },
-    requestCost: {
-      value: 16_112,
-      currency: "USD",
-      delta: { value: 8.4, direction: "down", period: "vsLastMonth" },
-    },
-  });
-}
-
-export const claudeUsageOverviewQueryOptions = queryOptions({
-  queryKey: claudeUsageKeys.overview(),
-  queryFn: fetchClaudeUsageOverview,
+export const usageSummaryQueryOptions = queryOptions({
+  queryKey: claudeUsageKeys.summary(),
+  queryFn: fetchUsageSummary,
 });
 
-export async function fetchTokenConsumptionTrend(): Promise<TokenConsumptionPoint[]> {
-  const now = new Date();
-  const shape = [7.2, 8.1, 8.7, 8.9, 8.3, 7.6, 7.1];
+const TREND_DAYS = 7;
 
-  const points: TokenConsumptionPoint[] = shape.map((value, index) => {
-    const daysAgo = shape.length - 1 - index;
-    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysAgo);
+type UsageTrendResponse = { points: TrendPoint[] };
 
-    return { date: date.toISOString(), tokens: Math.round(value * 1_000_000) };
-  });
+export async function fetchUsageTrend(metric: UsageMetric): Promise<TrendPoint[]> {
+  const data = await apiGet<UsageTrendResponse>(
+    `/admin/usage/trend?days=${TREND_DAYS}&metric=${metric}`,
+  );
 
-  return delay(points);
+  return data.points;
 }
 
-export const tokenConsumptionTrendQueryOptions = queryOptions({
-  queryKey: claudeUsageKeys.tokenConsumptionTrend(),
-  queryFn: fetchTokenConsumptionTrend,
+export const tokensTrendQueryOptions = queryOptions({
+  queryKey: claudeUsageKeys.trend("tokens", TREND_DAYS),
+  queryFn: () => fetchUsageTrend("tokens"),
 });
 
-export async function fetchDailyRequestsTrend(): Promise<DailyRequestsPoint[]> {
-  const now = new Date();
-  const shape = [186, 172, 165, 158, 142, 121, 108];
+export const requestsTrendQueryOptions = queryOptions({
+  queryKey: claudeUsageKeys.trend("requests", TREND_DAYS),
+  queryFn: () => fetchUsageTrend("requests"),
+});
 
-  const points: DailyRequestsPoint[] = shape.map((value, index) => {
-    const daysAgo = shape.length - 1 - index;
-    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysAgo);
+const TOP_USERS_LIMIT = 8;
 
-    return { date: date.toISOString(), requests: value * 1_000 };
-  });
+type TopApiUserResponse = {
+  user_id: string;
+  display_name: string;
+  plan_name: string;
+  requests: number;
+  tokens: number;
+  limit: number;
+  usage_percent: number;
+  status: string;
+};
 
-  return delay(points);
+function initialsFrom(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 }
-
-export const dailyRequestsTrendQueryOptions = queryOptions({
-  queryKey: claudeUsageKeys.dailyRequestsTrend(),
-  queryFn: fetchDailyRequestsTrend,
-});
 
 export async function fetchTopApiUsers(): Promise<TopApiUser[]> {
-  return delay([
-    {
-      id: "api_user_james_kim",
-      name: "James Kim",
-      initials: "JK",
-      planKey: "enterprise",
-      requests: 891_243,
-      tokens: 892_000_000,
-      cost: 2_890,
-      currency: "USD",
-      usagePercent: 92,
-      status: "active",
-    },
-    {
-      id: "api_user_marcus_williams",
-      name: "Marcus Williams",
-      initials: "MW",
-      planKey: "business",
-      requests: 234_891,
-      tokens: 235_000_000,
-      cost: 940,
-      currency: "USD",
-      usagePercent: 47,
-      status: "active",
-    },
-    {
-      id: "api_user_thomas_muller",
-      name: "Thomas Muller",
-      initials: "TM",
-      planKey: "business",
-      requests: 156_789,
-      tokens: 157_000_000,
-      cost: 627,
-      currency: "USD",
-      usagePercent: 31,
-      status: "active",
-    },
-    {
-      id: "api_user_sarah_chen",
-      name: "Sarah Chen",
-      initials: "SC",
-      planKey: "pro",
-      requests: 87_432,
-      tokens: 87_000_000,
-      cost: 437,
-      currency: "USD",
-      usagePercent: 87,
-      status: "active",
-    },
-    {
-      id: "api_user_li_wei",
-      name: "Li Wei",
-      initials: "LW",
-      planKey: "pro",
-      requests: 67_234,
-      tokens: 67_000_000,
-      cost: 336,
-      currency: "USD",
-      usagePercent: 34,
-      status: "active",
-    },
-    {
-      id: "api_user_priya_patel",
-      name: "Priya Patel",
-      initials: "PP",
-      planKey: "pro",
-      requests: 45_672,
-      tokens: 46_000_000,
-      cost: 228,
-      currency: "USD",
-      usagePercent: 91,
-      status: "limitExceeded",
-    },
-    {
-      id: "api_user_elena_rodriguez",
-      name: "Elena Rodriguez",
-      initials: "ER",
-      planKey: "starter",
-      requests: 9_821,
-      tokens: 9_800_000,
-      cost: 49,
-      currency: "USD",
-      usagePercent: 98,
-      status: "limitExceeded",
-    },
-    {
-      id: "api_user_aisha_okonkwo",
-      name: "Aisha Okonkwo",
-      initials: "AO",
-      planKey: "starter",
-      requests: 3_421,
-      tokens: 3_400_000,
-      cost: 17,
-      currency: "USD",
-      usagePercent: 34,
-      status: "active",
-    },
-  ]);
+  const data = await apiGet<TopApiUserResponse[]>(
+    `/admin/usage/top-users?limit=${TOP_USERS_LIMIT}`,
+  );
+
+  return data.map((user) => ({
+    id: user.user_id,
+    name: user.display_name,
+    initials: initialsFrom(user.display_name),
+    planName: user.plan_name,
+    requests: user.requests,
+    tokens: user.tokens,
+    limit: user.limit,
+    usagePercent: user.usage_percent,
+    status: user.status,
+    // No backend field for per-user request cost yet — omitted until one exists.
+  }));
 }
 
 export const topApiUsersQueryOptions = queryOptions({
-  queryKey: claudeUsageKeys.topUsers(),
+  queryKey: claudeUsageKeys.topUsers(TOP_USERS_LIMIT),
   queryFn: fetchTopApiUsers,
 });
+
+type AiSettingsResponse = {
+  monthly_budget_usd: number;
+  current_spend_usd: number;
+  percent_used: number;
+  month: string;
+  updated_at: string;
+};
+
+function mapAiSettings(data: AiSettingsResponse): AiSettings {
+  return {
+    monthlyBudgetUsd: data.monthly_budget_usd,
+    currentSpendUsd: data.current_spend_usd,
+    percentUsed: data.percent_used,
+    month: data.month,
+    updatedAt: data.updated_at,
+  };
+}
+
+export async function fetchAiSettings(): Promise<AiSettings> {
+  const data = await apiGet<AiSettingsResponse>("/admin/ai-settings");
+  return mapAiSettings(data);
+}
+
+export const aiSettingsQueryOptions = queryOptions({
+  queryKey: claudeUsageKeys.aiSettings(),
+  queryFn: fetchAiSettings,
+});
+
+export async function updateAiSettings(input: UpdateAiSettingsInput): Promise<AiSettings> {
+  const data = await apiPut<AiSettingsResponse>("/admin/ai-settings", {
+    monthly_budget_usd: input.monthlyBudgetUsd,
+  });
+
+  return mapAiSettings(data);
+}

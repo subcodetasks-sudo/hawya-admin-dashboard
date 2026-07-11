@@ -20,19 +20,35 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import { tokenConsumptionTrendQueryOptions } from "@/features/claude-usage/services/claude-usage";
+import {
+  requestsTrendQueryOptions,
+  tokensTrendQueryOptions,
+} from "@/features/claude-usage/services/claude-usage";
+import type { UsageMetric } from "@/features/claude-usage/types";
 import { getDateFnsLocale } from "@/lib/date-fns-locale";
 import { formatNumber } from "@/lib/format";
 
-const chartConfig = {
-  tokens: { label: "Tokens", color: "var(--primary)" },
-} satisfies ChartConfig;
+const QUERY_OPTIONS_BY_METRIC = {
+  tokens: tokensTrendQueryOptions,
+  requests: requestsTrendQueryOptions,
+} as const;
 
-export default function TokenConsumptionChart() {
+type Props = {
+  metric: UsageMetric;
+};
+
+export default function UsageTrendChart({ metric }: Props) {
   const t = useTranslations("ClaudeUsage");
   const locale = useLocale();
   const gradientId = useId();
-  const { data, isLoading, isError } = useQuery(tokenConsumptionTrendQueryOptions);
+  const { data, isLoading, isError } = useQuery(QUERY_OPTIONS_BY_METRIC[metric]);
+
+  const chartConfig = useMemo<ChartConfig>(
+    () => ({
+      value: { label: t(`charts.${metric}.title`), color: "var(--primary)" },
+    }),
+    [metric, t],
+  );
 
   const points = useMemo(() => {
     if (!data) {
@@ -43,23 +59,27 @@ export default function TokenConsumptionChart() {
 
     return data.map((point) => ({
       ...point,
-      label: format(new Date(point.date), "EEE", { locale: dateLocale }),
+      tickLabel: format(new Date(point.label), "EEE", { locale: dateLocale }),
     }));
   }, [data, locale]);
+
+  const isEmpty = !isLoading && !isError && points.length === 0;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("charts.tokenConsumption.title")}</CardTitle>
-        <CardDescription>{t("charts.tokenConsumption.subtitle")}</CardDescription>
+        <CardTitle>{t(`charts.${metric}.title`)}</CardTitle>
+        <CardDescription>{t(`charts.${metric}.subtitle`)}</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <Skeleton className="aspect-video w-full" />
         ) : isError || !data ? (
           <p className="text-sm text-destructive">
-            {t("charts.tokenConsumption.title")} — unable to load.
+            {t(`charts.${metric}.title`)} — {t("charts.loadError")}
           </p>
+        ) : isEmpty ? (
+          <p className="text-sm text-muted-foreground">{t("charts.noData")}</p>
         ) : (
           <ChartContainer config={chartConfig} className="aspect-video w-full">
             <AreaChart data={points} margin={{ left: -12, right: 12 }}>
@@ -71,7 +91,7 @@ export default function TokenConsumptionChart() {
               </defs>
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="label"
+                dataKey="tickLabel"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
@@ -94,7 +114,7 @@ export default function TokenConsumptionChart() {
                     formatter={(value) => (
                       <div className="flex w-full items-center justify-between gap-4">
                         <span className="text-muted-foreground">
-                          {t("charts.tokenConsumption.title")}
+                          {t(`charts.${metric}.title`)}
                         </span>
                         <span className="font-mono font-medium tabular-nums text-foreground">
                           {formatNumber(Number(value), locale)}
@@ -105,7 +125,7 @@ export default function TokenConsumptionChart() {
                 }
               />
               <Area
-                dataKey="tokens"
+                dataKey="value"
                 type="monotone"
                 fill={`url(#${gradientId})`}
                 stroke="var(--primary)"

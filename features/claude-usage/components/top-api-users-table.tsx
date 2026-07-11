@@ -25,7 +25,11 @@ import ApiUserStatusBadge from "@/features/claude-usage/components/api-user-stat
 import ApiUserUsageMeter from "@/features/claude-usage/components/api-user-usage-meter";
 import { topApiUsersQueryOptions } from "@/features/claude-usage/services/claude-usage";
 import { avatarColorFor } from "@/lib/avatar-color";
-import { formatCurrency, formatNumber } from "@/lib/format";
+import { formatNumber } from "@/lib/format";
+
+// `/admin/usage/top-users` doesn't return a cost field yet — the Cost column
+// is dropped until the backend adds one. Keep in sync if it ever does.
+const COLUMN_COUNT = 6;
 
 export default function TopApiUsersTable() {
   const t = useTranslations("ClaudeUsage");
@@ -46,7 +50,7 @@ export default function TopApiUsersTable() {
               <TableHead className="px-4 text-start">{t("table.plan")}</TableHead>
               <TableHead className="px-4 text-start">{t("table.requests")}</TableHead>
               <TableHead className="px-4 text-start">{t("table.tokens")}</TableHead>
-              <TableHead className="px-4 text-start">{t("table.cost")}</TableHead>
+              {/* <TableHead className="px-4 text-start">{t("table.cost")}</TableHead> */}
               <TableHead className="px-4 text-start">{t("table.usage")}</TableHead>
               <TableHead className="px-4 text-start">{t("table.status")}</TableHead>
             </TableRow>
@@ -55,7 +59,7 @@ export default function TopApiUsersTable() {
             {isLoading ? (
               Array.from({ length: 6 }).map((_, index) => (
                 <TableRow key={index} className="hover:bg-transparent">
-                  <TableCell colSpan={7} className="px-4 py-3">
+                  <TableCell colSpan={COLUMN_COUNT} className="px-4 py-3">
                     <Skeleton className="h-10 w-full" />
                   </TableCell>
                 </TableRow>
@@ -63,7 +67,7 @@ export default function TopApiUsersTable() {
             ) : isError || !data ? (
               <TableRow className="hover:bg-transparent">
                 <TableCell
-                  colSpan={7}
+                  colSpan={COLUMN_COUNT}
                   className="px-4 py-8 text-center text-sm text-destructive"
                 >
                   {t("table.loadError")}
@@ -72,7 +76,7 @@ export default function TopApiUsersTable() {
             ) : data.length === 0 ? (
               <TableRow className="hover:bg-transparent">
                 <TableCell
-                  colSpan={7}
+                  colSpan={COLUMN_COUNT}
                   className="px-4 py-8 text-center text-sm text-muted-foreground"
                 >
                   {t("table.empty")}
@@ -92,7 +96,7 @@ export default function TopApiUsersTable() {
                     </div>
                   </TableCell>
                   <TableCell className="px-4 py-3">
-                    <ApiUserPlanBadge plan={user.planKey} />
+                    <ApiUserPlanBadge plan={user.planName} />
                   </TableCell>
                   <TableCell className="px-4 py-3 tabular-nums">
                     {formatNumber(user.requests, locale)}
@@ -103,9 +107,9 @@ export default function TopApiUsersTable() {
                       maximumFractionDigits: 1,
                     })}
                   </TableCell>
-                  <TableCell className="px-4 py-3 tabular-nums">
+                  {/* <TableCell className="px-4 py-3 tabular-nums">
                     {formatCurrency(user.cost, user.currency, locale)}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell className="px-4 py-3">
                     <ApiUserUsageMeter value={user.usagePercent} locale={locale} />
                   </TableCell>

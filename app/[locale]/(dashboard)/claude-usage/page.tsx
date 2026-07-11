@@ -7,10 +7,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import ClaudeUsageOverview from "@/features/claude-usage/components/claude-usage-overview";
 import {
-  claudeUsageOverviewQueryOptions,
-  dailyRequestsTrendQueryOptions,
-  tokenConsumptionTrendQueryOptions,
+  aiSettingsQueryOptions,
+  requestsTrendQueryOptions,
+  tokensTrendQueryOptions,
   topApiUsersQueryOptions,
+  usageSummaryQueryOptions,
 } from "@/features/claude-usage/services/claude-usage";
 
 type Props = {
@@ -25,10 +26,11 @@ export default async function ClaudeUsagePage({ params }: Props) {
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(claudeUsageOverviewQueryOptions),
-    queryClient.prefetchQuery(tokenConsumptionTrendQueryOptions),
-    queryClient.prefetchQuery(dailyRequestsTrendQueryOptions),
+    queryClient.prefetchQuery(usageSummaryQueryOptions),
+    queryClient.prefetchQuery(tokensTrendQueryOptions),
+    queryClient.prefetchQuery(requestsTrendQueryOptions),
     queryClient.prefetchQuery(topApiUsersQueryOptions),
+    queryClient.prefetchQuery(aiSettingsQueryOptions),
   ]);
 
   return (
