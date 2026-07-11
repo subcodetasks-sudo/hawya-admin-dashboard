@@ -46,6 +46,16 @@
       "passwordRequired": "كلمة المرور مطلوبة",
       "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
     },
+    "otp": {
+      "title": "تحقق من هويتك",
+      "instructionsPrefix": "أرسلنا رمز تحقق مكوّن من 6 أرقام إلى",
+      "submit": "تحقق",
+      "submitting": "جارٍ التحقق...",
+      "back": "العودة لتسجيل الدخول",
+      "errors": {
+        "otpInvalid": "أدخل الرمز المكوّن من 6 أرقام"
+      }
+    },
     "hero": {
       "brand": "ClaudeAdmin",
       "heading1": "إدارة منصتك",
@@ -73,6 +83,7 @@
       "email": "البريد الإلكتروني",
       "apiKeys": "مفاتيح API",
       "security": "الأمان",
+      "auditLog": "سجل التدقيق",
       "roles": "أدوار المسؤولين"
     },
     "general": {
@@ -88,9 +99,11 @@
         "allowFreeTrial": "السماح بالتجربة المجانية",
         "maintenanceMode": "وضع الصيانة",
         "sendUsageSummaries": "إرسال ملخصات الاستخدام"
-      }
+      },
+      "loadError": "تعذر تحميل الإعدادات العامة."
     },
     "security": {
+      "loadError": "تعذر تحميل إعدادات الأمان.",
       "twoFactorAuth": {
         "title": "المصادقة الثنائية",
         "description": "طلب 2FA لجميع حسابات الإدارة"
@@ -118,19 +131,47 @@
       "active": "نشط",
       "inactive": "غير نشط",
       "createdAt": "تاريخ الإنشاء: {date}",
-      "environments": {
-        "production": "مفتاح API للإنتاج",
-        "development": "مفتاح API للتطوير"
-      },
+      "rotatedAt": "تاريخ التدوير: {date}",
       "actions": {
         "copy": "نسخ المفتاح",
-        "regenerate": "إعادة إنشاء المفتاح",
+        "rotate": "تدوير المفتاح",
         "delete": "حذف المفتاح"
       },
+      "createDialog": {
+        "title": "إنشاء مفتاح API",
+        "description": "أعطِ هذا المفتاح اسمًا لتحديد مكان استخدامه.",
+        "nameLabel": "اسم المفتاح",
+        "namePlaceholder": "مثال: مفتاح API للإنتاج",
+        "cancel": "إلغاء",
+        "submit": "إنشاء المفتاح"
+      },
+      "secretDialog": {
+        "title": "تم إنشاء مفتاح API",
+        "description": "انسخ هذا المفتاح الآن. لن تتمكن من رؤيته مرة أخرى.",
+        "close": "تم"
+      },
       "copiedToast": "تم نسخ المفتاح",
-      "regeneratedToast": "تم إعادة إنشاء المفتاح",
+      "rotatedToast": "تم تدوير المفتاح",
       "deletedToast": "تم حذف المفتاح",
-      "createdToast": "تم إنشاء مفتاح جديد"
+      "createdToast": "تم إنشاء مفتاح جديد",
+      "loadError": "تعذر تحميل مفاتيح API.",
+      "empty": "لا توجد مفاتيح API بعد."
+    },
+    "auditLog": {
+      "sectionTitle": "نشاط المسؤولين",
+      "table": {
+        "action": "الإجراء",
+        "target": "الهدف",
+        "admin": "المسؤول",
+        "date": "التاريخ",
+        "empty": "لا يوجد نشاط مسجل بعد.",
+        "loadError": "تعذر تحميل سجل التدقيق."
+      },
+      "pagination": {
+        "pageOf": "صفحة {page} من {totalPages}",
+        "previous": "السابق",
+        "next": "التالي"
+      }
     },
     "payment": {
       "title": "إعدادات الدفع"
@@ -151,14 +192,25 @@
       "vsLastWeek": "مقارنة بالأسبوع الماضي"
     },
     "stats": {
+      "title": "نظرة عامة",
       "apiRequestsToday": "طلبات API اليوم",
-      "activeUsers": "المستخدمين النشطين",
+      "totalUsers": "إجمالي المستخدمين",
       "activeSubscriptions": "الاشتراكات النشطة",
       "monthlyRevenue": "الإيرادات الشهرية",
-      "avgResponseTime": "متوسط وقت الاستجابة",
-      "activePlans": "الخطط النشطة",
+      "yearlyRevenue": "الإيرادات السنوية",
+      "availablePlans": "الخطط المتاحة",
       "growthRate": "معدل النمو",
-      "netRevenue": "الإيرادات الصافية"
+      "avgResponseTime": "متوسط وقت الاستجابة",
+      "visits": "الزيارات",
+      "loadError": "تعذر تحميل الإحصائيات."
+    },
+    "platformStats": {
+      "title": "إحصائيات المنصة",
+      "totalUsers": "إجمالي المستخدمين",
+      "verifiedUsers": "المستخدمون الموثقون",
+      "activeSubscriptions": "الاشتراكات النشطة",
+      "crawlsToday": "عمليات الزحف اليوم",
+      "aiCallsToday": "طلبات الذكاء الاصطناعي اليوم"
     },
     "charts": {
       "subscribersByPlan": {
@@ -172,13 +224,9 @@
       "apiUsageTrend": {
         "title": "اتجاه استخدام API",
         "subtitle": "الطلبات اليومية خلال الأسبوع الماضي"
-      }
-    },
-    "plans": {
-      "starter": "Starter",
-      "pro": "Pro",
-      "business": "Business",
-      "enterprise": "Enterprise"
+      },
+      "loadError": "تعذر التحميل.",
+      "noData": "لا توجد بيانات متاحة بعد."
     },
     "payments": {
       "title": "المدفوعات الأخيرة",
@@ -188,6 +236,8 @@
       "plan": "الخطة",
       "amount": "المبلغ",
       "date": "التاريخ",
+      "loadError": "تعذر التحميل.",
+      "noData": "لا توجد مدفوعات حديثة.",
       "status": {
         "paid": "مدفوع",
         "pending": "قيد الانتظار",
@@ -226,7 +276,18 @@
     "rowActions": {
       "edit": "تعديل",
       "duplicate": "نسخ",
+      "activate": "تفعيل",
+      "deactivate": "إيقاف",
       "delete": "حذف"
+    },
+    "toasts": {
+      "created": "تم إنشاء الخطة.",
+      "updated": "تم تحديث الخطة.",
+      "deleted": "تم حذف الخطة.",
+      "duplicated": "تم نسخ الخطة.",
+      "activated": "تم تفعيل الخطة.",
+      "deactivated": "تم إيقاف الخطة.",
+      "error": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
     },
     "deleteDialog": {
       "title": "حذف الخطة؟",
@@ -242,8 +303,9 @@
       "sections": {
         "generalInfo": "المعلومات العامة",
         "pricing": "التسعير",
-        "usageLimits": "حدود الاستخدام",
-        "features": "الميزات",
+        "limits": "حدود الخطة",
+        "supportAndCrawling": "الدعم والزحف",
+        "discount": "الخصم",
         "status": "الحالة"
       },
       "fields": {
@@ -256,26 +318,26 @@
           "placeholder": "وصف مختصر لهذه الخطة"
         },
         "monthlyPrice": "السعر الشهري",
-        "annualPrice": "السعر السنوي",
-        "currency": "العملة",
-        "tokensPerMonth": "حد Token / شهر",
-        "apiRequestsPerMonth": "طلبات API / شهر",
-        "projects": "المشاريع",
-        "storageGb": "التخزين (GB)",
-        "teamMembers": "أعضاء الفريق",
-        "connectedSites": "المواقع الإلكترونية"
+        "autoYearly": "احتساب السعر السنوي تلقائيًا",
+        "autoYearlyHint": "يتم احتساب السعر السنوي تلقائيًا من السعر الشهري وأي خصم فعّال.",
+        "yearlyPrice": "السعر السنوي",
+        "maxProjects": "الحد الأقصى للمشاريع",
+        "requestsLimit": "حد الطلبات / شهر",
+        "apiTokenLimit": "حد Token API / شهر",
+        "maxWebsites": "الحد الأقصى للمواقع",
+        "crawlingEnabled": "تفعيل الزحف",
+        "supportPriority": "أولوية الدعم",
+        "supportPriorityPlaceholder": "مثال: email"
       },
-      "unlimitedPlaceholder": "غير محدود",
-      "addFeature": "إضافة ميزة",
-      "customFeaturePlaceholder": "اسم الميزة",
-      "removeFeature": "إزالة الميزة",
-      "features": {
-        "prioritySupport": "الدعم الأولوي",
-        "advancedAnalytics": "التحليلات المتقدمة",
-        "teamMembers": "أعضاء الفريق",
-        "customIntegrations": "التكاملات المخصصة",
-        "claudeCrawling": "Claude Crawling",
-        "auditLogs": "Audit Logs"
+      "discount": {
+        "enable": "تفعيل الخصم",
+        "type": "نوع الخصم",
+        "typePercent": "نسبة مئوية",
+        "typeFixed": "مبلغ ثابت",
+        "value": "قيمة الخصم",
+        "scope": "يطبّق على",
+        "scopeMonth": "السعر الشهري",
+        "scopeYear": "السعر السنوي"
       },
       "statusOptions": {
         "active": "نشط",
@@ -289,26 +351,37 @@
   "Subscriptions": {
     "title": "الاشتراكات",
     "subtitle": "إدارة اشتراكات العملاء ودورات الفوترة",
+    "createSubscription": "إضافة اشتراك",
     "tabs": {
       "active": "نشط",
       "pending": "قيد الانتظار",
       "expired": "منتهي",
+      "suspended": "معلّق",
       "cancelled": "ملغى"
     },
     "toolbar": {
       "searchPlaceholder": "البحث بالاسم أو البريد...",
+      "filter": "تصفية",
+      "filterPlanLabel": "الخطة",
+      "planAll": "كل الخطط",
       "export": "تصدير"
     },
     "table": {
       "customer": "العميل",
       "plan": "الخطة",
       "billing": "الفوترة",
+      "price": "السعر",
       "status": "الحالة",
       "startDate": "تاريخ البدء",
       "renewal": "التجديد",
       "usage": "الاستخدام",
       "empty": "لا توجد اشتراكات.",
       "loadError": "تعذر تحميل الاشتراكات."
+    },
+    "pagination": {
+      "pageOf": "صفحة {page} من {totalPages}",
+      "previous": "السابق",
+      "next": "التالي"
     },
     "billing": {
       "monthly": "شهري",
@@ -318,12 +391,81 @@
       "active": "نشط",
       "pending": "قيد الانتظار",
       "expired": "منتهي",
-      "cancelled": "ملغى"
+      "cancelled": "ملغى",
+      "suspended": "معلّق"
     },
     "noRenewal": "—",
     "rowActions": {
       "viewDetails": "عرض التفاصيل",
+      "suspend": "تعليق الاشتراك",
+      "renew": "تجديد الاشتراك",
       "cancelSubscription": "إلغاء الاشتراك"
+    },
+    "cancelDialog": {
+      "title": "إلغاء هذا الاشتراك؟",
+      "description": "سيتم إلغاء اشتراك {name} وإيقاف التجديد التلقائي.",
+      "cancel": "الإبقاء على الاشتراك",
+      "confirm": "إلغاء الاشتراك"
+    },
+    "detail": {
+      "title": "تفاصيل الاشتراك",
+      "loadError": "تعذر تحميل تفاصيل الاشتراك.",
+      "endsAt": "ينتهي في",
+      "autoRenewOn": "التجديد التلقائي مفعّل",
+      "autoRenewOff": "التجديد التلقائي معطّل",
+      "actionsTitle": "الإجراءات",
+      "actions": {
+        "grantDays": "منح أيام إضافية",
+        "changePlan": "تغيير الخطة",
+        "renew": "تجديد الاشتراك",
+        "suspend": "تعليق الاشتراك",
+        "cancel": "إلغاء الاشتراك"
+      },
+      "grantDaysDialog": {
+        "title": "منح أيام إضافية",
+        "description": "تمديد تاريخ انتهاء هذا الاشتراك بعدد من الأيام.",
+        "daysLabel": "الأيام",
+        "cancel": "إلغاء",
+        "confirm": "منح الأيام"
+      },
+      "changePlanDialog": {
+        "title": "تغيير الخطة",
+        "description": "نقل هذا الاشتراك إلى خطة أو دورة فوترة مختلفة.",
+        "planLabel": "الخطة",
+        "billingCycleLabel": "دورة الفوترة",
+        "cancel": "إلغاء",
+        "confirm": "تغيير الخطة"
+      },
+      "note": {
+        "title": "ملاحظة المسؤول",
+        "placeholder": "أضف ملاحظة حول هذا الاشتراك...",
+        "save": "حفظ الملاحظة"
+      }
+    },
+    "create": {
+      "title": "إضافة اشتراك",
+      "description": "إنشاء اشتراك جديد لمستخدم.",
+      "userLabel": "المستخدم",
+      "userPlaceholder": "اختر مستخدمًا",
+      "userSearchPlaceholder": "البحث عن مستخدمين...",
+      "userLoading": "جارٍ البحث...",
+      "userEmpty": "لا يوجد مستخدمون.",
+      "planLabel": "الخطة",
+      "planLoading": "جارٍ تحميل الخطط...",
+      "statusLabel": "الحالة",
+      "autoRenewLabel": "تفعيل التجديد التلقائي",
+      "cancel": "إلغاء",
+      "submit": "إنشاء الاشتراك"
+    },
+    "toasts": {
+      "created": "تم إنشاء الاشتراك",
+      "suspended": "تم تعليق الاشتراك",
+      "renewed": "تم تجديد الاشتراك",
+      "cancelled": "تم إلغاء الاشتراك",
+      "daysGranted": "تم منح الأيام",
+      "planChanged": "تم تغيير الخطة (فرق التناسب: {amount})",
+      "noteSaved": "تم حفظ الملاحظة",
+      "error": "حدث خطأ ما. حاول مرة أخرى."
     }
   },
   "Testimonials": {
@@ -337,7 +479,8 @@
       "overall": {
         "title": "التقييم العام",
         "totalReviews": "{count} تقييم إجمالي"
-      }
+      },
+      "loadError": "تعذر تحميل التقييمات."
     },
     "toolbar": {
       "searchPlaceholder": "البحث في التقييمات..."
@@ -352,41 +495,51 @@
       "empty": "لا توجد آراء مطابقة.",
       "loadError": "تعذر تحميل آراء العملاء."
     },
+    "card": {
+      "anonymous": "مجهول"
+    },
     "rowActions": {
       "delete": "حذف",
       "reject": "رفض",
-      "approve": "قبول"
+      "approve": "قبول",
+      "approveSuccess": "تمت الموافقة على التقييم.",
+      "approveError": "تعذر الموافقة على هذا التقييم.",
+      "rejectSuccess": "تم رفض التقييم.",
+      "rejectError": "تعذر رفض هذا التقييم.",
+      "deleteSuccess": "تم حذف التقييم.",
+      "deleteError": "تعذر حذف هذا التقييم."
+    },
+    "deleteDialog": {
+      "title": "حذف التقييم",
+      "description": "هل أنت متأكد من حذف تقييم {name}؟ لا يمكن التراجع عن هذا الإجراء.",
+      "cancel": "إلغاء",
+      "confirm": "حذف"
     },
     "ratingLabel": "التقييم: {rating} من 5"
   },
   "ClaudeUsage": {
     "title": "استخدام Claude API",
     "subtitle": "راقب استهلاك API وتوزيع الموارد عبر جميع الخطط",
-    "compare": {
-      "vsYesterday": "مقارنة بالأمس",
-      "vsLastMonth": "مقارنة بالشهر الماضي",
-      "vsLastWeek": "مقارنة بالأسبوع الماضي"
-    },
     "stats": {
+      "totalRequests": "إجمالي الطلبات",
+      "totalTokens": "إجمالي Tokens",
       "successRate": "معدل النجاح",
-      "tokensSent": "إرسال Tokens",
-      "requests": "الطلبات",
-      "remainingQuota": "الحصة المتبقية",
+      "failedRequests": "الطلبات الفاشلة",
       "avgResponseTime": "متوسط الاستجابة",
-      "requestCost": "تكلفة الطلبات"
-    },
-    "remainingQuota": {
-      "renewsIn": "يتجدد خلال {days} يوم"
+      "remainingQuota": "الحصة المتبقية",
+      "loadError": "تعذر تحميل إحصائيات الاستخدام."
     },
     "charts": {
-      "tokenConsumption": {
+      "tokens": {
         "title": "استهلاك Tokens",
         "subtitle": "استخدام Tokens خلال الأسبوع الماضي"
       },
-      "dailyRequests": {
+      "requests": {
         "title": "الطلبات اليومية",
         "subtitle": "عدد الطلبات لكل يوم خلال الأسبوع الماضي"
-      }
+      },
+      "loadError": "تعذر التحميل.",
+      "noData": "لا توجد بيانات متاحة بعد."
     },
     "table": {
       "title": "أعلى مستخدمي API",
@@ -395,57 +548,227 @@
       "plan": "الخطة",
       "requests": "الطلبات",
       "tokens": "Tokens",
-      "cost": "التكلفة",
       "usage": "الاستخدام",
       "status": "الحالة",
       "empty": "لا توجد بيانات استخدام.",
       "loadError": "تعذر تحميل بيانات الاستخدام."
     },
     "status": {
-      "active": "نشط",
-      "limitExceeded": "تجاوز الحد"
+      "normal": "طبيعي",
+      "near_limit": "قريب من الحد"
+    },
+    "aiBudget": {
+      "title": "ميزانية الذكاء الاصطناعي",
+      "subtitle": "الإنفاق الشهري مقابل الميزانية المحددة",
+      "edit": "تعديل الميزانية",
+      "ofBudget": "من ميزانية {budget}",
+      "monthLabel": "{month}",
+      "updatedAt": "آخر تحديث {date}",
+      "loadError": "تعذر تحميل ميزانية الذكاء الاصطناعي.",
+      "editTitle": "تعديل الميزانية الشهرية",
+      "editDescription": "حدد الحد الأقصى للإنفاق الشهري على استخدام الذكاء الاصطناعي.",
+      "budgetLabel": "الميزانية الشهرية (دولار أمريكي)",
+      "cancel": "إلغاء",
+      "save": "حفظ التغييرات",
+      "savedToast": "تم تحديث الميزانية"
+    },
+    "tabs": {
+      "overview": "نظرة عامة",
+      "anthropic": "استخدام Anthropic"
+    },
+    "anthropic": {
+      "stats": {
+        "realCost": "التكلفة الفعلية (الشهر)",
+        "remaining": "الرصيد المتبقي",
+        "costSinceRecorded": "التكلفة منذ آخر تسجيل",
+        "inputTokens": "Tokens المدخلة",
+        "outputTokens": "Tokens المخرجة",
+        "loadError": "تعذر تحميل إحصائيات استخدام Anthropic."
+      },
+      "balance": {
+        "title": "رصيد الحساب",
+        "subtitle": "آخر رصيد معروف لحساب Anthropic",
+        "edit": "تعديل الرصيد",
+        "recordedAt": "تم التسجيل في {date}",
+        "editTitle": "تعديل الرصيد المعروف",
+        "editDescription": "حدد آخر رصيد معروف لحساب Anthropic.",
+        "balanceLabel": "الرصيد المعروف (دولار أمريكي)",
+        "cancel": "إلغاء",
+        "save": "حفظ التغييرات",
+        "savedToast": "تم تحديث الرصيد",
+        "loadError": "تعذر تحميل الرصيد."
+      },
+      "charts": {
+        "cost": {
+          "title": "التكلفة اليومية",
+          "subtitle": "إنفاق Anthropic لكل يوم هذا الشهر"
+        },
+        "usage": {
+          "title": "استخدام Tokens اليومي",
+          "subtitle": "Tokens المدخلة مقابل المخرجة لكل يوم هذا الشهر"
+        },
+        "loadError": "تعذر التحميل.",
+        "noData": "لا توجد بيانات متاحة بعد."
+      },
+      "workspaces": {
+        "title": "مساحات العمل",
+        "subtitle": "مساحات عمل Anthropic المرتبطة بهذا الحساب",
+        "name": "الاسم",
+        "type": "النوع",
+        "created": "تاريخ الإنشاء",
+        "status": "الحالة",
+        "active": "نشطة",
+        "archived": "مؤرشفة",
+        "empty": "لا توجد مساحات عمل.",
+        "loadError": "تعذر تحميل مساحات العمل."
+      },
+      "report": {
+        "title": "تقرير مخصص",
+        "subtitle": "استعلم عن تكلفة واستخدام Anthropic لفترة زمنية محددة",
+        "selectRange": "اختر الفترة الزمنية",
+        "costSection": "التكلفة حسب النموذج",
+        "usageSection": "استخدام Tokens حسب النموذج",
+        "date": "التاريخ",
+        "model": "النموذج",
+        "amount": "المبلغ",
+        "inputTokens": "Tokens المدخلة",
+        "outputTokens": "Tokens المخرجة",
+        "empty": "لا توجد بيانات لهذه الفترة.",
+        "loadError": "تعذر تحميل التقرير."
+      }
+    }
+  },
+  "Financial": {
+    "title": "المالية",
+    "subtitle": "تتبع الإيرادات والمدفوعات وأداء الفوترة",
+    "refresh": "تحديث",
+    "exportReport": "تصدير التقرير",
+    "stats": {
+      "mrr": "الإيراد الشهري المتكرر",
+      "yearlyRevenue": "الإيراد السنوي",
+      "monthlyRevenue": "الإيراد الشهري",
+      "refundsThisMonth": "المبالغ المستردة هذا الشهر",
+      "pendingPayments": "المدفوعات المعلقة",
+      "arr": "الإيراد السنوي المتكرر",
+      "loadError": "تعذر تحميل الإحصائيات المالية."
+    },
+    "revenueByPlan": {
+      "title": "الإيرادات حسب الخطة",
+      "subtitle": "توزيع الإيرادات عبر الخطط",
+      "loadError": "تعذر تحميل الإيرادات حسب الخطة.",
+      "empty": "لا توجد بيانات إيرادات بعد."
+    },
+    "revenueTrend": {
+      "title": "الإيرادات",
+      "subtitle": "اتجاه الإيرادات الشهري خلال آخر 12 شهرًا",
+      "loadError": "تعذر التحميل.",
+      "noData": "لا توجد بيانات متاحة بعد."
+    },
+    "payments": {
+      "title": "المدفوعات الأخيرة",
+      "subtitle": "جميع المعاملات عبر منصتك",
+      "referenceCopied": "تم نسخ المرجع إلى الحافظة",
+      "copyReference": "نسخ المرجع",
+      "toolbar": {
+        "searchPlaceholder": "البحث بالعميل أو المرجع...",
+        "filter": "تصفية",
+        "filterStatusLabel": "الحالة",
+        "statusAll": "كل الحالات"
+      },
+      "table": {
+        "reference": "المرجع",
+        "customer": "العميل",
+        "plan": "الخطة",
+        "amount": "المبلغ",
+        "paymentMethod": "طريقة الدفع",
+        "date": "التاريخ",
+        "status": "الحالة",
+        "empty": "لا توجد مدفوعات.",
+        "loadError": "تعذر تحميل المدفوعات."
+      },
+      "pagination": {
+        "pageOf": "صفحة {page} من {totalPages}",
+        "previous": "السابق",
+        "next": "التالي"
+      },
+      "status": {
+        "paid": "مدفوع",
+        "pending": "قيد الانتظار",
+        "failed": "فاشل",
+        "refunded": "مسترد"
+      }
     }
   },
   "Users": {
     "title": "المستخدمون",
     "subtitle": "إدارة المستخدمين المسجلين وصلاحياتهم",
-    "inviteUser": "دعوة مستخدم",
+    "createUser": "إضافة مستخدم",
     "toolbar": {
       "searchPlaceholder": "البحث عن المستخدمين...",
       "filter": "تصفية",
       "export": "تصدير",
-      "filterStatusLabel": "الحالة",
-      "filterPlanLabel": "الخطة"
+      "filterPlanLabel": "الخطة",
+      "planAll": "كل الخطط"
     },
     "table": {
       "user": "المستخدم",
       "plan": "الخطة",
       "status": "الحالة",
-      "apiUsage": "استخدام API",
+      "apiUsage": "طلبات API",
       "signupDate": "تاريخ التسجيل",
       "lastLogin": "آخر دخول",
+      "never": "لم يسجل الدخول",
       "empty": "لا يوجد مستخدمون.",
       "loadError": "تعذر تحميل المستخدمين."
     },
+    "pagination": {
+      "pageOf": "صفحة {page} من {totalPages}",
+      "previous": "السابق",
+      "next": "التالي"
+    },
     "status": {
-      "all": "الكل",
       "active": "نشط",
-      "suspended": "موقوف",
-      "blocked": "محظور"
+      "inactive": "موقوف"
+    },
+    "verification": {
+      "verified": "موثّق",
+      "unverified": "غير موثّق"
     },
     "rowActions": {
       "view": "عرض التفاصيل",
-      "edit": "تعديل المستخدم",
       "suspend": "تعليق المستخدم",
       "reactivate": "إعادة تفعيل المستخدم"
     },
     "detail": {
       "title": "تفاصيل المستخدم",
+      "loadError": "تعذر تحميل تفاصيل المستخدم.",
       "stats": {
         "lastLogin": "آخر دخول",
         "apiRequests": "طلبات API",
         "signupDate": "تاريخ التسجيل",
-        "plan": "الخطة"
+        "plan": "الخطة",
+        "totalProjects": "المشاريع",
+        "totalPayments": "إجمالي المدفوعات",
+        "subscriptionMonths": "أشهر الاشتراك",
+        "language": "اللغة"
+      },
+      "usage": {
+        "title": "الاستخدام",
+        "tokens": "التوكنز",
+        "successCount": "ناجحة",
+        "failedCount": "فاشلة",
+        "limit": "الحد الأقصى",
+        "remaining": "المتبقي"
+      },
+      "subscription": {
+        "title": "الاشتراك الحالي",
+        "empty": "لا يوجد اشتراك نشط.",
+        "billingCycle": "دورة الفوترة",
+        "startedAt": "البداية",
+        "endsAt": "النهاية"
+      },
+      "pastSubscriptions": {
+        "title": "الاشتراكات السابقة"
       },
       "actionsTitle": "الإجراءات",
       "actions": {
@@ -453,49 +776,53 @@
         "resetPassword": "إعادة تعيين كلمة المرور",
         "reactivate": "إعادة تفعيل المستخدم",
         "suspend": "تعليق المستخدم",
-        "block": "حظر دائم"
+        "ban": "حظر المستخدم"
       },
       "assignPlanLabel": "اختر خطة جديدة",
-      "notesLabel": "ملاحظات المسؤول",
-      "notesPlaceholder": "أضف ملاحظات حول هذا المستخدم...",
-      "saveNote": "حفظ الملاحظة",
-      "blockDialog": {
-        "title": "حظر هذا المستخدم نهائيًا؟",
-        "description": "سيفقد {name} كل الوصول فورًا. لا يمكن التراجع عن هذا الإجراء.",
+      "resetPasswordDialog": {
+        "title": "تم إنشاء كلمة مرور مؤقتة",
+        "description": "شارك كلمة المرور هذه مع المستخدم. لن يتم عرضها مرة أخرى.",
+        "close": "إغلاق"
+      },
+      "banDialog": {
+        "title": "حظر هذا المستخدم؟",
+        "description": "سيفقد {name} الوصول فورًا.",
+        "typeLabel": "نوع الحظر",
+        "temporary": "مؤقت",
+        "permanent": "دائم",
+        "untilLabel": "محظور حتى",
         "confirm": "حظر المستخدم",
         "cancel": "إلغاء"
+      },
+      "notes": {
+        "title": "ملاحظات المسؤول",
+        "empty": "لا توجد ملاحظات بعد.",
+        "placeholder": "أضف ملاحظة حول هذا المستخدم...",
+        "add": "إضافة ملاحظة"
       }
     },
-    "invite": {
-      "title": "دعوة مستخدم",
-      "description": "أرسل دعوة مع تحديد خطة أولية.",
+    "create": {
+      "title": "إضافة مستخدم",
+      "description": "أنشئ حساب مستخدم جديد مع تحديد خطة أولية.",
       "nameLabel": "الاسم",
       "namePlaceholder": "مثال: جوردان لي",
       "emailLabel": "البريد الإلكتروني",
       "emailPlaceholder": "name@company.com",
       "planLabel": "الخطة",
+      "planLoading": "جارٍ تحميل الخطط...",
+      "passwordLabel": "كلمة مرور مؤقتة",
+      "passwordPlaceholder": "حدد كلمة مرور أولية",
+      "verifiedLabel": "وضع البريد الإلكتروني كموثّق",
       "cancel": "إلغاء",
-      "submit": "إرسال الدعوة"
-    },
-    "edit": {
-      "title": "تعديل المستخدم",
-      "description": "قم بتحديث بيانات حساب هذا المستخدم.",
-      "nameLabel": "الاسم",
-      "emailLabel": "البريد الإلكتروني",
-      "planLabel": "الخطة",
-      "statusLabel": "الحالة",
-      "cancel": "إلغاء",
-      "submit": "حفظ التغييرات"
+      "submit": "إنشاء المستخدم"
     },
     "toasts": {
-      "invited": "تم إرسال الدعوة",
-      "updated": "تم تحديث المستخدم",
+      "created": "تم إنشاء المستخدم",
       "suspended": "تم تعليق المستخدم",
       "reactivated": "تم إعادة تفعيل المستخدم",
-      "blocked": "تم حظر المستخدم",
-      "passwordReset": "تم إرسال بريد إعادة تعيين كلمة المرور",
+      "banned": "تم حظر المستخدم",
       "planAssigned": "تم تحديث الخطة",
-      "noteSaved": "تم حفظ الملاحظة"
+      "noteAdded": "تمت إضافة الملاحظة"
     }
   }
 }

@@ -46,6 +46,16 @@
       "passwordRequired": "Password is required",
       "generic": "Something went wrong. Please try again."
     },
+    "otp": {
+      "title": "Verify your identity",
+      "instructionsPrefix": "We sent a 6-digit verification code to",
+      "submit": "Verify",
+      "submitting": "Verifying...",
+      "back": "Back to sign in",
+      "errors": {
+        "otpInvalid": "Enter the 6-digit code"
+      }
+    },
     "hero": {
       "brand": "ClaudeAdmin",
       "heading1": "Manage your platform",
@@ -73,6 +83,7 @@
       "email": "Email",
       "apiKeys": "API Keys",
       "security": "Security",
+      "auditLog": "Audit Log",
       "roles": "Admin Roles"
     },
     "general": {
@@ -88,9 +99,11 @@
         "allowFreeTrial": "Allow free trial",
         "maintenanceMode": "Maintenance mode",
         "sendUsageSummaries": "Send usage summaries"
-      }
+      },
+      "loadError": "Unable to load general settings."
     },
     "security": {
+      "loadError": "Unable to load security settings.",
       "twoFactorAuth": {
         "title": "Two-Factor Authentication",
         "description": "Require 2FA for all admin accounts"
@@ -118,19 +131,47 @@
       "active": "Active",
       "inactive": "Inactive",
       "createdAt": "Created: {date}",
-      "environments": {
-        "production": "Production API Key",
-        "development": "Development API Key"
-      },
+      "rotatedAt": "Rotated: {date}",
       "actions": {
         "copy": "Copy key",
-        "regenerate": "Regenerate key",
+        "rotate": "Rotate key",
         "delete": "Delete key"
       },
+      "createDialog": {
+        "title": "Create API Key",
+        "description": "Give this key a name to identify where it's used.",
+        "nameLabel": "Key Name",
+        "namePlaceholder": "e.g. Production API Key",
+        "cancel": "Cancel",
+        "submit": "Create Key"
+      },
+      "secretDialog": {
+        "title": "API Key Created",
+        "description": "Copy this key now. You won't be able to see it again.",
+        "close": "Done"
+      },
       "copiedToast": "Key copied to clipboard",
-      "regeneratedToast": "Key regenerated",
+      "rotatedToast": "Key rotated",
       "deletedToast": "Key deleted",
-      "createdToast": "New key created"
+      "createdToast": "New key created",
+      "loadError": "Unable to load API keys.",
+      "empty": "No API keys yet."
+    },
+    "auditLog": {
+      "sectionTitle": "Admin Activity",
+      "table": {
+        "action": "Action",
+        "target": "Target",
+        "admin": "Admin",
+        "date": "Date",
+        "empty": "No activity recorded yet.",
+        "loadError": "Unable to load the audit log."
+      },
+      "pagination": {
+        "pageOf": "Page {page} of {totalPages}",
+        "previous": "Previous",
+        "next": "Next"
+      }
     },
     "payment": {
       "title": "Payment Settings"
@@ -151,14 +192,25 @@
       "vsLastWeek": "vs. last week"
     },
     "stats": {
+      "title": "Overview",
       "apiRequestsToday": "API Requests Today",
-      "activeUsers": "Active Subscribers",
+      "totalUsers": "Total Users",
       "activeSubscriptions": "Active Subscriptions",
       "monthlyRevenue": "Monthly Revenue",
-      "avgResponseTime": "Avg. Response Time",
-      "activePlans": "Active Plans",
+      "yearlyRevenue": "Yearly Revenue",
+      "availablePlans": "Available Plans",
       "growthRate": "Growth Rate",
-      "netRevenue": "Net Revenue"
+      "avgResponseTime": "Avg. Response Time",
+      "visits": "Visits",
+      "loadError": "Unable to load stats."
+    },
+    "platformStats": {
+      "title": "Platform Stats",
+      "totalUsers": "Total Users",
+      "verifiedUsers": "Verified Users",
+      "activeSubscriptions": "Active Subscriptions",
+      "crawlsToday": "Crawls Today",
+      "aiCallsToday": "AI Calls Today"
     },
     "charts": {
       "subscribersByPlan": {
@@ -172,13 +224,9 @@
       "apiUsageTrend": {
         "title": "API Usage Trend",
         "subtitle": "Daily requests over the past week"
-      }
-    },
-    "plans": {
-      "starter": "Starter",
-      "pro": "Pro",
-      "business": "Business",
-      "enterprise": "Enterprise"
+      },
+      "loadError": "unable to load.",
+      "noData": "No data available yet."
     },
     "payments": {
       "title": "Recent Payments",
@@ -188,6 +236,8 @@
       "plan": "Plan",
       "amount": "Amount",
       "date": "Date",
+      "loadError": "unable to load.",
+      "noData": "No recent payments.",
       "status": {
         "paid": "Paid",
         "pending": "Pending",
@@ -226,7 +276,18 @@
     "rowActions": {
       "edit": "Edit",
       "duplicate": "Duplicate",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
       "delete": "Delete"
+    },
+    "toasts": {
+      "created": "Plan created.",
+      "updated": "Plan updated.",
+      "deleted": "Plan deleted.",
+      "duplicated": "Plan duplicated.",
+      "activated": "Plan activated.",
+      "deactivated": "Plan deactivated.",
+      "error": "Something went wrong. Please try again."
     },
     "deleteDialog": {
       "title": "Delete plan?",
@@ -242,8 +303,9 @@
       "sections": {
         "generalInfo": "General Information",
         "pricing": "Pricing",
-        "usageLimits": "Usage Limits",
-        "features": "Features",
+        "limits": "Plan Limits",
+        "supportAndCrawling": "Support & Crawling",
+        "discount": "Discount",
         "status": "Status"
       },
       "fields": {
@@ -256,26 +318,26 @@
           "placeholder": "A short description of this plan"
         },
         "monthlyPrice": "Monthly Price",
-        "annualPrice": "Annual Price",
-        "currency": "Currency",
-        "tokensPerMonth": "Token Limit / month",
-        "apiRequestsPerMonth": "API Requests / month",
-        "projects": "Projects",
-        "storageGb": "Storage (GB)",
-        "teamMembers": "Team Members",
-        "connectedSites": "Connected Websites"
+        "autoYearly": "Auto-calculate yearly price",
+        "autoYearlyHint": "Yearly price is calculated automatically from the monthly price and any active discount.",
+        "yearlyPrice": "Yearly Price",
+        "maxProjects": "Max Projects",
+        "requestsLimit": "Requests Limit / month",
+        "apiTokenLimit": "API Token Limit / month",
+        "maxWebsites": "Max Websites",
+        "crawlingEnabled": "Enable Crawling",
+        "supportPriority": "Support Priority",
+        "supportPriorityPlaceholder": "e.g. email"
       },
-      "unlimitedPlaceholder": "Unlimited",
-      "addFeature": "Add feature",
-      "customFeaturePlaceholder": "Feature name",
-      "removeFeature": "Remove feature",
-      "features": {
-        "prioritySupport": "Priority Support",
-        "advancedAnalytics": "Advanced Analytics",
-        "teamMembers": "Team Members",
-        "customIntegrations": "Custom Integrations",
-        "claudeCrawling": "Claude Crawling",
-        "auditLogs": "Audit Logs"
+      "discount": {
+        "enable": "Enable discount",
+        "type": "Discount Type",
+        "typePercent": "Percentage",
+        "typeFixed": "Fixed Amount",
+        "value": "Discount Value",
+        "scope": "Applies To",
+        "scopeMonth": "Monthly Price",
+        "scopeYear": "Yearly Price"
       },
       "statusOptions": {
         "active": "Active",
@@ -289,26 +351,37 @@
   "Subscriptions": {
     "title": "Subscriptions",
     "subtitle": "Manage customer subscriptions and billing cycles",
+    "createSubscription": "Add Subscription",
     "tabs": {
       "active": "Active",
       "pending": "Pending",
       "expired": "Expired",
+      "suspended": "Suspended",
       "cancelled": "Cancelled"
     },
     "toolbar": {
       "searchPlaceholder": "Search by name or email...",
+      "filter": "Filter",
+      "filterPlanLabel": "Plan",
+      "planAll": "All plans",
       "export": "Export"
     },
     "table": {
       "customer": "Customer",
       "plan": "Plan",
       "billing": "Billing",
+      "price": "Price",
       "status": "Status",
       "startDate": "Start Date",
       "renewal": "Renewal",
       "usage": "Usage",
       "empty": "No subscriptions found.",
       "loadError": "Unable to load subscriptions."
+    },
+    "pagination": {
+      "pageOf": "Page {page} of {totalPages}",
+      "previous": "Previous",
+      "next": "Next"
     },
     "billing": {
       "monthly": "Monthly",
@@ -318,12 +391,81 @@
       "active": "Active",
       "pending": "Pending",
       "expired": "Expired",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "suspended": "Suspended"
     },
     "noRenewal": "—",
     "rowActions": {
       "viewDetails": "View details",
+      "suspend": "Suspend subscription",
+      "renew": "Renew subscription",
       "cancelSubscription": "Cancel subscription"
+    },
+    "cancelDialog": {
+      "title": "Cancel this subscription?",
+      "description": "{name}'s subscription will be cancelled and auto-renew turned off.",
+      "cancel": "Keep subscription",
+      "confirm": "Cancel subscription"
+    },
+    "detail": {
+      "title": "Subscription Details",
+      "loadError": "Unable to load subscription details.",
+      "endsAt": "Ends",
+      "autoRenewOn": "Auto-renew on",
+      "autoRenewOff": "Auto-renew off",
+      "actionsTitle": "Actions",
+      "actions": {
+        "grantDays": "Grant Days",
+        "changePlan": "Change Plan",
+        "renew": "Renew Subscription",
+        "suspend": "Suspend Subscription",
+        "cancel": "Cancel Subscription"
+      },
+      "grantDaysDialog": {
+        "title": "Grant extra days",
+        "description": "Extend this subscription's end date by a number of days.",
+        "daysLabel": "Days",
+        "cancel": "Cancel",
+        "confirm": "Grant Days"
+      },
+      "changePlanDialog": {
+        "title": "Change plan",
+        "description": "Move this subscription to a different plan or billing cycle.",
+        "planLabel": "Plan",
+        "billingCycleLabel": "Billing cycle",
+        "cancel": "Cancel",
+        "confirm": "Change Plan"
+      },
+      "note": {
+        "title": "Admin Note",
+        "placeholder": "Add a note about this subscription...",
+        "save": "Save Note"
+      }
+    },
+    "create": {
+      "title": "Add Subscription",
+      "description": "Create a new subscription for a user.",
+      "userLabel": "User",
+      "userPlaceholder": "Select a user",
+      "userSearchPlaceholder": "Search users...",
+      "userLoading": "Searching...",
+      "userEmpty": "No users found.",
+      "planLabel": "Plan",
+      "planLoading": "Loading plans...",
+      "statusLabel": "Status",
+      "autoRenewLabel": "Enable auto-renew",
+      "cancel": "Cancel",
+      "submit": "Create Subscription"
+    },
+    "toasts": {
+      "created": "Subscription created",
+      "suspended": "Subscription suspended",
+      "renewed": "Subscription renewed",
+      "cancelled": "Subscription cancelled",
+      "daysGranted": "Days granted",
+      "planChanged": "Plan changed (proration: {amount})",
+      "noteSaved": "Note saved",
+      "error": "Something went wrong. Please try again."
     }
   },
   "Testimonials": {
@@ -337,7 +479,8 @@
       "overall": {
         "title": "Overall Rating",
         "totalReviews": "{count} total ratings"
-      }
+      },
+      "loadError": "Unable to load ratings."
     },
     "toolbar": {
       "searchPlaceholder": "Search reviews..."
@@ -352,41 +495,51 @@
       "empty": "No testimonials found.",
       "loadError": "Unable to load testimonials."
     },
+    "card": {
+      "anonymous": "Anonymous"
+    },
     "rowActions": {
       "delete": "Delete",
       "reject": "Reject",
-      "approve": "Approve"
+      "approve": "Approve",
+      "approveSuccess": "Review approved.",
+      "approveError": "Unable to approve this review.",
+      "rejectSuccess": "Review rejected.",
+      "rejectError": "Unable to reject this review.",
+      "deleteSuccess": "Review deleted.",
+      "deleteError": "Unable to delete this review."
+    },
+    "deleteDialog": {
+      "title": "Delete review",
+      "description": "Are you sure you want to delete the review from {name}? This cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
     },
     "ratingLabel": "Rating: {rating} of 5"
   },
   "ClaudeUsage": {
     "title": "Claude API Usage",
     "subtitle": "Monitor API consumption and resource distribution across all plans",
-    "compare": {
-      "vsYesterday": "vs. yesterday",
-      "vsLastMonth": "vs. last month",
-      "vsLastWeek": "vs. last week"
-    },
     "stats": {
+      "totalRequests": "Total Requests",
+      "totalTokens": "Total Tokens",
       "successRate": "Success Rate",
-      "tokensSent": "Tokens Sent",
-      "requests": "Requests",
-      "remainingQuota": "Remaining Quota",
+      "failedRequests": "Failed Requests",
       "avgResponseTime": "Avg. Response Time",
-      "requestCost": "Request Cost"
-    },
-    "remainingQuota": {
-      "renewsIn": "Renews in {days} days"
+      "remainingQuota": "Remaining Quota",
+      "loadError": "Unable to load usage stats."
     },
     "charts": {
-      "tokenConsumption": {
+      "tokens": {
         "title": "Token Consumption",
         "subtitle": "Token usage over the past week"
       },
-      "dailyRequests": {
+      "requests": {
         "title": "Daily Requests",
         "subtitle": "Number of requests per day over the past week"
-      }
+      },
+      "loadError": "unable to load.",
+      "noData": "No data available yet."
     },
     "table": {
       "title": "Top API Users",
@@ -395,57 +548,227 @@
       "plan": "Plan",
       "requests": "Requests",
       "tokens": "Tokens",
-      "cost": "Cost",
       "usage": "Usage",
       "status": "Status",
       "empty": "No API usage data found.",
       "loadError": "Unable to load usage data."
     },
     "status": {
-      "active": "Active",
-      "limitExceeded": "Limit Exceeded"
+      "normal": "Normal",
+      "near_limit": "Near Limit"
+    },
+    "aiBudget": {
+      "title": "AI Budget",
+      "subtitle": "Monthly spend against your configured budget",
+      "edit": "Edit budget",
+      "ofBudget": "of {budget} budget",
+      "monthLabel": "{month}",
+      "updatedAt": "Updated {date}",
+      "loadError": "Unable to load AI budget.",
+      "editTitle": "Edit Monthly Budget",
+      "editDescription": "Set the maximum monthly spend for AI usage.",
+      "budgetLabel": "Monthly Budget (USD)",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "savedToast": "Budget updated"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "anthropic": "Anthropic Usage"
+    },
+    "anthropic": {
+      "stats": {
+        "realCost": "Real Cost (Month)",
+        "remaining": "Remaining Balance",
+        "costSinceRecorded": "Cost Since Recorded",
+        "inputTokens": "Input Tokens",
+        "outputTokens": "Output Tokens",
+        "loadError": "Unable to load Anthropic usage stats."
+      },
+      "balance": {
+        "title": "Account Balance",
+        "subtitle": "Known Anthropic account balance",
+        "edit": "Edit balance",
+        "recordedAt": "Recorded {date}",
+        "editTitle": "Edit Known Balance",
+        "editDescription": "Set the last known Anthropic account balance.",
+        "balanceLabel": "Known Balance (USD)",
+        "cancel": "Cancel",
+        "save": "Save Changes",
+        "savedToast": "Balance updated",
+        "loadError": "Unable to load balance."
+      },
+      "charts": {
+        "cost": {
+          "title": "Daily Cost",
+          "subtitle": "Anthropic spend per day this month"
+        },
+        "usage": {
+          "title": "Daily Token Usage",
+          "subtitle": "Input vs. output tokens per day this month"
+        },
+        "loadError": "unable to load.",
+        "noData": "No data available yet."
+      },
+      "workspaces": {
+        "title": "Workspaces",
+        "subtitle": "Anthropic workspaces linked to this account",
+        "name": "Name",
+        "type": "Type",
+        "created": "Created",
+        "status": "Status",
+        "active": "Active",
+        "archived": "Archived",
+        "empty": "No workspaces found.",
+        "loadError": "Unable to load workspaces."
+      },
+      "report": {
+        "title": "Custom Report",
+        "subtitle": "Query Anthropic cost and usage for a specific date range",
+        "selectRange": "Select date range",
+        "costSection": "Cost by model",
+        "usageSection": "Token usage by model",
+        "date": "Date",
+        "model": "Model",
+        "amount": "Amount",
+        "inputTokens": "Input Tokens",
+        "outputTokens": "Output Tokens",
+        "empty": "No data for this range.",
+        "loadError": "Unable to load report."
+      }
+    }
+  },
+  "Financial": {
+    "title": "Financial",
+    "subtitle": "Track revenue, payments, and billing performance",
+    "refresh": "Refresh",
+    "exportReport": "Export Report",
+    "stats": {
+      "mrr": "Monthly Recurring Revenue",
+      "yearlyRevenue": "Yearly Revenue",
+      "monthlyRevenue": "Monthly Revenue",
+      "refundsThisMonth": "Refunds This Month",
+      "pendingPayments": "Pending Payments",
+      "arr": "Annual Recurring Revenue",
+      "loadError": "Unable to load financial stats."
+    },
+    "revenueByPlan": {
+      "title": "Revenue by Plan",
+      "subtitle": "Distribution of revenue across plans",
+      "loadError": "Unable to load revenue by plan.",
+      "empty": "No revenue data available yet."
+    },
+    "revenueTrend": {
+      "title": "Revenue",
+      "subtitle": "Monthly revenue trend for the past 12 months",
+      "loadError": "Unable to load.",
+      "noData": "No data available yet."
+    },
+    "payments": {
+      "title": "Recent Payments",
+      "subtitle": "All transactions across your platform",
+      "referenceCopied": "Reference copied to clipboard",
+      "copyReference": "Copy reference",
+      "toolbar": {
+        "searchPlaceholder": "Search by customer or reference...",
+        "filter": "Filter",
+        "filterStatusLabel": "Status",
+        "statusAll": "All statuses"
+      },
+      "table": {
+        "reference": "Reference",
+        "customer": "Customer",
+        "plan": "Plan",
+        "amount": "Amount",
+        "paymentMethod": "Payment Method",
+        "date": "Date",
+        "status": "Status",
+        "empty": "No payments found.",
+        "loadError": "Unable to load payments."
+      },
+      "pagination": {
+        "pageOf": "Page {page} of {totalPages}",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "status": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      }
     }
   },
   "Users": {
     "title": "Users",
     "subtitle": "Manage registered users and their permissions",
-    "inviteUser": "Invite User",
+    "createUser": "Add User",
     "toolbar": {
       "searchPlaceholder": "Search users...",
       "filter": "Filter",
       "export": "Export",
-      "filterStatusLabel": "Status",
-      "filterPlanLabel": "Plan"
+      "filterPlanLabel": "Plan",
+      "planAll": "All plans"
     },
     "table": {
       "user": "User",
       "plan": "Plan",
       "status": "Status",
-      "apiUsage": "API Usage",
+      "apiUsage": "API Requests",
       "signupDate": "Signup Date",
       "lastLogin": "Last Login",
+      "never": "Never",
       "empty": "No users found.",
       "loadError": "Unable to load users."
     },
+    "pagination": {
+      "pageOf": "Page {page} of {totalPages}",
+      "previous": "Previous",
+      "next": "Next"
+    },
     "status": {
-      "all": "All",
       "active": "Active",
-      "suspended": "Suspended",
-      "blocked": "Blocked"
+      "inactive": "Suspended"
+    },
+    "verification": {
+      "verified": "Verified",
+      "unverified": "Unverified"
     },
     "rowActions": {
       "view": "View details",
-      "edit": "Edit user",
       "suspend": "Suspend user",
       "reactivate": "Reactivate user"
     },
     "detail": {
       "title": "User Details",
+      "loadError": "Unable to load user details.",
       "stats": {
         "lastLogin": "Last Login",
         "apiRequests": "API Requests",
         "signupDate": "Signup Date",
-        "plan": "Plan"
+        "plan": "Plan",
+        "totalProjects": "Projects",
+        "totalPayments": "Total Payments",
+        "subscriptionMonths": "Subscription Months",
+        "language": "Language"
+      },
+      "usage": {
+        "title": "Usage",
+        "tokens": "Tokens",
+        "successCount": "Successful",
+        "failedCount": "Failed",
+        "limit": "Limit",
+        "remaining": "Remaining"
+      },
+      "subscription": {
+        "title": "Current Subscription",
+        "empty": "No active subscription.",
+        "billingCycle": "Billing cycle",
+        "startedAt": "Started",
+        "endsAt": "Ends"
+      },
+      "pastSubscriptions": {
+        "title": "Past Subscriptions"
       },
       "actionsTitle": "Actions",
       "actions": {
@@ -453,49 +776,53 @@
         "resetPassword": "Reset Password",
         "reactivate": "Reactivate User",
         "suspend": "Suspend User",
-        "block": "Permanently Block"
+        "ban": "Ban User"
       },
       "assignPlanLabel": "Select a new plan",
-      "notesLabel": "Admin Notes",
-      "notesPlaceholder": "Add notes about this user...",
-      "saveNote": "Save Note",
-      "blockDialog": {
-        "title": "Permanently block this user?",
-        "description": "{name} will lose all access immediately. This cannot be undone.",
-        "confirm": "Block User",
+      "resetPasswordDialog": {
+        "title": "Temporary password generated",
+        "description": "Share this password with the user. It won't be shown again.",
+        "close": "Close"
+      },
+      "banDialog": {
+        "title": "Ban this user?",
+        "description": "{name} will lose access immediately.",
+        "typeLabel": "Ban type",
+        "temporary": "Temporary",
+        "permanent": "Permanent",
+        "untilLabel": "Banned until",
+        "confirm": "Ban User",
         "cancel": "Cancel"
+      },
+      "notes": {
+        "title": "Admin Notes",
+        "empty": "No notes yet.",
+        "placeholder": "Add a note about this user...",
+        "add": "Add Note"
       }
     },
-    "invite": {
-      "title": "Invite User",
-      "description": "Send an invitation with an initial plan assignment.",
+    "create": {
+      "title": "Add User",
+      "description": "Create a new user account with an initial plan.",
       "nameLabel": "Name",
       "namePlaceholder": "e.g. Jordan Lee",
       "emailLabel": "Email",
       "emailPlaceholder": "name@company.com",
       "planLabel": "Plan",
+      "planLoading": "Loading plans...",
+      "passwordLabel": "Temporary Password",
+      "passwordPlaceholder": "Set an initial password",
+      "verifiedLabel": "Mark email as verified",
       "cancel": "Cancel",
-      "submit": "Send Invite"
-    },
-    "edit": {
-      "title": "Edit User",
-      "description": "Update this user's account details.",
-      "nameLabel": "Name",
-      "emailLabel": "Email",
-      "planLabel": "Plan",
-      "statusLabel": "Status",
-      "cancel": "Cancel",
-      "submit": "Save Changes"
+      "submit": "Create User"
     },
     "toasts": {
-      "invited": "Invitation sent",
-      "updated": "User updated",
+      "created": "User created",
       "suspended": "User suspended",
       "reactivated": "User reactivated",
-      "blocked": "User blocked",
-      "passwordReset": "Password reset email sent",
+      "banned": "User banned",
       "planAssigned": "Plan updated",
-      "noteSaved": "Note saved"
+      "noteAdded": "Note added"
     }
   }
 }
