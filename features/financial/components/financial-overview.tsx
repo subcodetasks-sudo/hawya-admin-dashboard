@@ -5,6 +5,8 @@ import { Download, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
+import { downloadCsv } from "@/lib/csv-export";
+import InvoicesCard from "@/features/financial/components/invoices-card";
 import PaymentsCard from "@/features/financial/components/payments-card";
 import RevenueByPlanCard from "@/features/financial/components/revenue-by-plan-card";
 import RevenueTrendChart from "@/features/financial/components/revenue-trend-chart";
@@ -38,16 +40,7 @@ export default function FinancialOverview() {
       ["plan_name", "revenue"],
       ...(revenueByPlan ?? []).map((item) => [item.planName, String(item.revenue)]),
     ];
-    const csv = rows
-      .map((row) => row.map((value) => `"${value.replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "financial-report.csv";
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadCsv(rows, "financial-report.csv");
   }
 
   return (
@@ -81,6 +74,7 @@ export default function FinancialOverview() {
       </div>
 
       <PaymentsCard />
+      <InvoicesCard />
     </div>
   );
 }

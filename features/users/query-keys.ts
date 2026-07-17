@@ -7,4 +7,5 @@ export const userKeys = {
   details: () => [...userKeys.all, "detail"] as const,
   detail: (id: string) => [...userKeys.details(), id] as const,
   plans: () => [...userKeys.all, "plans"] as const,
+  financialStatus: (id: string) => [...userKeys.all, "financial-status", id] as const,
 };

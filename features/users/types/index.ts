@@ -81,3 +81,10 @@ export type BanUserInput = {
   banType: BanType;
   until?: string;
 };
+
+export type UserFinancialStatus = {
+  userId: string;
+  status: string;
+  outstandingAmount: number;
+  lastPaymentAt: string | null;
+};

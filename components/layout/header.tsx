@@ -1,9 +1,10 @@
 "use client";
 
-import { Bell, LogOut, Search, Settings } from "lucide-react";
+import { LogOut, Search, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { findActiveNavItem } from "@/components/layout/nav-items";
+import NotificationBellMenu from "@/features/admin-notifications/components/notification-bell-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Breadcrumb,
@@ -68,9 +69,7 @@ export default function DashboardHeader() {
       </div>
 
       <div className="ms-auto flex items-center gap-1">
-        <Button variant="ghost" size="icon" aria-label={t("notifications")}>
-          <Bell />
-        </Button>
+        <NotificationBellMenu />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

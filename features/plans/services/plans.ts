@@ -5,21 +5,21 @@ import { planKeys } from "@/features/plans/query-keys";
 import type { DiscountType, DiscountScope, Plan, PlanInput } from "@/features/plans/types";
 
 type PlanFeaturesResponse = {
-  requests_limit: number;
-  api_token_limit: number;
-  max_websites: number;
-  crawling_enabled: boolean;
-  support_priority: string;
+  requests_limit: number | null;
+  api_token_limit: number | null;
+  max_websites: number | null;
+  crawling_enabled: boolean | null;
+  support_priority: string | null;
 };
 
 type PlanResponse = {
   id: string;
   name: string;
-  description: string;
-  price_monthly: number;
-  price_yearly: number;
+  description: string | null;
+  price_monthly: number | null;
+  price_yearly: number | null;
   max_projects: number;
-  features: PlanFeaturesResponse;
+  features: PlanFeaturesResponse | null;
   discount_type: DiscountType | null;
   discount_value: number | null;
   discount_scope: DiscountScope | null;
@@ -32,16 +32,16 @@ function mapPlan(data: PlanResponse): Plan {
   return {
     id: data.id,
     name: data.name,
-    description: data.description,
-    priceMonthly: data.price_monthly,
-    priceYearly: data.price_yearly,
+    description: data.description ?? "",
+    priceMonthly: data.price_monthly ?? 0,
+    priceYearly: data.price_yearly ?? 0,
     maxProjects: data.max_projects,
     features: {
-      requestsLimit: data.features.requests_limit,
-      apiTokenLimit: data.features.api_token_limit,
-      maxWebsites: data.features.max_websites,
-      crawlingEnabled: data.features.crawling_enabled,
-      supportPriority: data.features.support_priority,
+      requestsLimit: data.features?.requests_limit ?? 0,
+      apiTokenLimit: data.features?.api_token_limit ?? 0,
+      maxWebsites: data.features?.max_websites ?? 0,
+      crawlingEnabled: data.features?.crawling_enabled ?? false,
+      supportPriority: data.features?.support_priority ?? "",
     },
     discount:
       data.discount_type && data.discount_scope && data.discount_value != null

@@ -7,6 +7,7 @@ import type {
   CreateUserInput,
   PlanOption,
   UserDetail,
+  UserFinancialStatus,
   UserNote,
   UsersListParams,
   UsersListResult,
@@ -231,4 +232,30 @@ export async function resetUserPassword(id: string): Promise<string> {
 export async function addUserNote(id: string, note: string): Promise<UserNote> {
   const data = await apiPost<UserNoteResponse>(`/admin/users/${id}/notes`, { note });
   return mapNote(data);
+}
+
+type UserFinancialStatusResponse = {
+  user_id: string;
+  status: string;
+  outstanding_amount: number;
+  last_payment_at: string | null;
+};
+
+export async function fetchUserFinancialStatus(id: string): Promise<UserFinancialStatus> {
+  const data = await apiGet<UserFinancialStatusResponse>(`/admin/financial/users/${id}/status`);
+
+  return {
+    userId: data.user_id,
+    status: data.status,
+    outstandingAmount: data.outstanding_amount,
+    lastPaymentAt: data.last_payment_at,
+  };
+}
+
+export function userFinancialStatusQueryOptions(id: string) {
+  return queryOptions({
+    queryKey: userKeys.financialStatus(id),
+    queryFn: () => fetchUserFinancialStatus(id),
+    enabled: Boolean(id),
+  });
 }

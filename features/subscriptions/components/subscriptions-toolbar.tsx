@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { downloadCsv } from "@/lib/csv-export";
 import {
   planOptionsQueryOptions,
   subscriptionsListQueryOptions,
@@ -62,18 +63,9 @@ export default function SubscriptionsToolbar({
       subscription.renewsAt ?? "",
       String(subscription.usagePercent),
     ]);
-    const csv = [header, ...rows]
-      .map((row) => row.map((value) => `"${value.replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
     // Exports only the currently loaded page — the list endpoint is
     // server-paginated and there is no "export all" endpoint yet.
-    link.download = "subscriptions.csv";
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadCsv([header, ...rows], "subscriptions.csv");
   }
 
   return (

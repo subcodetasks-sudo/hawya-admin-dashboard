@@ -11,8 +11,8 @@ export class ApiError extends Error {
 }
 
 type ApiEnvelope<T> =
-  | { success: true; data: T }
-  | { success: false; message?: string; data: null };
+  | { status: true; message?: string; data: T }
+  | { status: false; message?: string; data: null; errors?: { error?: string } };
 
 async function getAdminToken(): Promise<string | undefined> {
   if (typeof window !== "undefined") {
@@ -42,7 +42,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
   const json = (await response.json().catch(() => null)) as ApiEnvelope<T> | null;
 
-  if (!response.ok || !json || !json.success) {
+  if (!response.ok || !json || !json.status) {
     throw new ApiError(
       (json && "message" in json && json.message) || `Request failed with status ${response.status}`,
       response.status,

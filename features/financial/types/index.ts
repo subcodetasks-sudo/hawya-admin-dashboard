@@ -44,3 +44,34 @@ export type PaymentsListResult = {
   page: number;
   perPage: number;
 };
+
+export type Invoice = {
+  id: string;
+  reference: string;
+  userId: string;
+  userName: string;
+  planName: string;
+  amount: number;
+  currency: string;
+  status: PaymentStatus;
+  issuedAt: string;
+};
+
+export type InvoicesListParams = {
+  page: number;
+  perPage: number;
+};
+
+export type InvoicesListResult = {
+  invoices: Invoice[];
+  total: number;
+  page: number;
+  perPage: number;
+};
+
+export type UserFinancialStatus = {
+  userId: string;
+  status: string;
+  outstandingAmount: number;
+  lastPaymentAt: string | null;
+};

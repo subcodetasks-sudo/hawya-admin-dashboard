@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { downloadCsv } from "@/lib/csv-export";
 import { plansListQueryOptions } from "@/features/plans/services/plans";
 import type { PlanStatusFilter } from "@/features/plans/types";
 
@@ -50,16 +51,7 @@ export default function PlansToolbar({
       plan.isActive ? "active" : "inactive",
       plan.createdAt,
     ]);
-    const csv = [header, ...rows]
-      .map((row) => row.map((value) => `"${value.replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "plans.csv";
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadCsv([header, ...rows], "plans.csv");
   }
 
   return (

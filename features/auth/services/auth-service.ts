@@ -18,7 +18,7 @@ export interface LoginData {
 }
 
 interface LoginSuccessResponse {
-  success: true;
+  status: true;
   data: LoginData;
 }
 

@@ -12,6 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Skeleton } from "@/components/ui/skeleton";
 import UserDetailActions from "@/features/users/components/user-detail-actions";
 import UserDetailNotes from "@/features/users/components/user-detail-notes";
+import UserFinancialStatus from "@/features/users/components/user-financial-status";
 import UserPlanBadge from "@/features/users/components/user-plan-badge";
 import UserStatusBadge from "@/features/users/components/user-status-badge";
 import { formatRelativeTime } from "@/features/users/lib/relative-time";
@@ -255,6 +256,10 @@ export default function UserDetailSheet({ userId, open, onOpenChange }: Props) {
                   </div>
                 </div>
               ) : null}
+
+              <Separator />
+
+              <UserFinancialStatus userId={user.id} />
 
               <Separator />
 

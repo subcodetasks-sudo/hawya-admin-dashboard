@@ -1,4 +1,4 @@
-import type { PaymentsListParams } from "@/features/financial/types";
+import type { InvoicesListParams, PaymentsListParams } from "@/features/financial/types";
 
 export const financialKeys = {
   all: ["financial"] as const,
@@ -6,4 +6,5 @@ export const financialKeys = {
   revenueByPlan: () => [...financialKeys.all, "revenue-by-plan"] as const,
   revenueTrend: (months: number) => [...financialKeys.all, "revenue-trend", months] as const,
   payments: (params: PaymentsListParams) => [...financialKeys.all, "payments", params] as const,
+  invoices: (params: InvoicesListParams) => [...financialKeys.all, "invoices", params] as const,
 };

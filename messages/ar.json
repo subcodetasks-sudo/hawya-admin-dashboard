@@ -21,6 +21,8 @@
     "breadcrumbRoot": "المنصة",
     "searchPlaceholder": "البحث في كل شيء...",
     "notifications": "الإشعارات",
+    "notificationsLoading": "جارٍ تحميل الإشعارات...",
+    "notificationsEmpty": "لا توجد إشعارات جديدة.",
     "accountName": "ClaudeAdmin",
     "accountInitials": "CA",
     "settings": "الإعدادات",
@@ -697,6 +699,27 @@
         "failed": "فاشل",
         "refunded": "مسترد"
       }
+    },
+    "invoices": {
+      "title": "الفواتير",
+      "subtitle": "الفواتير الصادرة لاشتراكات المنصة",
+      "download": "تحميل الفاتورة",
+      "downloadError": "تعذر تحميل الفاتورة.",
+      "table": {
+        "reference": "المرجع",
+        "customer": "العميل",
+        "plan": "الخطة",
+        "amount": "المبلغ",
+        "date": "التاريخ",
+        "status": "الحالة",
+        "empty": "لا توجد فواتير.",
+        "loadError": "تعذر تحميل الفواتير."
+      },
+      "pagination": {
+        "pageOf": "صفحة {page} من {totalPages}",
+        "previous": "السابق",
+        "next": "التالي"
+      }
     }
   },
   "Users": {
@@ -769,6 +792,14 @@
       },
       "pastSubscriptions": {
         "title": "الاشتراكات السابقة"
+      },
+      "financial": {
+        "title": "الحالة المالية",
+        "loadError": "تعذر تحميل الحالة المالية.",
+        "status": "حالة الحساب",
+        "outstandingAmount": "المبلغ المستحق",
+        "lastPayment": "آخر دفعة",
+        "never": "لا يوجد"
       },
       "actionsTitle": "الإجراءات",
       "actions": {

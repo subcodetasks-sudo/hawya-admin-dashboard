@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { downloadCsv } from "@/lib/csv-export";
 import { planOptionsQueryOptions, usersListQueryOptions } from "@/features/users/services/users";
 import type { UsersListParams } from "@/features/users/types";
 
@@ -53,18 +54,9 @@ export default function UsersToolbar({
       user.createdAt,
       user.lastLoginAt ?? "",
     ]);
-    const csv = [header, ...rows]
-      .map((row) => row.map((value) => `"${value.replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
     // Exports only the currently loaded page — the list endpoint is
     // server-paginated and there is no "export all" endpoint yet.
-    link.download = "users.csv";
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadCsv([header, ...rows], "users.csv");
   }
 
   return (

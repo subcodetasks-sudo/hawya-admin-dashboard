@@ -21,6 +21,8 @@
     "breadcrumbRoot": "Platform",
     "searchPlaceholder": "Search anything...",
     "notifications": "Notifications",
+    "notificationsLoading": "Loading notifications...",
+    "notificationsEmpty": "You're all caught up.",
     "accountName": "ClaudeAdmin",
     "accountInitials": "CA",
     "settings": "Settings",
@@ -697,6 +699,27 @@
         "failed": "Failed",
         "refunded": "Refunded"
       }
+    },
+    "invoices": {
+      "title": "Invoices",
+      "subtitle": "Generated invoices for platform subscriptions",
+      "download": "Download invoice",
+      "downloadError": "Unable to download invoice.",
+      "table": {
+        "reference": "Reference",
+        "customer": "Customer",
+        "plan": "Plan",
+        "amount": "Amount",
+        "date": "Date",
+        "status": "Status",
+        "empty": "No invoices found.",
+        "loadError": "Unable to load invoices."
+      },
+      "pagination": {
+        "pageOf": "Page {page} of {totalPages}",
+        "previous": "Previous",
+        "next": "Next"
+      }
     }
   },
   "Users": {
@@ -769,6 +792,14 @@
       },
       "pastSubscriptions": {
         "title": "Past Subscriptions"
+      },
+      "financial": {
+        "title": "Billing Status",
+        "loadError": "Unable to load billing status.",
+        "status": "Account Status",
+        "outstandingAmount": "Outstanding Amount",
+        "lastPayment": "Last Payment",
+        "never": "Never"
       },
       "actionsTitle": "Actions",
       "actions": {

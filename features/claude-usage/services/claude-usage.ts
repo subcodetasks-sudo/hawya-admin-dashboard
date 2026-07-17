@@ -40,14 +40,10 @@ export const usageSummaryQueryOptions = queryOptions({
 
 const TREND_DAYS = 7;
 
-type UsageTrendResponse = { points: TrendPoint[] };
-
 export async function fetchUsageTrend(metric: UsageMetric): Promise<TrendPoint[]> {
-  const data = await apiGet<UsageTrendResponse>(
+  return apiGet<TrendPoint[]>(
     `/admin/usage/trend?days=${TREND_DAYS}&metric=${metric}`,
   );
-
-  return data.points;
 }
 
 export const tokensTrendQueryOptions = queryOptions({

@@ -4,6 +4,9 @@ import { apiGet } from "@/lib/api-client";
 import { financialKeys } from "@/features/financial/query-keys";
 import type {
   FinancialSummary,
+  Invoice,
+  InvoicesListParams,
+  InvoicesListResult,
   Payment,
   PaymentsListParams,
   PaymentsListResult,
@@ -128,4 +131,67 @@ export function paymentsListQueryOptions(params: PaymentsListParams) {
     queryKey: financialKeys.payments(params),
     queryFn: () => fetchPayments(params),
   });
+}
+
+type InvoiceResponse = {
+  id: string;
+  reference: string;
+  user_id: string;
+  user_name: string;
+  plan_name: string;
+  amount: number;
+  currency: string;
+  status: string;
+  issued_at: string;
+};
+
+function mapInvoice(data: InvoiceResponse): Invoice {
+  return {
+    id: data.id,
+    reference: data.reference,
+    userId: data.user_id,
+    userName: data.user_name,
+    planName: data.plan_name,
+    amount: data.amount,
+    currency: data.currency,
+    status: data.status as Invoice["status"],
+    issuedAt: data.issued_at,
+  };
+}
+
+type InvoicesListResponse = {
+  invoices: InvoiceResponse[];
+  total: number;
+  page?: number;
+  per_page?: number;
+};
+
+export async function fetchInvoices(params: InvoicesListParams): Promise<InvoicesListResult> {
+  const query = new URLSearchParams({
+    page: String(params.page),
+    per_page: String(params.perPage),
+  });
+
+  const data = await apiGet<InvoicesListResponse>(`/admin/financial/invoices?${query.toString()}`);
+
+  return {
+    invoices: data.invoices.map(mapInvoice),
+    total: data.total,
+    page: data.page ?? params.page,
+    perPage: data.per_page ?? params.perPage,
+  };
+}
+
+export function invoicesListQueryOptions(params: InvoicesListParams) {
+  return queryOptions({
+    queryKey: financialKeys.invoices(params),
+    queryFn: () => fetchInvoices(params),
+  });
+}
+
+type InvoiceDownloadResponse = { url: string };
+
+export async function fetchInvoiceDownloadUrl(id: string): Promise<string> {
+  const data = await apiGet<InvoiceDownloadResponse>(`/admin/financial/invoices/${id}/download`);
+  return data.url;
 }
