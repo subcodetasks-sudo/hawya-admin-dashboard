@@ -47,14 +47,16 @@ export type PaymentsListResult = {
 
 export type Invoice = {
   id: string;
-  reference: string;
+  number: string;
   userId: string;
   userName: string;
-  planName: string;
+  planName: string | null;
   amount: number;
   currency: string;
   status: PaymentStatus;
+  paymentMethod: string | null;
   issuedAt: string;
+  paidAt: string | null;
 };
 
 export type InvoicesListParams = {

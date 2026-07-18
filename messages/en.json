@@ -28,6 +28,9 @@
     "settings": "Settings",
     "logout": "Log out"
   },
+  "notifications": {
+    "newNotification": "New notification"
+  },
   "Auth": {
     "title": "Sign In",
     "subtitle": "Welcome back, sign in to access your dashboard.",
@@ -706,9 +709,10 @@
       "download": "Download invoice",
       "downloadError": "Unable to download invoice.",
       "table": {
-        "reference": "Reference",
+        "number": "Number",
         "customer": "Customer",
         "plan": "Plan",
+        "noPlan": "—",
         "amount": "Amount",
         "date": "Date",
         "status": "Status",

@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  CreditCard,
+  // CreditCard,
   History,
   KeyRound,
-  Mail,
+  // Mail,
   Settings,
   Shield,
-  UserCog,
+  // UserCog,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -17,12 +17,13 @@ import type { SettingsTabId } from "@/features/settings/types";
 
 const TABS: { id: SettingsTabId; icon: LucideIcon }[] = [
   { id: "general", icon: Settings },
-  { id: "payment", icon: CreditCard },
-  { id: "email", icon: Mail },
+  // Hidden until /admin/settings/payment|email|roles APIs exist
+  // { id: "payment", icon: CreditCard },
+  // { id: "email", icon: Mail },
   { id: "apiKeys", icon: KeyRound },
   { id: "security", icon: Shield },
   { id: "auditLog", icon: History },
-  { id: "roles", icon: UserCog },
+  // { id: "roles", icon: UserCog },
 ];
 
 type Props = {

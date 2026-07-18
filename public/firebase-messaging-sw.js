@@ -1,35 +1,45 @@
-/* global self */
-// Firebase Messaging Service Worker
-// Handles background push notifications
+/* global self, firebase */
 
-import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+// Firebase Messaging Service Worker — handles background push notifications.
+// Uses the compat CDN (importScripts) because ES-module imports are not
+// available in classic service-worker scope without a bundler step.
+// Config must be hardcoded — service workers cannot read Next.js env vars.
+// Keep the CDN major in sync with the `firebase` package to avoid IndexedDB
+// VersionError clashes between the page SDK and this worker.
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAFsOu-MlO2a9cmsQUS6li9PSMZnIcvLLs",
-  authDomain: "base-3c8d1.firebaseapp.com",
-  projectId: "base-3c8d1",
-  storageBucket: "base-3c8d1.firebasestorage.app",
-  messagingSenderId: "688944977102",
-  appId: "1:688944977102:web:d8fc2e39ac88f4eee5ec9f",
-  measurementId: "G-6XZ6MTCSV2",
-};
+importScripts(
+  "https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js"
+);
+importScripts(
+  "https://www.gstatic.com/firebasejs/12.11.0/firebase-messaging-compat.js"
+);
 
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+firebase.initializeApp({
+  apiKey: "AIzaSyAw750mAZaJ73G37Q5KCSqtbJ1yToDIqL0",
+  authDomain: "seo-ai-1acc8.firebaseapp.com",
+  projectId: "seo-ai-1acc8",
+  storageBucket: "seo-ai-1acc8.firebasestorage.app",
+  messagingSenderId: "1055837749186",
+  appId: "1:1055837749186:web:dc9f3a3fb45527a1b7605b",
+});
 
-onBackgroundMessage(messaging, (payload) => {
-  console.log("[Service Worker] Received background message:", payload);
+const messaging = firebase.messaging();
 
-  const notificationTitle =
-    payload.data?.title || payload.notification?.title || "New Message";
-  const notificationOptions = {
-    body:
-      payload.data?.body ||
-      payload.notification?.body ||
-      "Check your notifications.",
-    icon: payload.data?.icon || "/firebase-logo.png",
+messaging.onBackgroundMessage(function (payload) {
+  // When the push already includes a `notification` payload, the browser
+  // displays it automatically. Calling showNotification again would duplicate it.
+  if (payload.notification) {
+    return;
+  }
+
+  const title = payload.data?.title || "New Notification";
+
+  const options = {
+    body: payload.data?.body || "",
+    icon: payload.data?.icon || "/logo.png",
+    badge: "/logo.png",
+    data: payload.data ?? {},
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  self.registration.showNotification(title, options);
 });

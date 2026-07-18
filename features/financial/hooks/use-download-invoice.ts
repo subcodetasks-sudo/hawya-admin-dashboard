@@ -2,10 +2,15 @@
 
 import { useMutation } from "@tanstack/react-query";
 
-import { fetchInvoiceDownloadUrl } from "@/features/financial/services/financial";
+import { downloadInvoicePdf } from "@/features/financial/services/financial";
+
+type DownloadInvoiceInput = {
+  id: string;
+  filename: string;
+};
 
 export function useDownloadInvoice() {
   return useMutation({
-    mutationFn: fetchInvoiceDownloadUrl,
+    mutationFn: ({ id, filename }: DownloadInvoiceInput) => downloadInvoicePdf(id, filename),
   });
 }

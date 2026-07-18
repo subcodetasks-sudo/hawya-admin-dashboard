@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { CreditCard, Mail, UserCog } from "lucide-react";
+// import { CreditCard, Mail, UserCog } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import ApiKeysPanel from "@/features/settings/components/api-keys-panel";
 import AuditLogPanel from "@/features/settings/components/audit-log-panel";
 import GeneralSettingsPanel from "@/features/settings/components/general-settings-panel";
 import SecuritySettingsPanel from "@/features/settings/components/security-settings-panel";
-import SettingsComingSoon from "@/features/settings/components/settings-coming-soon";
+// import SettingsComingSoon from "@/features/settings/components/settings-coming-soon";
 import SettingsTabsNav from "@/features/settings/components/settings-tabs-nav";
 import type { SettingsTabId } from "@/features/settings/types";
 
@@ -26,12 +26,13 @@ export default function SettingsOverview() {
         return <SecuritySettingsPanel />;
       case "auditLog":
         return <AuditLogPanel />;
-      case "payment":
-        return <SettingsComingSoon icon={CreditCard} title={t("payment.title")} />;
-      case "email":
-        return <SettingsComingSoon icon={Mail} title={t("email.title")} />;
-      case "roles":
-        return <SettingsComingSoon icon={UserCog} title={t("roles.title")} />;
+      // Hidden until /admin/settings/payment|email|roles APIs exist
+      // case "payment":
+      //   return <SettingsComingSoon icon={CreditCard} title={t("payment.title")} />;
+      // case "email":
+      //   return <SettingsComingSoon icon={Mail} title={t("email.title")} />;
+      // case "roles":
+      //   return <SettingsComingSoon icon={UserCog} title={t("roles.title")} />;
     }
   }
 

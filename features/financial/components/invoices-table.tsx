@@ -54,26 +54,21 @@ export default function InvoicesTable({ params }: Props) {
   }
 
   function handleDownload(invoice: Invoice) {
-    const downloadWindow = window.open("", "_blank");
-
-    downloadInvoice.mutate(invoice.id, {
-      onSuccess: (url) => {
-        if (downloadWindow) {
-          downloadWindow.location.href = url;
-        }
+    downloadInvoice.mutate(
+      { id: invoice.id, filename: invoice.number },
+      {
+        onError: () => {
+          toast.error(t("invoices.downloadError"));
+        },
       },
-      onError: () => {
-        downloadWindow?.close();
-        toast.error(t("invoices.downloadError"));
-      },
-    });
+    );
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead className="px-4 text-start">{t("invoices.table.reference")}</TableHead>
+          <TableHead className="px-4 text-start">{t("invoices.table.number")}</TableHead>
           <TableHead className="px-4 text-start">{t("invoices.table.customer")}</TableHead>
           <TableHead className="px-4 text-start">{t("invoices.table.plan")}</TableHead>
           <TableHead className="px-4 text-start">{t("invoices.table.amount")}</TableHead>
@@ -113,7 +108,7 @@ export default function InvoicesTable({ params }: Props) {
           invoices.map((invoice) => (
             <TableRow key={invoice.id}>
               <TableCell className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                {invoice.reference}
+                {invoice.number}
               </TableCell>
               <TableCell className="px-4 py-3">
                 <div className="flex items-center gap-3">
@@ -125,9 +120,13 @@ export default function InvoicesTable({ params }: Props) {
                   <p className="truncate text-sm font-medium">{invoice.userName}</p>
                 </div>
               </TableCell>
-              <TableCell className="px-4 py-3 text-muted-foreground">{invoice.planName}</TableCell>
+              <TableCell className="px-4 py-3 text-muted-foreground">
+                {invoice.planName ?? t("invoices.table.noPlan")}
+              </TableCell>
               <TableCell className="px-4 py-3 font-medium tabular-nums">
-                {formatCurrency(invoice.amount, invoice.currency, locale)}
+                {formatCurrency(invoice.amount, invoice.currency, locale, {
+                  maximumFractionDigits: 0,
+                })}
               </TableCell>
               <TableCell className="px-4 py-3 text-muted-foreground">
                 {formatDate(invoice.issuedAt)}

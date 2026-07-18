@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { apiGet } from "@/lib/api-client";
+import { apiGet, apiGetBlob } from "@/lib/api-client";
 import { financialKeys } from "@/features/financial/query-keys";
 import type {
   FinancialSummary,
@@ -135,27 +135,31 @@ export function paymentsListQueryOptions(params: PaymentsListParams) {
 
 type InvoiceResponse = {
   id: string;
-  reference: string;
+  number: string;
   user_id: string;
   user_name: string;
-  plan_name: string;
+  plan_name: string | null;
   amount: number;
   currency: string;
   status: string;
+  payment_method: string | null;
   issued_at: string;
+  paid_at: string | null;
 };
 
 function mapInvoice(data: InvoiceResponse): Invoice {
   return {
     id: data.id,
-    reference: data.reference,
+    number: data.number,
     userId: data.user_id,
     userName: data.user_name,
     planName: data.plan_name,
     amount: data.amount,
     currency: data.currency,
     status: data.status as Invoice["status"],
+    paymentMethod: data.payment_method,
     issuedAt: data.issued_at,
+    paidAt: data.paid_at,
   };
 }
 
@@ -189,9 +193,14 @@ export function invoicesListQueryOptions(params: InvoicesListParams) {
   });
 }
 
-type InvoiceDownloadResponse = { url: string };
-
-export async function fetchInvoiceDownloadUrl(id: string): Promise<string> {
-  const data = await apiGet<InvoiceDownloadResponse>(`/admin/financial/invoices/${id}/download`);
-  return data.url;
+export async function downloadInvoicePdf(id: string, filename: string): Promise<void> {
+  const blob = await apiGetBlob(`/admin/financial/invoices/${id}/download`);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }

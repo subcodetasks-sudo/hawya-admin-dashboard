@@ -2,6 +2,7 @@ import AppSidebar from "@/components/layout/sidear";
 import DashboardHeader from "@/components/layout/header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { FcmInitializer } from "@/features/notifications/components/fcm-initializer";
 
 export default function DashboardLayout({
   children,
@@ -10,6 +11,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
+      <FcmInitializer />
       <AppSidebar />
       <SidebarInset>
         <DashboardHeader />

@@ -64,4 +64,4 @@ Each feature is meant to expose `components/`, `hooks/`, and `services/` (per `.
 
 ### Environment variables
 
-`.env.local` (gitignored) defines: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_LANDING_API_URL`, and the `NEXT_PUBLIC_FIREBASE_*` set (API key, auth domain, database URL, project ID, storage bucket, messaging sender ID, app ID, VAPID key) consumed by the notifications feature.
+`.env.local` (gitignored) defines: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_FIREBASE_*` set (API key, auth domain, database URL, project ID, storage bucket, messaging sender ID, app ID, VAPID key) consumed by the notifications feature.

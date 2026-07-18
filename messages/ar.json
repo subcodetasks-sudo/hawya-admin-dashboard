@@ -28,6 +28,9 @@
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج"
   },
+  "notifications": {
+    "newNotification": "إشعار جديد"
+  },
   "Auth": {
     "title": "تسجيل الدخول",
     "subtitle": "مرحبًا بك مجددًا، سجّل دخولك للوصول إلى لوحة التحكم.",
@@ -706,9 +709,10 @@
       "download": "تحميل الفاتورة",
       "downloadError": "تعذر تحميل الفاتورة.",
       "table": {
-        "reference": "المرجع",
+        "number": "الرقم",
         "customer": "العميل",
         "plan": "الخطة",
+        "noPlan": "—",
         "amount": "المبلغ",
         "date": "التاريخ",
         "status": "الحالة",

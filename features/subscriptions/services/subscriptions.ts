@@ -187,7 +187,8 @@ type PlanOptionResponse = {
 type PlanOptionsResponse = { plans: PlanOptionResponse[]; total: number };
 
 export async function fetchPlanOptions(): Promise<PlanOption[]> {
-  const data = await apiGet<PlanOptionsResponse>("/admin/plans");
+  // Assignment / filter dropdowns: active plans only (API default now includes inactive).
+  const data = await apiGet<PlanOptionsResponse>("/admin/plans?include_inactive=false");
 
   return data.plans.map((plan) => ({
     id: plan.id,

@@ -56,7 +56,8 @@ function mapPlan(data: PlanResponse): Plan {
 type PlansListResponse = { plans: PlanResponse[]; total: number };
 
 export async function fetchPlans(): Promise<Plan[]> {
-  const data = await apiGet<PlansListResponse>("/admin/plans");
+  // Admin list needs inactive plans so status filters / reactivate work.
+  const data = await apiGet<PlansListResponse>("/admin/plans?include_inactive=true");
   return data.plans.map(mapPlan);
 }
 

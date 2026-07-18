@@ -1,11 +1,12 @@
 export type SettingsTabId =
   | "general"
-  | "payment"
-  | "email"
+  // Hidden until /admin/settings/payment|email|roles APIs exist
+  // | "payment"
+  // | "email"
   | "apiKeys"
   | "security"
-  | "auditLog"
-  | "roles";
+  | "auditLog";
+  // | "roles";
 
 export type GeneralSettings = {
   platformName: string;

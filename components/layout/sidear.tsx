@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 import { isNavItemActive, navGroups } from "@/components/layout/nav-items";
@@ -30,20 +30,15 @@ export default function AppSidebar() {
       dir={direction}
       collapsible="icon"
     >
-      <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-1.5">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <Sparkles className="size-4" />
-          </div>
-          <div className="flex min-w-0 flex-col leading-tight group-data-[collapsible=icon]:hidden">
-            <span className="truncate text-sm font-semibold text-sidebar-foreground">
-              Howyeah
-            </span>
-            <span className="truncate text-xs text-sidebar-foreground/60">
-              {t("tagline")}
-            </span>
-          </div>
-        </div>
+      <SidebarHeader className="items-center justify-center gap-0 p-2">
+        <Image
+          src="/logo.png"
+          alt="RANK AI by HOWEYAH"
+          width={220}
+          height={56}
+          className="h-auto w-full object-contain group-data-[collapsible=icon]:size-full group-data-[collapsible=icon]:object-cover group-data-[collapsible=icon]:object-left"
+          priority
+        />
       </SidebarHeader>
       <SidebarContent>
         {navGroups.map((group) => (
