@@ -89,8 +89,16 @@ export default function PlansTable({ searchQuery, statusFilter }: Props) {
               <TableRow key={plan.id}>
                 <TableCell className="px-4 py-3">
                   <div className="flex flex-col">
-                    <span className="font-medium">{plan.name}</span>
+                    <span className="font-medium">{plan.features.displayName || plan.name}</span>
                     <span className="text-xs text-muted-foreground">{plan.description}</span>
+                    {plan.features.highlights.length > 0 ? (
+                      <span className="text-xs text-muted-foreground">
+                        {plan.features.highlights.slice(0, 2).join(" · ")}
+                        {plan.features.highlights.length > 2
+                          ? ` ${t("table.moreHighlights", { count: plan.features.highlights.length - 2 })}`
+                          : ""}
+                      </span>
+                    ) : null}
                   </div>
                 </TableCell>
                 <TableCell className="px-4 py-3 tabular-nums">

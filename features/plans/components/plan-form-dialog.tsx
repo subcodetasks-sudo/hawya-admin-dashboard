@@ -20,7 +20,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import PlanDiscountFields from "@/features/plans/components/plan-discount-fields";
-import PlanSupportFields from "@/features/plans/components/plan-support-fields";
+import PlanFeaturesFields from "@/features/plans/components/plan-features-fields";
+import PlanHighlightsFields from "@/features/plans/components/plan-highlights-fields";
 import PlanUsageLimitsFields from "@/features/plans/components/plan-usage-limits-fields";
 import { useCreatePlan, useUpdatePlan } from "@/features/plans/hooks/use-plan-mutations";
 import { buildFormValues, formValuesToInput } from "@/features/plans/lib/plan-form-values";
@@ -150,8 +151,13 @@ export default function PlanFormDialog({ mode, plan, trigger, open: openProp, on
           </section>
 
           <section className="flex flex-col gap-3">
-            <h3 className="text-sm font-semibold">{t("form.sections.supportAndCrawling")}</h3>
-            <PlanSupportFields values={values} onChange={patchValues} />
+            <h3 className="text-sm font-semibold">{t("form.sections.features")}</h3>
+            <PlanFeaturesFields values={values} onChange={patchValues} />
+          </section>
+
+          <section className="flex flex-col gap-3">
+            <h3 className="text-sm font-semibold">{t("form.sections.highlights")}</h3>
+            <PlanHighlightsFields values={values} onChange={patchValues} />
           </section>
 
           <section className="flex flex-col gap-3">

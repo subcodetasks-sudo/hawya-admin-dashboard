@@ -15,5 +15,6 @@ export {
   getStoredAdmin,
   setSession,
   subscribeToSession,
+  updateSessionToken,
   type AdminSession,
 } from "./services/session";

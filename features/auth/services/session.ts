@@ -39,6 +39,25 @@ export function clearSession(): void {
   window.dispatchEvent(new Event(SESSION_CHANGE_EVENT));
 }
 
+/**
+ * Replaces the session token in place (e.g. after the email-change endpoint
+ * issues a new one) while preserving whichever storage — localStorage
+ * ("remember me") or sessionStorage — the admin's current session already
+ * lives in, and merging in any updated session fields (e.g. the new email).
+ */
+export function updateSessionToken(
+  token: string,
+  patch: Partial<AdminSession> = {},
+): void {
+  const current = getStoredAdmin();
+  if (!current) {
+    return;
+  }
+
+  const remember = window.localStorage.getItem(SESSION_STORAGE_KEY) !== null;
+  setSession(token, { ...current, ...patch }, remember);
+}
+
 export function getStoredAdmin(): AdminSession | null {
   if (typeof window === "undefined") {
     return null;

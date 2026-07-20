@@ -5,11 +5,16 @@ import { planKeys } from "@/features/plans/query-keys";
 import type { DiscountType, DiscountScope, Plan, PlanInput } from "@/features/plans/types";
 
 type PlanFeaturesResponse = {
-  requests_limit: number | null;
-  api_token_limit: number | null;
-  max_websites: number | null;
-  crawling_enabled: boolean | null;
-  support_priority: string | null;
+  display_name?: string | null;
+  requests_limit?: number | null;
+  api_token_limit?: number | null;
+  max_websites?: number | null;
+  crawling_enabled?: boolean | null;
+  support_priority?: string | null;
+  highlights?: string[] | null;
+  // Backend allows arbitrary extra keys inside `features`; they are kept as-is
+  // via `Plan.featuresRaw` and must not be dropped when saving.
+  [key: string]: unknown;
 };
 
 type PlanResponse = {
@@ -37,12 +42,16 @@ function mapPlan(data: PlanResponse): Plan {
     priceYearly: data.price_yearly ?? 0,
     maxProjects: data.max_projects,
     features: {
-      requestsLimit: data.features?.requests_limit ?? 0,
-      apiTokenLimit: data.features?.api_token_limit ?? 0,
-      maxWebsites: data.features?.max_websites ?? 0,
-      crawlingEnabled: data.features?.crawling_enabled ?? false,
+      displayName: data.features?.display_name ?? "",
+      requestsLimit: data.features?.requests_limit ?? null,
+      apiTokenLimit: data.features?.api_token_limit ?? null,
+      maxWebsites: data.features?.max_websites ?? null,
+      // Backend defaults crawling to enabled when the key is omitted.
+      crawlingEnabled: data.features?.crawling_enabled ?? true,
       supportPriority: data.features?.support_priority ?? "",
+      highlights: Array.isArray(data.features?.highlights) ? data.features.highlights : [],
     },
+    featuresRaw: data.features ?? null,
     discount:
       data.discount_type && data.discount_scope && data.discount_value != null
         ? { type: data.discount_type, value: data.discount_value, scope: data.discount_scope }
@@ -66,6 +75,21 @@ export const plansListQueryOptions = queryOptions({
   queryFn: fetchPlans,
 });
 
+// Extra/unknown keys from the original `features` object (if any) are kept
+// so editing a plan through the form never wipes fields the form doesn't know about.
+function buildFeaturesPayload(input: PlanInput): PlanFeaturesResponse {
+  return {
+    ...(input.featuresRaw ?? {}),
+    display_name: input.features.displayName,
+    requests_limit: input.features.requestsLimit,
+    api_token_limit: input.features.apiTokenLimit,
+    max_websites: input.features.maxWebsites,
+    crawling_enabled: input.features.crawlingEnabled,
+    support_priority: input.features.supportPriority,
+    highlights: input.features.highlights,
+  };
+}
+
 function buildPlanRequestBody(input: PlanInput) {
   return {
     name: input.name,
@@ -73,13 +97,7 @@ function buildPlanRequestBody(input: PlanInput) {
     price_monthly: input.priceMonthly,
     auto_yearly: input.autoYearly,
     max_projects: input.maxProjects,
-    features: {
-      requests_limit: input.features.requestsLimit,
-      api_token_limit: input.features.apiTokenLimit,
-      max_websites: input.features.maxWebsites,
-      crawling_enabled: input.features.crawlingEnabled,
-      support_priority: input.features.supportPriority,
-    },
+    features: buildFeaturesPayload(input),
     is_active: input.isActive,
     ...(input.discount
       ? {

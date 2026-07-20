@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Search, Settings } from "lucide-react";
+import { LogOut, Search, Settings, UserCog } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { findActiveNavItem } from "@/components/layout/nav-items";
@@ -85,6 +85,12 @@ export default function DashboardHeader() {
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuLabel>{accountLabel}</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/account">
+                <UserCog />
+                {t("account")}
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/settings">
                 <Settings />

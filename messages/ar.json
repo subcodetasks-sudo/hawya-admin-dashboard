@@ -25,6 +25,7 @@
     "notificationsEmpty": "لا توجد إشعارات جديدة.",
     "accountName": "ClaudeAdmin",
     "accountInitials": "CA",
+    "account": "حسابي",
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج"
   },
@@ -188,6 +189,63 @@
       "title": "أدوار المسؤولين"
     }
   },
+  "Account": {
+    "title": "حسابي",
+    "subtitle": "إدارة ملفك الشخصي وكلمة المرور والبريد الإلكتروني",
+    "profile": {
+      "sectionTitle": "الملف الشخصي",
+      "lastLogin": "آخر تسجيل دخول",
+      "lastLoginNever": "لم يسجل الدخول بعد",
+      "memberSince": "عضو منذ",
+      "loadError": "تعذر تحميل ملفك الشخصي.",
+      "roles": {
+        "super_admin": "مسؤول عام",
+        "admin": "مسؤول",
+        "support": "الدعم الفني"
+      }
+    },
+    "password": {
+      "sectionTitle": "تغيير كلمة المرور",
+      "currentPassword": "كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور الجديدة",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور",
+      "submit": "تحديث كلمة المرور",
+      "submitting": "جارٍ التحديث...",
+      "success": "تم تحديث كلمة المرور",
+      "errors": {
+        "currentRequired": "كلمة المرور الحالية مطلوبة",
+        "newMinLength": "يجب أن تتكون كلمة المرور الجديدة من 8 أحرف على الأقل",
+        "newRequiresDigit": "يجب أن تحتوي كلمة المرور الجديدة على رقم واحد على الأقل",
+        "confirmRequired": "يرجى تأكيد كلمة المرور الجديدة",
+        "confirmMismatch": "كلمتا المرور غير متطابقتين",
+        "sameAsCurrent": "يجب أن تختلف كلمة المرور الجديدة عن الحالية",
+        "wrongCurrentPassword": "كلمة المرور الحالية غير صحيحة",
+        "passwordUnchanged": "يجب أن تكون كلمة المرور الجديدة مختلفة",
+        "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "email": {
+      "sectionTitle": "تغيير البريد الإلكتروني",
+      "newEmail": "البريد الإلكتروني الجديد",
+      "currentPassword": "كلمة المرور الحالية",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور",
+      "submit": "تحديث البريد الإلكتروني",
+      "submitting": "جارٍ التحديث...",
+      "success": "تم تحديث البريد الإلكتروني",
+      "errors": {
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+        "currentPasswordRequired": "كلمة المرور الحالية مطلوبة",
+        "wrongCurrentPassword": "كلمة المرور الحالية غير صحيحة",
+        "emailUnchanged": "يجب أن يكون البريد الإلكتروني الجديد مختلفًا",
+        "emailTaken": "هذا البريد الإلكتروني مستخدم بالفعل من قِبل مسؤول آخر",
+        "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+      }
+    }
+  },
   "Dashboard": {
     "title": "لوحة التحكم",
     "subtitle": "نظرة عامة على أداء منصتك",
@@ -270,6 +328,7 @@
       "actions": "الإجراءات",
       "perMonthSuffix": "/mo",
       "perYearSuffix": "/yr",
+      "moreHighlights": "+{count} أخرى",
       "empty": "لا توجد خطط مطابقة لبحثك.",
       "loadError": "تعذر تحميل الخطط."
     },
@@ -309,7 +368,8 @@
         "generalInfo": "المعلومات العامة",
         "pricing": "التسعير",
         "limits": "حدود الخطة",
-        "supportAndCrawling": "الدعم والزحف",
+        "features": "ميزات الخطة",
+        "highlights": "أبرز الميزات",
         "discount": "الخصم",
         "status": "الحالة"
       },
@@ -327,12 +387,31 @@
         "autoYearlyHint": "يتم احتساب السعر السنوي تلقائيًا من السعر الشهري وأي خصم فعّال.",
         "yearlyPrice": "السعر السنوي",
         "maxProjects": "الحد الأقصى للمشاريع",
+        "displayName": {
+          "label": "اسم العرض",
+          "placeholder": "مثال: الباقة الأساسية"
+        },
         "requestsLimit": "حد الطلبات / شهر",
         "apiTokenLimit": "حد Token API / شهر",
         "maxWebsites": "الحد الأقصى للمواقع",
+        "unlimitedPlaceholder": "غير محدود",
         "crawlingEnabled": "تفعيل الزحف",
         "supportPriority": "أولوية الدعم",
-        "supportPriorityPlaceholder": "مثال: email"
+        "highlights": {
+          "label": "أبرز الميزات التسويقية",
+          "empty": "لم تتم إضافة أي ميزات بعد.",
+          "placeholder": "مثال: زحف كامل للموقع",
+          "add": "إضافة ميزة",
+          "moveUp": "تحريك للأعلى",
+          "moveDown": "تحريك للأسفل",
+          "remove": "إزالة"
+        }
+      },
+      "supportPriorityOptions": {
+        "community": "المجتمع",
+        "email": "البريد الإلكتروني",
+        "priority": "أولوية",
+        "dedicated": "مخصص"
       },
       "discount": {
         "enable": "تفعيل الخصم",

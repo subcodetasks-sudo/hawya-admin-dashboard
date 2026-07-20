@@ -25,6 +25,7 @@
     "notificationsEmpty": "You're all caught up.",
     "accountName": "ClaudeAdmin",
     "accountInitials": "CA",
+    "account": "My Account",
     "settings": "Settings",
     "logout": "Log out"
   },
@@ -188,6 +189,63 @@
       "title": "Admin Roles"
     }
   },
+  "Account": {
+    "title": "My Account",
+    "subtitle": "Manage your profile, password, and email address",
+    "profile": {
+      "sectionTitle": "Profile",
+      "lastLogin": "Last Login",
+      "lastLoginNever": "Never",
+      "memberSince": "Member Since",
+      "loadError": "Unable to load your profile.",
+      "roles": {
+        "super_admin": "Super Admin",
+        "admin": "Admin",
+        "support": "Support"
+      }
+    },
+    "password": {
+      "sectionTitle": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submit": "Update Password",
+      "submitting": "Updating...",
+      "success": "Password updated",
+      "errors": {
+        "currentRequired": "Current password is required",
+        "newMinLength": "New password must be at least 8 characters",
+        "newRequiresDigit": "New password must contain at least one digit",
+        "confirmRequired": "Please confirm your new password",
+        "confirmMismatch": "Passwords do not match",
+        "sameAsCurrent": "New password must be different from the current password",
+        "wrongCurrentPassword": "Current password is incorrect",
+        "passwordUnchanged": "New password must be different",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "email": {
+      "sectionTitle": "Change Email",
+      "newEmail": "New Email",
+      "currentPassword": "Current Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submit": "Update Email",
+      "submitting": "Updating...",
+      "success": "Email updated",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "currentPasswordRequired": "Current password is required",
+        "wrongCurrentPassword": "Current password is incorrect",
+        "emailUnchanged": "New email must be different",
+        "emailTaken": "This email is already used by another admin",
+        "generic": "Something went wrong. Please try again."
+      }
+    }
+  },
   "Dashboard": {
     "title": "Dashboard",
     "subtitle": "An overview of your platform's performance",
@@ -270,6 +328,7 @@
       "actions": "Actions",
       "perMonthSuffix": "/mo",
       "perYearSuffix": "/yr",
+      "moreHighlights": "+{count} more",
       "empty": "No plans match your search.",
       "loadError": "Unable to load plans."
     },
@@ -309,7 +368,8 @@
         "generalInfo": "General Information",
         "pricing": "Pricing",
         "limits": "Plan Limits",
-        "supportAndCrawling": "Support & Crawling",
+        "features": "Plan Features",
+        "highlights": "Highlights",
         "discount": "Discount",
         "status": "Status"
       },
@@ -327,12 +387,31 @@
         "autoYearlyHint": "Yearly price is calculated automatically from the monthly price and any active discount.",
         "yearlyPrice": "Yearly Price",
         "maxProjects": "Max Projects",
+        "displayName": {
+          "label": "Display Name",
+          "placeholder": "e.g. Basic Plan"
+        },
         "requestsLimit": "Requests Limit / month",
         "apiTokenLimit": "API Token Limit / month",
         "maxWebsites": "Max Websites",
+        "unlimitedPlaceholder": "Unlimited",
         "crawlingEnabled": "Enable Crawling",
         "supportPriority": "Support Priority",
-        "supportPriorityPlaceholder": "e.g. email"
+        "highlights": {
+          "label": "Marketing Highlights",
+          "empty": "No highlights added yet.",
+          "placeholder": "e.g. Full site crawling",
+          "add": "Add Highlight",
+          "moveUp": "Move up",
+          "moveDown": "Move down",
+          "remove": "Remove"
+        }
+      },
+      "supportPriorityOptions": {
+        "community": "Community",
+        "email": "Email",
+        "priority": "Priority",
+        "dedicated": "Dedicated"
       },
       "discount": {
         "enable": "Enable discount",

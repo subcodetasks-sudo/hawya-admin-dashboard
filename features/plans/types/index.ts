@@ -4,12 +4,16 @@ export type DiscountType = "percent" | "fixed";
 
 export type DiscountScope = "month" | "year";
 
+export type SupportPriority = "community" | "email" | "priority" | "dedicated";
+
 export type PlanFeatures = {
-  requestsLimit: number;
-  apiTokenLimit: number;
-  maxWebsites: number;
+  displayName: string;
+  requestsLimit: number | null;
+  apiTokenLimit: number | null;
+  maxWebsites: number | null;
   crawlingEnabled: boolean;
   supportPriority: string;
+  highlights: string[];
 };
 
 export type PlanDiscount = {
@@ -26,6 +30,9 @@ export type Plan = {
   priceYearly: number;
   maxProjects: number;
   features: PlanFeatures;
+  // Raw features object as returned by the backend, kept so unknown/extra
+  // keys survive a round-trip through the edit form instead of being dropped.
+  featuresRaw: Record<string, unknown> | null;
   discount: PlanDiscount | null;
   isActive: boolean;
   subscribers: number;
@@ -39,6 +46,7 @@ export type PlanInput = {
   autoYearly: boolean;
   maxProjects: number;
   features: PlanFeatures;
+  featuresRaw: Record<string, unknown> | null;
   discount: PlanDiscount | null;
   isActive: boolean;
 };

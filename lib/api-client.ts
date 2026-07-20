@@ -4,11 +4,13 @@ const ADMIN_TOKEN_COOKIE = "admin_token";
 
 export class ApiError extends Error {
   status: number;
+  code?: string;
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, code?: string) {
     super(message);
     this.name = "ApiError";
     this.status = status;
+    this.code = code;
   }
 }
 
@@ -58,12 +60,21 @@ async function request<T>(
     cache: "no-store",
   });
 
+  // 204 No Content never carries a JSON body — treat any 2xx as success.
+  if (response.status === 204) {
+    if (!response.ok) {
+      throw new ApiError(`Request failed with status ${response.status}`, response.status);
+    }
+    return undefined as T;
+  }
+
   const json = (await response.json().catch(() => null)) as ApiEnvelope<T> | null;
 
   if (!response.ok || !json || !json.status) {
     throw new ApiError(
       (json && "message" in json && json.message) || `Request failed with status ${response.status}`,
       response.status,
+      json && "errors" in json ? json.errors?.error : undefined,
     );
   }
 
